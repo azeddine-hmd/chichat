@@ -1,5 +1,5 @@
 {
-  "name": "disscord-navbar",
+  "name": "discord",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,17 @@
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
+    "tailwind-merge": "^1.13.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
-  }
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11"
+  ]
 }
