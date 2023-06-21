@@ -6,6 +6,7 @@ export type Key =
   "alt"|
   "ArrowDown" |
   "ArrowUp" |
+  "Escape" |
   string;
 
 export type KeyboardInputEvent = {
@@ -13,13 +14,9 @@ export type KeyboardInputEvent = {
   callback: () => void;
 };
 
-export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent) {
+export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disableScrollEvent: boolean = false) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // if (event.repeat) {
-      //   console.log("key repeated!");
-      //   return;
-      // }
       const {keys, callback} = keyboardInputEvent;
       if (keys.every((key) => {
         return (key === "ctrl" && event.ctrlKey) ||
@@ -27,6 +24,7 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent) {
           (key === "alt" && event.altKey) ||
           (key === "ArrowUp" && event.key === key) ||
           (key === "ArrowDown" && event.key === key) ||
+          (key === "Escape" && event.key === key) ||
           (typeof key === "string" && event.key.toLowerCase() === key);
         })
       ) {
@@ -34,6 +32,8 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent) {
       } else {
         // console.log(`unknown key: ${event.key}`);
       }
+      if (disableScrollEvent)
+        event.stopPropagation();
     };
 
   // console.log("adding event: useKeyboardShortcut");

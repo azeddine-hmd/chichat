@@ -36,7 +36,10 @@ module.exports = {
         },
         red: {
           500: '#f23f42',
-        }
+        },
+      },
+      animation: {
+        'bounce-slow': 'bounce 3s infinite',
       },
     },
   },

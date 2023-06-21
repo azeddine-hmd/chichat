@@ -1,17 +1,19 @@
+"use client";
+
 import React, { MouseEvent, useContext } from "react";
 import { twMerge } from "tailwind-merge";
 import Field from "../atoms/field";
-import { SearchDialogContext } from "../templates/base-template";
+import { GlobalContext } from "@/client-context/global";
 
 export type DisabledSearchFieldType = React.ComponentProps<"div">;
 
 export default function DisabledSearchField({
   className,
 }: DisabledSearchFieldType) {
-  const setOpenedSearchDialog = useContext(SearchDialogContext);
+  const searchPopup = useContext(GlobalContext)!!.searchPopup;
 
   const clickHandler = (_: MouseEvent<HTMLButtonElement>) => {
-    if (setOpenedSearchDialog) setOpenedSearchDialog(true);
+    searchPopup.set(true);
   };
 
   return (

@@ -2,8 +2,8 @@ export class Channel {
   id: number;
   name: string;
 
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
+  constructor(opt: {id: number, name: string}) {
+    this.id = opt.id;
+    this.name = opt.name;
   }
 }

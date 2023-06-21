@@ -10,11 +10,13 @@ export type ButtonProps = {
 export default function Button({
   children,
   className,
+  ref,
   ...restProps
 }: ButtonProps) {
   return (
     <button
       className={twMerge("rounded-lg bg-transparent text-muted", className)}
+      ref={ref}
       {...restProps}
     >
       {children}
