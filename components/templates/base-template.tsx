@@ -63,10 +63,10 @@ export default function BaseTemplate({ children }: BaseTemplateType) {
         <div className="flex">
           <ServerSidebar />
           <Channelbar />
-          {children}
-          <main className="w-32">
-            <div className="h-full w-full bg-gray-700" />
+          <main className="">
+            {children}
           </main>
+          <div className="h-full w-w-32 bg-gray-700" />
           {isFloatingShortcutHelperOpen && <FloatingShortcutHelper /> }
         </div>
         {isSearchPopupOpen && <QuickSearchPopup />}
