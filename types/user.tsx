@@ -4,15 +4,15 @@ export class User {
   username: string;
   avatar: string;
 
-  constructor(opt: {
+  constructor(opts: {
     id: number;
     displayName: string;
     username: string;
     avatar: string;
   }) {
-    this.id = opt.id;
-    this.displayName = opt.displayName;
-    this.username = opt.username;
-    this.avatar = opt.avatar;
+    this.id = opts.id;
+    this.displayName = opts.displayName;
+    this.username = opts.username;
+    this.avatar = opts.avatar;
   }
 }
