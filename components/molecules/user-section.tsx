@@ -9,11 +9,11 @@ import { MicSvg } from "@/svg/mic";
 import { HeadphoneSvg } from "@/svg/headphone";
 import Tooltip from "./tooltip";
 
-interface AvatarSectionType {
+interface UserSectionProps {
   className?: string;
 }
 
-export default function AvatarSection({ className }: AvatarSectionType) {
+export default function UserSection({ className }: UserSectionProps) {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isHeadphoneMuted, setIsHeadphoneMuted] = useState(false);
 
@@ -41,7 +41,7 @@ export default function AvatarSection({ className }: AvatarSectionType) {
   };
 
   return (
-    <div className={twMerge("flex h-[52px] w-full bg-gray-800 p-2", className)}>
+    <section className={twMerge("flex h-[52px] w-full bg-gray-800 p-2", className)}>
       <Button className="relative group mr-2 flex items-center justify-start rounded-[4px] pl-[2px] hover:bg-[#4E5058]/60">
         <Avatar />
         <div className="flex w-[78px] flex-col items-start justify-start">
@@ -74,6 +74,6 @@ export default function AvatarSection({ className }: AvatarSectionType) {
         <BsGearFill size="18" />
         <Tooltip direction="top" margin={4} >User Settings</Tooltip>
       </Button>
-    </div>
+    </section>
   );
 }

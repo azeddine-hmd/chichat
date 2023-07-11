@@ -44,8 +44,12 @@ function Item({
           setHighlightedItem(index);
         }}
       >
-        {item instanceof Channel && <p>#&nbsp;&nbsp;{item.name}</p>}
-        {item instanceof User && <p>#&nbsp;&nbsp;{item.displayName}</p>}
+        {item instanceof Channel 
+          && <p>#&nbsp;&nbsp;{item.name}</p>
+        }
+        {item instanceof User 
+          && <p>user dm info</p>
+        }
       </Button>
     </div>
   );

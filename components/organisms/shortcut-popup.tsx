@@ -3,8 +3,8 @@
 import { useContext } from "react";
 import Hr from "../atoms/hr";
 import Popup from "../molecules/popup";
-import { GlobalContext } from "@/client-context/global";
 import Field from "../atoms/field";
+import { GlobalContext } from "@/app/global-context";
 
 export default function ShortcutPopup() {
   const shortcutHelpPopup = useContext(GlobalContext)!!.shortcutHelpPopup;

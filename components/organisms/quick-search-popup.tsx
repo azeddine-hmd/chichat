@@ -4,7 +4,7 @@ import { ChangeEvent, useContext, useState } from "react";
 import SearchField from "../molecules/search-field";
 import SearchResult from "../molecules/search-result";
 import Popup from "../molecules/popup";
-import { GlobalContext } from "@/client-context/global";
+import { GlobalContext } from "@/app/global-context";
 
 export default function QuickSearchPopup() {
   const searchPopup = useContext(GlobalContext)!!.searchPopup;

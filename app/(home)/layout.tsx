@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import Channelbar from "../organisms/channelbar";
-import ServerSidebar from "../organisms/server-sidebar";
-import { GlobalContext } from "@/client-context/global";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
-import ShortcutPopup from "../organisms/shortcut-popup";
-import FloatingShortcutHelper from "../molecules/floating-shortcut-helper";
-import QuickSearchPopup from "../organisms/quick-search-popup";
+import Channelbar from "@/components/organisms/channelbar";
+import ServerSidebar from "@/components/organisms/server-sidebar";
+import FloatingShortcutHelper from "@/components/molecules/floating-shortcut-helper";
+import QuickSearchPopup from "@/components/organisms/quick-search-popup";
+import ShortcutPopup from "@/components/organisms/shortcut-popup";
+import React, { useState } from "react";
+import { GlobalContext } from "../global-context";
 
-type BaseTemplateType = {
+export default function HomeLayout({
+  children,
+}: {
   children: React.ReactNode;
-};
-
-export default function BaseTemplate({ children }: BaseTemplateType) {
+}) {
   const [isSearchPopupOpen, openSearchPopup] = useState(false);
   const [isShortcutHelpPopupOpen, openShortcutHelpPopup] = useState(false);
   const [isFloatingShortcutHelperOpen, showFloatingShortcut] = useState(true);
@@ -31,7 +31,7 @@ export default function BaseTemplate({ children }: BaseTemplateType) {
       state: isFloatingShortcutHelperOpen,
       set: showFloatingShortcut,
     },
-  }
+  };
 
   useKeyboardShortcut({
     keys: ["ctrl", "alt", "p"],
@@ -51,23 +51,19 @@ export default function BaseTemplate({ children }: BaseTemplateType) {
   useKeyboardShortcut({
     keys: ["shift", "?"],
     callback() {
-        openShortcutHelpPopup(true);
+      openShortcutHelpPopup(true);
     },
   });
 
-  useKeyboardShortcut
-
   return (
-    <div>
-      <GlobalContext.Provider value={globalContext} >
-        <div className="flex">
+    <div className="h-full w-full">
+      <GlobalContext.Provider value={globalContext}>
+        <div className="flex h-full w-full">
           <ServerSidebar />
           <Channelbar />
-          <main className="">
-            {children}
-          </main>
-          <div className="h-full w-w-32 bg-gray-700" />
-          {isFloatingShortcutHelperOpen && <FloatingShortcutHelper /> }
+          {children}
+          <div className="h-full w-32 bg-gray-700" />
+          {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />}
         </div>
         {isSearchPopupOpen && <QuickSearchPopup />}
         {isShortcutHelpPopupOpen && <ShortcutPopup />}

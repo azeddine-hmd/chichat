@@ -1,5 +1,3 @@
-"use client";
-
 import { State } from "@/types/state";
 import { createContext } from "react";
 

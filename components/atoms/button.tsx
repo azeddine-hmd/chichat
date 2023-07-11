@@ -4,7 +4,7 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 export type ButtonProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 } & React.ComponentProps<"button">;
 
 export default function Button({
