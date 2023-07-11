@@ -17,6 +17,7 @@ module.exports = {
           field: '#949BA4',
         },
         foreground: '#dbdee1',
+        link: '#00a8fc',
       },
       colors: {
         primary: {
