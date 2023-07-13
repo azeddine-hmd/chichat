@@ -19,6 +19,14 @@ module.exports = {
         foreground: '#dbdee1',
         link: '#00a8fc',
       },
+      fill: {
+        muted: {
+          DEFAULT: '#b5bac1',
+          hover: '#fafafa',
+          field: '#949BA4',
+        },
+        foreground: '#dbdee1',
+      },
       colors: {
         primary: {
           DEFAULT: '#5865f2',

@@ -8,7 +8,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="h-full w-full">
-      <LoginWallpaperSvg className="absolute inset-0 -z-10" />
+      <LoginWallpaperSvg className="w-full h-full fixed inset-0 -z-10" />
       <div className="flex h-full w-full items-center justify-center">
         {children}
       </div>

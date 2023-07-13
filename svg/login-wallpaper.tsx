@@ -18,8 +18,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           y2="913.29"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#29cc7a"></stop>
-          <stop offset="1" stop-color="#038567"></stop>
+          <stop offset="0" stopColor="#29cc7a"></stop>
+          <stop offset="1" stopColor="#038567"></stop>
         </linearGradient>
         <linearGradient
           id="linear-gradient-2"
@@ -29,8 +29,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           y2="476.33"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#ffe75c"></stop>
-          <stop offset="1" stop-color="#ffc619"></stop>
+          <stop offset="0" stopColor="#ffe75c"></stop>
+          <stop offset="1" stopColor="#ffc619"></stop>
         </linearGradient>
         <linearGradient
           id="linear-gradient-3"
@@ -48,8 +48,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           y2="847.49"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#d11583"></stop>
-          <stop offset="1" stop-color="#eb50a4"></stop>
+          <stop offset="0" stopColor="#d11583"></stop>
+          <stop offset="1" stopColor="#eb50a4"></stop>
         </linearGradient>
         <linearGradient
           id="linear-gradient-5"
@@ -60,8 +60,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           gradientTransform="rotate(-21.3 -1852.872 -1403.071)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#66bcff"></stop>
-          <stop offset="1" stop-color="#8cd9ff"></stop>
+          <stop offset="0" stopColor="#66bcff"></stop>
+          <stop offset="1" stopColor="#8cd9ff"></stop>
         </linearGradient>
         <linearGradient
           id="linear-gradient-6"
@@ -72,8 +72,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           gradientTransform="rotate(-4.2 -13157.002 -13444.26)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#ffc619"></stop>
-          <stop offset="1" stop-color="#ffe75c"></stop>
+          <stop offset="0" stopColor="#ffc619"></stop>
+          <stop offset="1" stopColor="#ffe75c"></stop>
         </linearGradient>
       </defs>
       <path fill="#5865f2" d="M0 0H1700V1200H0z" data-name="Layer 4"></path>
@@ -127,9 +127,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M197.1 375.3a58.3 58.3 0 0037.6-74.7c-3.3-9.7-11-20.5-19.2-28.4"
         ></path>
         <path
@@ -141,9 +141,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.7"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.7"
           d="M194 276c16.1 10 10.9 19.6 24.9 35.8"
         ></path>
         <path
@@ -188,9 +188,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M250.4 340.3a83.6 83.6 0 00-1.5 18.6"
         ></path>
         <path
@@ -209,9 +209,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M180.3 303.5c-4.3-2.9-7.4-2.2-12 .5-5.7-3.8-12.4-3.6-19.1-.2-4.9 2.4-16.9 7.8-22.9 10.5M169.3 304.5c12.5 7.7 16.1 17.7 17.6 24.4"
         ></path>
         <path
@@ -245,25 +245,25 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M208.1 317.1L200 317.1"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M222.4 314.7L226.9 314.7"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M181.4 233.3c2.7-8.3 1.8-13.6.6-16.5M194.1 245.2c5.5-.3 8.9-2.1 11.8-5.2M184.6 270.7a13 13 0 010 3.1M169.1 259.7c-4.7 4.4-12.5 4.9-18.1 4M169.7 241.8c-2.4-3.7-6.5-7.7-10-8.9M195.2 260.6a29.7 29.7 0 005.9 1.3"
         ></path>
         <path
@@ -273,33 +273,33 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.7"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.7"
           d="M176.4 277.3c3.8 18.8-5 29.2-5.8 48.6"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M209.9 378.5a46.4 46.4 0 01-.8-34.9M206.1 360c-2.9-3.7-3.3-9.5-3.3-9.5"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M131.5 312L121.6 316.7"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.201"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.201"
           d="M234.5 296.5L240.2 297.4"
         ></path>
         <path
@@ -390,9 +390,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#ff5cb4"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M234.4 790.9a113.1 113.1 0 00.7-30M192 772c5.8 12 6.8 18 6.8 18"
         ></path>
         <path
@@ -471,25 +471,25 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="3.204"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="3.204"
           d="M382.1 765.7a8.1 8.1 0 015.2.9M338.4 765.8a17.4 17.4 0 017.4.8"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="6.866"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="6.866"
           d="M351.8 750.9c-11.3-.3-17.4-.2-27.5 1.1M392.3 752.4c-6.8-1.6-11-1.8-18.6-1.8"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M490.2 808.3c-22.1 3.7-77.3 7.9-145.6 3.4"
         ></path>
         <path
@@ -499,9 +499,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M255.1 873.9c7.2 3.7 16.1 4 16.1 4M251.2 801.8a46.6 46.6 0 00-8 19.8"
         ></path>
         <ellipse
@@ -515,9 +515,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#eb459f"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M359.4 738.7c6.8-7.5 10.1-18.3 11.2-25.7M347.2 728.6c5.8-23.6 5.8-48.7-10.2-57.5"
         ></path>
         <ellipse
@@ -531,9 +531,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M333.2 811.7L338.3 804.9"
         ></path>
         <ellipse
@@ -547,9 +547,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M442.1 791.4c1.1 9.7-7 21.7-7 21.7"
         ></path>
         <path
@@ -559,9 +559,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M485.1 757.1L489.7 758.7"
         ></path>
         <path
@@ -583,25 +583,25 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M205.2 913.4a47.1 47.1 0 005-26.1M225.4 897.8c-.1 8.7-1.6 15.7-5.8 21.5"
         ></path>
         <path
           fill="none"
           stroke="#039c78"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M312.9 806.9c1.7-6 7.6-12.2 10.3-14"
         ></path>
         <path
           fill="none"
           stroke="#039c78"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.289"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.289"
           d="M319.2 772L314.7 769.4"
         ></path>
       </g>
@@ -640,8 +640,8 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           r="108.1"
           fill="none"
           stroke="#29cc7a"
-          stroke-miterlimit="10"
-          stroke-width="6.883"
+          strokeMiterlimit="10"
+          strokeWidth="6.883"
         ></circle>
         <path
           fill="#eb459f"
@@ -672,17 +672,17 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1416.3 546.9c-22.5 4.3-27.8 22.7-26 43.8-9.4 6.1-13.2 13.2-13.6 23.4"
         ></path>
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1447.3 554c-23 10.2-20 17.7-13.2 37.5a40.1 40.1 0 00-12.3 37.6"
         ></path>
         <path
@@ -692,9 +692,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1495.3 482.7c0-3.2 1.6-5.7 3.5-5.7s3.6 2.5 3.6 5.7"
         ></path>
         <circle cx="1490.8" cy="451.2" r="9.2" fill="#4452f2"></circle>
@@ -721,9 +721,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#ffae00"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.5"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.5"
           d="M1444.5 485.9a23.5 23.5 0 009.1 6.1"
         ></path>
         <path
@@ -733,9 +733,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1443.3 499.9c-3.1 1.8-6.7 6.4-7 13.2M1420.6 474.1c.9-6.2 2.5-8.3 3.6-8.5s1 2.3.6 7.9M1450.6 473.5c2.1-9.1 5.1-9.6 6.4-9s2.2 2.9 1.9 9.6"
         ></path>
         <ellipse
@@ -749,9 +749,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1502.4 482.7c0 3.1-1.6 5.6-3.6 5.6s-3.5-2.5-3.5-5.6"
         ></path>
         <path
@@ -777,9 +777,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="5"
           d="M1413.1 548.5c5.9-.4 8.6-.5 10 1.7s.4 6.1-.8 12.7-2.7 5.5-10.2 6"
         ></path>
         <ellipse
@@ -821,9 +821,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1439.3 551.5c-5.1 2.6-5.5 7.3-4.6 11.3-5 2.3-6.3 5.1-5.4 11.3-2.7 1.6-5 3.6-4.1 8.6"
         ></path>
         <path d="M1441.6 593.2L1445.9 589.2 1444.4 596.6 1441.6 593.2z"></path>
@@ -835,17 +835,17 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1505.5 620.5a27.3 27.3 0 00-26.1-19.1M1489.4 580.9a27.6 27.6 0 00-5.6 20.1"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.238"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.238"
           d="M1485.8 587.1L1483.2 582.7"
         ></path>
       </g>
@@ -882,9 +882,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="1.703"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.703"
           d="M1170.7 800.6c-10.9 7.4-12.9 21.1-20.5 30.1s-14.7 10.3-14.7 10.3"
         ></path>
         <path
@@ -895,33 +895,33 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#ffc619"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="5.643"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="5.643"
           d="M1226.6 871.1L1234.2 891.2"
         ></path>
         <path
           fill="none"
           stroke="#ffc619"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="5.643"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="5.643"
           d="M1234.9 863.9L1242.5 884"
         ></path>
         <path
           fill="none"
           stroke="#ffc619"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="5.643"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="5.643"
           d="M1243.2 856.7L1250.8 876.7"
         ></path>
         <path
           fill="none"
           stroke="#ff8c19"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="3.762"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="3.762"
           d="M1260.9 859.2c-2-5.1-7.8-5.7-12.9-1.2l-20.6 17.9c-5.2 4.5-7.8 12.4-5.9 17.5s7.8 5.6 12.9 1.1l20.7-17.9c5.1-4.5 7.7-12.3 5.8-17.4z"
         ></path>
         <path
@@ -940,9 +940,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           y="806.8"
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="1.703"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.703"
           rx="3.9"
           transform="rotate(45 1254.728 810.625)"
         ></rect>
@@ -973,9 +973,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="1.233"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.233"
           d="M1487.3 78.1c1.6 6.1 3.1 17.3 3.1 17.3"
         ></path>
         <path
@@ -985,9 +985,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="1.233"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.233"
           d="M1436.9 90.6a49.5 49.5 0 008.9 12.7"
         ></path>
         <path d="M1447.6 101.3c5.8-2.2 12.9 1.9 15.8 9.1s.6 14.9-5.2 17.2l16.8-1.1c14.2-5.5 21-13.2 15.5-27.3-4.1-10.4-13.5-13.8-26.3-8.8s-16.6 10.9-16.6 10.9z"></path>
@@ -1014,9 +1014,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="1.233"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.233"
           d="M1499.5 64.6c15.8 5.2 26.1 9.4 26.1 9.4M1513.3 88.3c-5.2-5.4-12.3-12.3-18.1-18M1429.9 112.9c-1.3-8.8-.7-22.4-.7-22.4M1412.6 110.4a119.9 119.9 0 0111.1-20.7"
         ></path>
         <path
@@ -1128,18 +1128,18 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.096"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.096"
           d="M682.3 942.4L668.2 898"
         ></path>
         <circle cx="676.7" cy="924.6" r="11.7" fill="#29cc7a"></circle>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="2.096"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="2.096"
           d="M674.4 917.5L668.2 898"
         ></path>
         <circle cx="668.2" cy="898" r="4.1" fill="#eb459f"></circle>
@@ -1195,9 +1195,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#66bcff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2.439"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2.439"
           d="M986.7 107.2l4.4-1.1-3.1-2.7"
         ></path>
         <ellipse
@@ -1214,17 +1214,17 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#ffe75c"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="1.742"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.742"
           d="M1032.9 181.2c4.6 3.1 6.7 5.5 7.9 10.4"
         ></path>
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="1.742"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.742"
           d="M1029 113.5L1031.4 113.2"
         ></path>
         <path
@@ -1252,9 +1252,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
         <path
           fill="none"
           stroke="#000"
-          stroke-linecap="round"
-          stroke-miterlimit="10"
-          stroke-width="1.521"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.521"
           d="M588.4 190.2L588.1 192.7"
         ></path>
         <path
@@ -1281,9 +1281,9 @@ export default function LoginWallpaperSvg({ className }: React.ComponentProps<"s
           <path
             fill="none"
             stroke="#000"
-            stroke-linecap="round"
-            stroke-miterlimit="10"
-            stroke-width="1.521"
+            strokeLinecap="round"
+            strokeMiterlimit="10"
+            strokeWidth="1.521"
             d="M522 150L522.2 151.9"
           ></path>
         </g>

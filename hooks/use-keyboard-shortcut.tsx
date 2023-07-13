@@ -7,6 +7,7 @@ export type Key =
   "ArrowDown" |
   "ArrowUp" |
   "Escape" |
+  "Enter" |
   string;
 
 export type KeyboardInputEvent = {
@@ -25,6 +26,7 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disa
           (key === "ArrowUp" && event.key === key) ||
           (key === "ArrowDown" && event.key === key) ||
           (key === "Escape" && event.key === key) ||
+          (key === "Enter" && event.key === key) ||
           (typeof key === "string" && event.key.toLowerCase() === key);
         })
       ) {

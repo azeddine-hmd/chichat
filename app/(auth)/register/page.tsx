@@ -1,27 +1,19 @@
-import Field from "@/components/atoms/field";
-import FieldInput from "@/components/atoms/field-input";
-import ArrowDownSvg from "@/svg/arrow-down";
-import React from "react";
-import {
-  BsArrowBarDown,
-  BsArrowDown,
-  BsArrowDownCircle,
-  BsArrowDownShort,
-  BsArrowDownSquare,
-  BsFileArrowDown,
-} from "react-icons/bs";
+"use client";
 
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mb-2 w-full text-xs font-semibold text-muted">
-      {children}
-    </div>
-  );
-}
+import FieldInput from "@/components/atoms/field-input";
+import Label from "@/components/atoms/label";
+import Dropdownmenu from "@/components/molecules/dropdown-menu";
+import PrimaryButton from "@/components/molecules/primary-button";
+import Link from "next/link";
+import React, { MouseEvent } from "react";
 
 export default function Login() {
+  const continueOnClick = (event: MouseEvent<HTMLButtonElement>) => {
+    window.location.href = "/";
+  };
+
   return (
-    <div className="flex h-[602px] w-[480px] flex-col items-center rounded-md bg-gray-600 p-8 shadow-lg">
+    <div className="flex h-fit w-[480px] flex-col items-center rounded-md bg-gray-600 p-8 shadow-lg">
       <h1 className="text-2xl font-semibold text-white/90">
         Create an account
       </h1>
@@ -43,11 +35,48 @@ export default function Login() {
           type="password"
         ></FieldInput>
         <Label>DATE OF BIRTH</Label>
-        <div className="flex flex-nowrap justify-start gap-2 w-full">
-          <FieldInput className="h-10 max-w-[145px] flex justify-between flex-shrink border border-gray-850" placeholder={""}>
-            <div className="m-1" >Month</div>
-            <ArrowDownSvg className="text-foreground m-1" />
-          </FieldInput>
+        <div className="flex w-full flex-nowrap justify-start gap-2">
+          <Dropdownmenu
+            className="max-w-[145px]"
+            placeholder="Month"
+            items={[
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ]}
+          />
+          <Dropdownmenu
+            className="max-w-[145px]"
+            placeholder="Day"
+            items={Array.from({ length: 31 }, (_, index) => String(index + 1))}
+          />
+          <Dropdownmenu
+            className="max-w-[145px]"
+            placeholder="Year"
+            items={Array.from({ length: 40 }, (_, index) =>
+              String(2020 - index)
+            )}
+          />
+        </div>
+        <PrimaryButton
+          className="text-md mt-5 flex h-[44px] items-center justify-center bg-primary font-semibold text-white transition-all duration-300 ease-in-out hover:bg-primary/80 hover:transition-all hover:duration-300 active:bg-primary/60 "
+          onClick={continueOnClick}
+        >
+          Continue
+        </PrimaryButton>
+        <div className="mt-4">
+          <Link href="/login" className="text-sm text-link">
+            Already have an account?
+          </Link>
         </div>
       </div>
     </div>
