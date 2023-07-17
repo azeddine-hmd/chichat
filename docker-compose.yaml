@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    env_file:
+      - backend/.env.db
+    volumes:
+      - /var/lib/postgres/data:/home/azeddine/workspace/discord/postgres/data
+
+  express:
+    image: node:latest
+    user: node
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
+    command: 'npm run dev'
+
+  next:
+    image: node:latest
+    user: node
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/frontend
+    working_dir: /frontend
+    command: 'npm run dev'
