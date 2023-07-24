@@ -18,7 +18,7 @@ export default function Login() {
         Create an account
       </h1>
       <div className="mt-5 h-full w-full">
-        <Label>EMAIL</Label>
+        <Label>Display Name</Label>
         <FieldInput
           className="text-md mb-5 h-10 w-full bg-gray-850 p-2 text-foreground"
           placeholder=""
@@ -33,6 +33,11 @@ export default function Login() {
           className="text-md mb-5 h-10 w-full bg-gray-850 p-2 text-foreground"
           placeholder=""
           type="password"
+        ></FieldInput>
+        <Label>EMAIL</Label>
+        <FieldInput
+          className="text-md mb-5 h-10 w-full bg-gray-850 p-2 text-foreground"
+          placeholder=""
         ></FieldInput>
         <Label>DATE OF BIRTH</Label>
         <div className="flex w-full flex-nowrap justify-start gap-2">
