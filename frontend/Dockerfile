@@ -8,11 +8,8 @@ COPY ./package*.json ./
 RUN if [ "$NODE_ENV" = "production" ]; then \
 	npm ci --omit=dev; \
 else \
-	npm ci; \
+	npm i; \
 fi
-
-COPY prisma ./prisma
-RUN npx prisma generate
 
 COPY . ./
 

@@ -1,13 +1,10 @@
 version: '3'
-
 services:
   db:
     image: postgres:latest
     container_name: discord-db
     user: root
     restart: always
-    volumes:
-      - ${PWD}/.postgres:/var/lib/postgres/data
     environment:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -27,24 +24,39 @@ services:
     volumes:
       - ./backend:/usr/src/app
     environment:
+      - NODE_ENV=${NODE_ENV}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_HOST=db
       - EXPRESS_PORT=${EXPRESS_PORT}
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+      - BACKEND_PROTOCOL=${BACKEND_PROTOCOL}
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_DOMAIN=${BACKEND_DOMAIN}
+      - FRONTEND_PROTOCOL=${FRONTEND_PROTOCOL}
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - FRONTEND_DOMAIN=${FRONTEND_DOMAIN}
     env_file:
       - ./backend/.env
 
-  # frontend:
-  #   image: node:latest
-  #   container_name: discord-frontend
-  #   user: node
-  #   depends_on:
-  #     - express
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - ./frontend:/frontend
-  #   working_dir: /frontend
-  #   command: 'npm run dev'
+  frontend:
+    image: discord-frontend
+    container_name: discord-frontend
+    build: ./frontend
+    user: node
+    ports:
+      - ${NEXT_PORT}:${NEXT_PORT}
+    volumes:
+      - ./frontend:/usr/src/app
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - ${NEXT_PORT}:${NEXT_PORT}
+      - BACKEND_PROTOCOL=${BACKEND_PROTOCOL}
+      - BACKEND_HOST=${BACKEND_HOST}
+      - BACKEND_DOMAIN=${BACKEND_DOMAIN}
+      - FRONTEND_PROTOCOL=${FRONTEND_PROTOCOL}
+      - FRONTEND_HOST=${FRONTEND_HOST}
+      - FRONTEND_DOMAIN=${FRONTEND_DOMAIN}
+    # env_file:
+      # - ./frontend/.env

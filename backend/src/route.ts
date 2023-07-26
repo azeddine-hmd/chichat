@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import { cookieParserMiddleware } from './middlewares/cookie';
 import { errorHandler } from './middlewares/error-handler';
 import { authRouter } from './auth/route';
+import cors from 'cors';
+import { corsOptions } from './config';
 
 const prefix = '/api';
 
@@ -14,6 +16,7 @@ export function setupRoutes(app: Express) {
   app.use(bodyParser.json());
   app.use(sessionMiddleware);
   app.use(requestTimeMiddleware);
+  app.use(cors(corsOptions));
 
   // routes
   app.use(prefix, authRouter);
