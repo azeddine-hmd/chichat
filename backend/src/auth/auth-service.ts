@@ -28,7 +28,7 @@ export async function registerUser(registerDto: RegisterDto) {
   }
 }
 
-export async function sendEmailVerification(user: User) {
+export async function sendEmailVerification(user: User, sessionId: string) {
   const emailSecret = randomUUID();
   const verificationEmailHTML = `
   <h1>Email Verficiation</h1>
@@ -42,6 +42,7 @@ export async function sendEmailVerification(user: User) {
       data: {
         operation: 'EMAIL_VALIDATION',
         code: emailSecret,
+        sessionId: sessionId,
         user: {
           connect: {
             id: user.id,
@@ -60,4 +61,30 @@ export async function sendEmailVerification(user: User) {
     console.error(err);
     throw new Error(500, 'failed to send verification mail');
   }
+}
+
+export async function verifyEmail(code: string, sessionId: string) {
+  // verify code
+  const storedCodes = await prisma.codes.findMany({
+    where: {
+      code: code,
+      sessionId: sessionId,
+    },
+    include: {
+      user: true,
+    },
+  });
+  if (storedCodes.length != 1 || storedCodes[0].code !== code)
+    throw new Error(400, 'Failed to verify email');
+
+  // activate account
+  const storedCode = storedCodes[0];
+  await prisma.user.update({
+    where: {
+      id: storedCode.user.id,
+    },
+    data: {
+      active: true,
+    },
+  });
 }
