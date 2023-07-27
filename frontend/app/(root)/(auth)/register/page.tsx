@@ -1,15 +1,26 @@
 "use client";
 
+import DotLoading from "@/components/atoms/dot-loading";
 import FieldInput from "@/components/atoms/field-input";
 import Label from "@/components/atoms/label";
 import Dropdownmenu from "@/components/molecules/dropdown-menu";
 import PrimaryButton from "@/components/molecules/primary-button";
 import Link from "next/link";
-import React, { MouseEvent } from "react";
+import { useRouter } from "next/navigation";
+import React, { MouseEvent, useState } from "react";
 
 export default function Login() {
+  const [onLoading, setOnLoading] = useState(false);
+  const router = useRouter();
+
   const continueOnClick = (event: MouseEvent<HTMLButtonElement>) => {
-    window.location.href = "/";
+    if (onLoading) return;
+    setOnLoading(true);
+    setTimeout(() => {
+      // if request successed.
+      router.push("/auth/verify-email");
+      // else display error
+    }, 3000);
   };
 
   return (
@@ -76,7 +87,7 @@ export default function Login() {
           className="text-md mt-5 flex h-[44px] items-center justify-center bg-primary font-semibold text-white transition-all duration-300 ease-in-out hover:bg-primary/80 hover:transition-all hover:duration-300 active:bg-primary/60 "
           onClick={continueOnClick}
         >
-          Continue
+          {!onLoading ? <>{"Continue"}</> : <DotLoading dotClassName="h-2 w-2" />}
         </PrimaryButton>
         <div className="mt-4">
           <Link href="/login" className="text-sm text-link">

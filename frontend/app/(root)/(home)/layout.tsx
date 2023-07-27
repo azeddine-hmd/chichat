@@ -7,7 +7,7 @@ import FloatingShortcutHelper from "@/components/molecules/floating-shortcut-hel
 import QuickSearchPopup from "@/components/organisms/quick-search-popup";
 import ShortcutPopup from "@/components/organisms/shortcut-popup";
 import React, { useState } from "react";
-import { GlobalContext } from "../global-context";
+import { GlobalContext } from "@/app/global-context";
 
 export default function HomeLayout({
   children,

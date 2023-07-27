@@ -1,7 +1,12 @@
 "use client";
 
-import React, { ChangeEvent, MouseEvent, useEffect, useRef, useState } from "react";
-import { twJoin, twMerge } from "tailwind-merge";
+import React, {
+  ChangeEvent,
+  MouseEvent,
+  useRef,
+  useState,
+} from "react";
+import { twMerge } from "tailwind-merge";
 import FieldInput from "../atoms/field-input";
 import ArrowDownSvg from "@/svg/arrow-down";
 import FloatingCard from "../atoms/floating-card";
@@ -65,13 +70,20 @@ export default function DropdownMenu({
   useKeyboardShortcut({
     keys: ["Enter"],
     callback: () => {
-      if (openMenu) {
+      if (openMenu && filteredItems.length > 0) {
+        if (inputRef?.current) {
+          if (filteredItems[highlightedItem] !== "undefined")
+            inputRef.current.value = filteredItems[highlightedItem];
+          else
+            inputRef.current.value = filteredItems[0];
+        }
+        else {
+          console.log(`inputRef is undefined!!`);
+        }
+        if (onItemSelected) onItemSelected(filteredItems[highlightedItem]);
         setOpenMenu(false);
         setFilteredItems(items);
         setHighlightedItem(0);
-        if (inputRef?.current)
-          inputRef.current.value = filteredItems[highlightedItem];
-        if (onItemSelected) onItemSelected(filteredItems[highlightedItem]);
       }
     },
   });
