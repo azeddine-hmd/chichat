@@ -7,8 +7,8 @@ export type LabelProps = {
 
 export default function Label({ children, className }: LabelProps) {
   return (
-    <h3 className={twMerge("mb-2 w-full text-xs font-semibold text-muted", className)} >
+    <label className={twMerge("box-border w-full text-xs font-bold text-muted", className)} >
       {children}
-    </h3>
+    </label>
   );
 }

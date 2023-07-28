@@ -1,11 +1,6 @@
 "use client";
 
-import React, {
-  ChangeEvent,
-  MouseEvent,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, MouseEvent, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import FieldInput from "../atoms/field-input";
 import ArrowDownSvg from "@/svg/arrow-down";
@@ -17,13 +12,16 @@ export type DropdownmenuProps = {
   placeholder?: string;
   items: Array<string>;
   onItemSelected?: (item: string) => void;
-} & React.ComponentProps<"div">;
+  fieldName?: string;
+} & React.ComponentProps<"input">;
 
 export default function DropdownMenu({
   className,
   placeholder = "",
   items,
   onItemSelected,
+  fieldName,
+  ...restProps
 }: DropdownmenuProps) {
   const [filteredItems, setFilteredItems] = useState<Array<string>>(items);
   const [openMenu, setOpenMenu] = useState(false);
@@ -72,12 +70,10 @@ export default function DropdownMenu({
     callback: () => {
       if (openMenu && filteredItems.length > 0) {
         if (inputRef?.current) {
-          if (filteredItems[highlightedItem] !== "undefined")
+          if (filteredItems[highlightedItem] !== undefined)
             inputRef.current.value = filteredItems[highlightedItem];
-          else
-            inputRef.current.value = filteredItems[0];
-        }
-        else {
+          else inputRef.current.value = "";
+        } else {
           console.log(`inputRef is undefined!!`);
         }
         if (onItemSelected) onItemSelected(filteredItems[highlightedItem]);
@@ -92,12 +88,14 @@ export default function DropdownMenu({
     <div className="relative">
       <FieldInput
         className={twMerge(
-          "text-md flex h-fit flex-shrink cursor-default justify-between border border-gray-850 bg-gray-850 p-2",
+          "text-md flex h-fit max-w-[145px] flex-shrink cursor-default justify-between border border-gray-850 bg-gray-850 p-2",
           className
         )}
         placeholder={placeholder}
         onChange={onFieldChange}
         inputRef={inputRef}
+        name={fieldName}
+        {...restProps}
       />
       <ArrowDownSvg
         id="dropdown-arrow"
