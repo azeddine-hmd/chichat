@@ -1,3 +1,5 @@
+import { HttpError } from "./http-error";
+
 interface RegisterDto {
   displayName: string;
   username: string;
@@ -10,20 +12,26 @@ interface RegisterDto {
   };
 }
 
-export async function registerUser(dto: RegisterDto): Promise<boolean> {
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/api/auth/register",
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(dto),
-    }
-  );
-  if (!res.ok)
-    return false;
-
-  return true;
+export async function registerUser(
+  dto: RegisterDto
+): Promise<HttpError | null> {
+  try {
+    const res = await fetch(
+      process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/api/auth/register",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(dto),
+      }
+    );
+    if (!res.ok) 
+      return await res.json();
+  } catch (err) {
+    console.error("network failure");
+    return { message: "Network Failure" };
+  }
+  return null;
 }

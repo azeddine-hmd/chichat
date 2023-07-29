@@ -1,32 +1,20 @@
-// import { mg } from '../config';
 import nodemailer from 'nodemailer';
 
-export async function sendVerificationMail(to: string, htmlContent: string) {
-  // return await mg.messages.create(
-  //   'sandboxebcb4c88e0454f0181e28e38dda7e503.mailgun.org',
-  //   {
-  //     from: 'Discord  <mailgun@sandboxebcb4c88e0454f0181e28e38dda7e503.mailgun.org>',
-  //     to: [to],
-  //     subject: 'Email Validation',
-  //     text: 'Testing some Mailgun awesomeness!',
-  //     html: htmlContent,
-  //   }
-  // );
-  
-  // send via nodemail
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    auth: {
-      user: 'azeddine.hmd@gmail.com',
-      pass: 'InnocentDevil_666',
-    },
-    secure: true,
-    authMethod: 'PLAIN',
-  })
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    type: 'login',
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+})
 
+export async function sendVerificationMail(to: string, htmlContent: string) {
   await transporter.sendMail({
-      from: 'Azeddine Hamdaoui  <smtp.gmail.com>',
+      from: 'Azeddine Hamdaoui  <azeddine.hmd@gmail.com>',
       to: [to],
       subject: 'Email Validation',
       text: 'This is just for development application!',

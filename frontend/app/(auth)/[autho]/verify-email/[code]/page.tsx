@@ -14,10 +14,10 @@ async function checkValidationCode(code: string) {
     code: code,
   };
   console.log(
-    `url: ${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/auth/email-verify`
+    `url: ${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/auth/email-verify`
   );
   const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/auth/email-verify/",
+    process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/api/auth/email-verify/",
     {
       method: "POST",
       headers: {

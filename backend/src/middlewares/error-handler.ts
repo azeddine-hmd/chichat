@@ -1,5 +1,5 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import { Error } from '../utils/error';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export function errorHandler(
   err: ErrorRequestHandler,
@@ -7,9 +7,11 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  if (err instanceof Error) {
-    res.status(400).send({ error: err.message });
+  if (err instanceof PrismaClientKnownRequestError) {
+    console.log(JSON.stringify(err.meta.target));
+    res.status(400).send({ message: err.meta.target + ' already exist' });
   } else {
+    console.error(err);
     next(err);
   }
 }

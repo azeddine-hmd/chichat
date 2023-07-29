@@ -4,6 +4,7 @@ import Label from "@/components/atoms/label";
 import Dropdownmenu from "@/components/molecules/dropdown-menu";
 import FormField from "@/components/molecules/form-field";
 import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
+import { Error } from "@/network/error";
 import { registerUser } from "@/network/register";
 import { delay } from "@/utils/delay";
 import { Formik } from "formik";
@@ -65,6 +66,7 @@ export default function Login() {
     values: RegisterFormType,
     setLoadingState: Dispatch<SetStateAction<boolean>>
   ) {
+    setNetError(null);
     (async () => {
       setLoadingState(true);
       await delay(1_000);
@@ -72,15 +74,15 @@ export default function Login() {
       const monthIndex = months.indexOf(month);
       const dateOfBirth = { day: day, month: monthIndex, year: year };
       const dto = { ...rest, dateOfBirth };
-      const success = await registerUser(dto);
-      if (success)
+      const error = await registerUser(dto);
+      if (!error) {
         router.push("/auth/verify-email");
-      else {
+      } else {
         setLoadingState(false);
-        setNetError('something went wrong!');
+        setNetError(error.message);
         setTimeout(() => {
           setNetError(null);
-        }, 2_000);
+        }, 10_000);
       }
     })();
   }
@@ -90,11 +92,9 @@ export default function Login() {
       <h1 className="text-2xl font-semibold text-white/90">
         Create an account
       </h1>
-      {netError &&
-        <h3>
-          {netError}
-        </h3>
-      }
+      {netError && (
+        <h3 className="mt-2 text-lg font-semibold text-red-400">{netError}</h3>
+      )}
       <div className="mt-5 h-full w-full">
         <Formik
           initialValues={{
@@ -178,7 +178,6 @@ export default function Login() {
               </div>
               <PrimaryDotLoadingButton
                 type="submit"
-                disabled={isSubmitting}
                 onButtonClicked={(_, setLoadingState) =>
                   isValid && onSubmit(values, setLoadingState)
                 }
