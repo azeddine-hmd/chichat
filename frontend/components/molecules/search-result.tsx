@@ -83,7 +83,7 @@ function InitialResults() {
 
   useKeyboardShortcut({
     keys: ["ArrowUp"],
-    callback: () => {
+    callback: (_) => {
       if (highlightedItem == 0) setHighlightedItem(maxLen - 1);
       else setHighlightedItem(highlightedItem - 1);
     },
@@ -91,7 +91,7 @@ function InitialResults() {
 
   useKeyboardShortcut({
     keys: ["ArrowDown"],
-    callback: () => {
+    callback: (_) => {
       if (highlightedItem == maxLen - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);
     },
@@ -182,7 +182,7 @@ function HotResult({ text }: HotResultType) {
 
   useKeyboardShortcut({
     keys: ["ArrowUp"],
-    callback: () => {
+    callback: (_) => {
       if (highlightedItem == 0) setHighlightedItem(results.length - 1);
       else setHighlightedItem(highlightedItem - 1);
     },
@@ -190,7 +190,7 @@ function HotResult({ text }: HotResultType) {
 
   useKeyboardShortcut({
     keys: ["ArrowDown"],
-    callback: () => {
+    callback: (_) => {
       if (highlightedItem == results.length - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);
     },

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { KeyboardEvent, useEffect } from "react";
 
 export type Key = 
   "ctrl" |
@@ -12,12 +12,12 @@ export type Key =
 
 export type KeyboardInputEvent = {
   keys: Array<Key>;
-  callback: () => void;
+  callback: (event: any) => void;
 };
 
 export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disableScrollEvent: boolean = false) {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: any) => {
       const {keys, callback} = keyboardInputEvent;
       if (keys.every((key) => {
         return (key === "ctrl" && event.ctrlKey) ||
@@ -30,7 +30,7 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disa
           (typeof key === "string" && event.key.toLowerCase() === key);
         })
       ) {
-        callback();
+        callback(event);
       } else {
         // console.log(`unknown key: ${event.key}`);
       }

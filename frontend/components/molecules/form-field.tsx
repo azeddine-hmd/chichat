@@ -15,6 +15,7 @@ export default function FormField({
   placeholder = "",
   type = "text",
   error,
+  className,
   ...restProps
 }: LabelInputFieldProps) {
   return (
@@ -24,7 +25,7 @@ export default function FormField({
         {error && error !== "Required" && <span className="text-red-400" >&nbsp;&nbsp;-&nbsp;&nbsp;{error}</span>}
       </Label>
       <FieldInput
-        className={twMerge("text-md mb-1 mt-1 h-10 w-full bg-gray-850 p-2 text-foreground")}
+        className={twMerge("text-md mb-3 mt-2 h-10 w-full bg-gray-850 p-2 text-foreground")}
         placeholder={placeholder}
         type={type}
         {...restProps}

@@ -41,12 +41,15 @@ export default function CodeAuthVerification({
       const isVerified = await checkValidationCode(code);
       setTimeout(() => {
         setOnValidating(false);
+        setTimeout(() => {
+          window.location.assign("/login");
+        }, 2000);
       }, 1000);
     })();
   }, [code]);
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-md bg-gray-600 p-8 shadow-lg">
+    <div className="flex flex-col items-center justify-center">
       {onValidating ? (
         <>
           <div className="mb-4 text-2xl font-semibold text-foreground">

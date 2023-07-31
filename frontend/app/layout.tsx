@@ -1,6 +1,7 @@
 import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
+import GlobalTemplate from "@/components/templates/global";
 
 export const metadata = {
   title: "Discord| Your Place To Talk and Hang Out",
@@ -17,7 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <GlobalTemplate>{children}</GlobalTemplate>
+      </body>
     </html>
   );
 }

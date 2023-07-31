@@ -4,9 +4,9 @@ import Label from "@/components/atoms/label";
 import Dropdownmenu from "@/components/molecules/dropdown-menu";
 import FormField from "@/components/molecules/form-field";
 import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
-import { Error } from "@/network/error";
 import { registerUser } from "@/network/register";
 import { delay } from "@/utils/delay";
+import { strongEmail, strongPassword } from "@/utils/yup-extra";
 import { Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,9 +18,9 @@ type RegisterFormType = {
   username: string;
   password: string;
   email: string;
-  day: number;
+  day: string; // number
   month: string;
-  year: number;
+  year: string; // number
 };
 
 export default function Login() {
@@ -54,12 +54,15 @@ export default function Login() {
       .max(20, "Too Long!")
       .required("Required"),
 
-    password: Yup.string()
-      .min(8, "Too Short!")
-      .max(20, "Too Long!")
-      .required("Required"),
+    password: strongPassword().required("Required"),
 
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: strongEmail().required("Required"),
+
+    day: Yup.string().required("Required"),
+
+      month: Yup.string().required("Required"),
+
+      year: Yup.string().required("Required"),
   });
 
   function onSubmit(
@@ -72,7 +75,11 @@ export default function Login() {
       await delay(1_000);
       const { day, month, year, ...rest } = values;
       const monthIndex = months.indexOf(month);
-      const dateOfBirth = { day: day, month: monthIndex, year: year };
+      const dateOfBirth = {
+        day: parseInt(day),
+        month: monthIndex,
+        year: parseInt(month),
+      };
       const dto = { ...rest, dateOfBirth };
       const error = await registerUser(dto);
       if (!error) {
@@ -88,7 +95,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex h-fit w-[480px] flex-col items-center rounded-md bg-gray-600 p-8 shadow-lg">
+    <div className="flex h-fit w-[480px] flex-col items-center">
       <h1 className="text-2xl font-semibold text-white/90">
         Create an account
       </h1>
@@ -102,23 +109,16 @@ export default function Login() {
             username: "",
             password: "",
             email: "",
-            day: 1,
-            month: "January",
-            year: 2000,
+            day: "",
+            month: "",
+            year: "",
           }}
           validationSchema={registrationSchema}
-          onSubmit={() => {}}
+          onSubmit={() => { }}
           validateOnMount={true}
         >
-          {({
-            values,
-            errors,
-            handleChange,
-            isSubmitting,
-            handleSubmit,
-            isValid,
-          }) => (
-            <form onSubmit={handleSubmit}>
+          {({ values, errors, handleChange, handleSubmit, isValid }) => (
+            <form onSubmit={handleSubmit} className="h-full w-full">
               <FormField
                 name="displayName"
                 error={errors.displayName}
@@ -153,7 +153,7 @@ export default function Login() {
                 EMAIL
               </FormField>
               <Label>DATE OF BIRTH</Label>
-              <div className="flex w-full flex-nowrap justify-start gap-2">
+              <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
                 <Dropdownmenu
                   placeholder="Month"
                   items={months}

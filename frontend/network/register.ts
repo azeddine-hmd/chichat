@@ -29,9 +29,9 @@ export async function registerUser(
     );
     if (!res.ok) 
       return await res.json();
+    return null;
   } catch (err) {
     console.error("network failure");
     return { message: "Network Failure" };
   }
-  return null;
 }

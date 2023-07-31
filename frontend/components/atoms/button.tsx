@@ -15,7 +15,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={twMerge("rounded-lg bg-transparent text-muted", className)}
+      className={twMerge("outline-none rounded-lg bg-transparent text-muted", className)}
       ref={ref}
       {...restProps}
     >

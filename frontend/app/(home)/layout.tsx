@@ -35,14 +35,14 @@ export default function HomeLayout({
 
   useKeyboardShortcut({
     keys: ["ctrl", "alt", "p"],
-    callback() {
+    callback(_) {
       openSearchPopup(true);
     },
   });
 
   useKeyboardShortcut({
     keys: ["Escape"],
-    callback() {
+    callback(_) {
       if (isSearchPopupOpen) openSearchPopup(false);
       if (isShortcutHelpPopupOpen) openShortcutHelpPopup(false);
     },
@@ -50,7 +50,7 @@ export default function HomeLayout({
 
   useKeyboardShortcut({
     keys: ["shift", "?"],
-    callback() {
+    callback(event) {
       openShortcutHelpPopup(true);
     },
   });
