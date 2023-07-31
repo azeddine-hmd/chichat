@@ -66,11 +66,12 @@ function FloatingMenuCard({
 
   useKeyboardShortcut({
     keys: ["Enter"],
-    callback: (_) => {
+    callback: (event: KeyboardEvent) => {
       console.log("inside evil enter");
       fireItemSelection();
+      event.stopPropagation();
     },
-  });
+  }, true);
 
   function onItemClicked(event: MouseEvent<HTMLButtonElement>) {
     fireItemSelection();
@@ -130,9 +131,9 @@ export default function DropdownMenu({
   };
 
   function onItemSelected(item: string) {
+    setInputValue(item);
     setOpenMenu(false);
     setFilteredItems(items);
-    setInputValue(item);
   }
 
   return (

@@ -58,5 +58,3 @@ services:
       - FRONTEND_PROTOCOL=${FRONTEND_PROTOCOL}
       - FRONTEND_HOST=${FRONTEND_HOST}
       - FRONTEND_DOMAIN=${FRONTEND_DOMAIN}
-    # env_file:
-      # - ./frontend/.env

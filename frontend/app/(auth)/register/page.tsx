@@ -25,7 +25,7 @@ type RegisterFormType = {
 
 export default function Login() {
   const router = useRouter();
-  const [netError, setNetError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const months = [
     "January",
     "February",
@@ -60,21 +60,22 @@ export default function Login() {
 
     day: Yup.string().required("Required"),
 
-      month: Yup.string().required("Required"),
+    month: Yup.string().required("Required"),
 
-      year: Yup.string().required("Required"),
+    year: Yup.string().required("Required"),
   });
 
   function onSubmit(
     values: RegisterFormType,
     setLoadingState: Dispatch<SetStateAction<boolean>>
   ) {
-    setNetError(null);
+    setError(null);
     (async () => {
       setLoadingState(true);
       await delay(1_000);
       const { day, month, year, ...rest } = values;
       const monthIndex = months.indexOf(month);
+      console.log(`day: ${day} and year: ${year}`);
       const dateOfBirth = {
         day: parseInt(day),
         month: monthIndex,
@@ -86,9 +87,9 @@ export default function Login() {
         router.push("/auth/verify-email");
       } else {
         setLoadingState(false);
-        setNetError(error.message);
+        setError(error.message);
         setTimeout(() => {
-          setNetError(null);
+          setError(null);
         }, 10_000);
       }
     })();
@@ -99,8 +100,8 @@ export default function Login() {
       <h1 className="text-2xl font-semibold text-white/90">
         Create an account
       </h1>
-      {netError && (
-        <h3 className="mt-2 text-lg font-semibold text-red-400">{netError}</h3>
+      {error && (
+        <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
       )}
       <div className="mt-5 h-full w-full">
         <Formik
@@ -114,7 +115,7 @@ export default function Login() {
             year: "",
           }}
           validationSchema={registrationSchema}
-          onSubmit={() => { }}
+          onSubmit={() => {}}
           validateOnMount={true}
         >
           {({ values, errors, handleChange, handleSubmit, isValid }) => (

@@ -18,7 +18,7 @@ type LoginFormType = {
 
 export default function Login() {
   const router = useRouter();
-  const [netError, setNetError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const loginSchema = Yup.object().shape({
     password: Yup.string().min(8, "Too short").required("Required"),
@@ -29,7 +29,7 @@ export default function Login() {
     values: LoginFormType,
     setLoadingState: Dispatch<SetStateAction<boolean>>
   ) {
-    setNetError(null);
+    setError(null);
     (async () => {
       setLoadingState(true);
       await delay(1_000);
@@ -38,9 +38,9 @@ export default function Login() {
         router.push("/");
       } else {
         setLoadingState(false);
-        setNetError(error.message);
+        setError(error.message);
         setTimeout(() => {
-          setNetError(null);
+          setError(null);
         }, 10_000);
       }
     })();
@@ -52,8 +52,8 @@ export default function Login() {
       <h6 className="text-md mt-2 text-muted">
         We&apos;re excited to see you again!
       </h6>
-      {netError && (
-        <h3 className="mt-2 text-lg font-semibold text-red-400">{netError}</h3>
+      {error && (
+        <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
       )}
       <div className="mt-4 flex h-full w-full flex-col items-center justify-start">
         <Formik

@@ -39,10 +39,12 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disa
     };
 
   // console.log("adding event: useKeyboardShortcut");
-	window.addEventListener("keydown", handleKeyDown);
+	// window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keypress", handleKeyDown)
     return () => {
       // console.log("removing event: useKeyboardShortcut");
-      window.removeEventListener("keydown", handleKeyDown);
+      // window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keypress", handleKeyDown);
     };
 
   }, [keyboardInputEvent]);
