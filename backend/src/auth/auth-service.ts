@@ -6,7 +6,7 @@ import { sendVerificationMail } from '../utils/send-mail';
 import { randomUUID } from 'crypto';
 import { HttpError } from '../utils/error';
 
-export async function registerUser(registerDto: RegisterDto) {
+export async function registerUser(registerDto: RegisterDto): Promise<User> {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(registerDto.password, salt);
   const birth = registerDto.dateOfBirth;

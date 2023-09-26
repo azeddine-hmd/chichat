@@ -7,7 +7,7 @@ type GlobalTemplateProps = {
   children?: React.ReactNode;
 };
 
-const pathWhitelist = ["/login", "/register", "/auth/verify-email"];
+const pathWhitelist = ["/login", "/register", "/auth/verify-email", "/test"]; // TODO: remove test path
 
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);

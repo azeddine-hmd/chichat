@@ -8,6 +8,7 @@ import { registerUser } from "@/network/register";
 import { delay } from "@/utils/delay";
 import { strongEmail, strongPassword } from "@/utils/yup-extra";
 import { Formik } from "formik";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
@@ -96,104 +97,112 @@ export default function Login() {
   }
 
   return (
-    <div className="flex h-fit w-[480px] flex-col items-center">
-      <h1 className="text-2xl font-semibold text-white/90">
-        Create an account
-      </h1>
-      {error && (
-        <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
-      )}
-      <div className="mt-5 h-full w-full">
-        <Formik
-          initialValues={{
-            displayName: "",
-            username: "",
-            password: "",
-            email: "",
-            day: "",
-            month: "",
-            year: "",
-          }}
-          validationSchema={registrationSchema}
-          onSubmit={() => {}}
-          validateOnMount={true}
-        >
-          {({ values, errors, handleChange, handleSubmit, isValid }) => (
-            <form onSubmit={handleSubmit} className="h-full w-full">
-              <FormField
-                name="displayName"
-                error={errors.displayName}
-                onChange={handleChange}
-                value={values.displayName}
-              >
-                DISPLAY NAME
-              </FormField>
-              <FormField
-                name="username"
-                error={errors.username}
-                onChange={handleChange}
-                value={values.username}
-              >
-                USERNAME
-              </FormField>
-              <FormField
-                type="password"
-                name="password"
-                error={errors.password}
-                onChange={handleChange}
-                value={values.password}
-              >
-                PASSWORD
-              </FormField>
-              <FormField
-                name="email"
-                error={errors.email}
-                onChange={handleChange}
-                value={values.email}
-              >
-                EMAIL
-              </FormField>
-              <Label>DATE OF BIRTH</Label>
-              <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
-                <Dropdownmenu
-                  placeholder="Month"
-                  items={months}
-                  fieldName="month"
-                  onChange={handleChange}
-                  value={values.month}
-                />
-                <Dropdownmenu
-                  placeholder="Day"
-                  items={days}
-                  fieldName="day"
-                  onChange={handleChange}
-                  value={values.day}
-                />
-                <Dropdownmenu
-                  placeholder="Year"
-                  items={years}
-                  fieldName="year"
-                  onChange={handleChange}
-                  value={values.year}
-                />
-              </div>
-              <PrimaryDotLoadingButton
-                type="submit"
-                onButtonClicked={(_, setLoadingState) =>
-                  isValid && onSubmit(values, setLoadingState)
-                }
-              >
-                Continue
-              </PrimaryDotLoadingButton>
-            </form>
+    <motion.div
+      initial={{ opacity: 0, translateY: -50 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ duration: 0.7 }}
+    >
+      <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
+        <div className="flex h-fit w-[480px] flex-col items-center">
+          <h1 className="text-2xl font-semibold text-white/90">
+            Create an account
+          </h1>
+          {error && (
+            <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
           )}
-        </Formik>
-        <div className="mt-4">
-          <Link href="/login" className="text-sm text-link">
-            Already have an account?
-          </Link>
+          <div className="mt-5 h-full w-full">
+            <Formik
+              initialValues={{
+                displayName: "",
+                username: "",
+                password: "",
+                email: "",
+                day: "",
+                month: "",
+                year: "",
+              }}
+              validationSchema={registrationSchema}
+              onSubmit={() => {}}
+              validateOnMount={true}
+            >
+              {({ values, errors, handleChange, handleSubmit, isValid }) => (
+                <form onSubmit={handleSubmit} className="h-full w-full">
+                  <FormField
+                    name="displayName"
+                    error={errors.displayName}
+                    onChange={handleChange}
+                    value={values.displayName}
+                  >
+                    DISPLAY NAME
+                  </FormField>
+                  <FormField
+                    name="username"
+                    error={errors.username}
+                    onChange={handleChange}
+                    value={values.username}
+                  >
+                    USERNAME
+                  </FormField>
+                  <FormField
+                    type="password"
+                    name="password"
+                    error={errors.password}
+                    onChange={handleChange}
+                    value={values.password}
+                  >
+                    PASSWORD
+                  </FormField>
+                  <FormField
+                    name="email"
+                    error={errors.email}
+                    onChange={handleChange}
+                    value={values.email}
+                  >
+                    EMAIL
+                  </FormField>
+                  <Label>DATE OF BIRTH</Label>
+                  <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
+                    <Dropdownmenu
+                      placeholder="Month"
+                      items={months}
+                      fieldName="month"
+                      onChange={handleChange}
+                      value={values.month}
+                    />
+                    <Dropdownmenu
+                      placeholder="Day"
+                      items={days}
+                      fieldName="day"
+                      onChange={handleChange}
+                      value={values.day}
+                    />
+                    <Dropdownmenu
+                      placeholder="Year"
+                      items={years}
+                      fieldName="year"
+                      onChange={handleChange}
+                      value={values.year}
+                    />
+                  </div>
+                  <PrimaryDotLoadingButton
+                    type="submit"
+                    onButtonClicked={(_, setLoadingState) =>
+                      isValid && onSubmit(values, setLoadingState)
+                    }
+                  >
+                    Continue
+                  </PrimaryDotLoadingButton>
+                </form>
+              )}
+            </Formik>
+            <div className="mt-4">
+              <Link href="/login" className="text-sm text-link">
+                Already have an account?
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

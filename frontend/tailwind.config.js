@@ -29,7 +29,8 @@ module.exports = {
       },
       colors: {
         primary: {
-          DEFAULT: '#5865f2',
+          // DEFAULT: '#5865f2',
+          DEFAULT: '#CC5500',
         },
         secondary: '#313338',
         button: {

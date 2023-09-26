@@ -9,8 +9,7 @@ import { HttpError } from '../utils/error';
 export async function register(req: Request, res: Response) {
   const registerDto = plainToClass(RegisterDto, req.body);
   const validationError = await validate(registerDto);
-  if (validationError.length > 0)
-    return res.status(400).json(validationError);
+  if (validationError.length > 0) return res.status(400).json(validationError);
   const user = await authService.registerUser(registerDto);
   await authService.sendEmailVerification(user, req.sessionID);
   res.send(user);
@@ -19,8 +18,7 @@ export async function register(req: Request, res: Response) {
 export async function verifyEmail(req: Request, res: Response) {
   const verifyEmailDto = plainToClass(VerifyEmailDto, req.body);
   const validationError = await validate(verifyEmailDto);
-  if (validationError.length > 0)
-    return res.status(400).json(validationError);
+  if (validationError.length > 0) return res.status(400).json(validationError);
   await authService.verifyEmail(verifyEmailDto.code, req.sessionID);
 
   // login
