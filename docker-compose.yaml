@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: postgres:latest
-    container_name: discord-db
+    container_name: chichat-db
     user: root
     restart: always
     environment:
@@ -12,8 +12,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
 
   backend:
-    image: discord-backend
-    container_name: discord-backend
+    image: chichat-backend
+    container_name: chichat-backend
     build: ./backend
     user: node
     depends_on:
@@ -41,8 +41,8 @@ services:
       - ./backend/.env
 
   frontend:
-    image: discord-frontend
-    container_name: discord-frontend
+    image: chichat-frontend
+    container_name: chichat-frontend
     build: ./frontend
     user: node
     ports:

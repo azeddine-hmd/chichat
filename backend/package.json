@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "backend server for discord app",
+  "description": "backend server for chichat app",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
