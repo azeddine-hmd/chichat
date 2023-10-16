@@ -15,7 +15,10 @@ model User {
     password    String
     dateOfBirth DateTime
     active      Boolean  @default(false)
-    Codes       Codes[]
+
+    Codes      Codes[]
+    Friend1 Friendship[] @relation("Friend1")
+    Friend2 Friendship[] @relation("Friend2")
 }
 
 model Codes {
@@ -23,7 +26,19 @@ model Codes {
     operation String
     code      String
     createdAt DateTime @default(now())
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    Int
     sessionId String
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Friendship {
+    id       Int @id @default(autoincrement())
+    user1_id Int
+    user2_id Int
+
+    user1 User @relation("Friend1", references: [id], onDelete: Cascade, fields: [user1_id])
+    user2 User @relation("Friend2", references: [id], onDelete: Cascade, fields: [user2_id])
+
+    @@unique([user1_id, user2_id], name: "unique_user_combination")
 }

@@ -7,7 +7,12 @@ type GlobalTemplateProps = {
   children?: React.ReactNode;
 };
 
-const pathWhitelist = ["/login", "/register", "/auth/verify-email", "/test"]; // TODO: remove test path
+const pathWhitelist = [
+  "/login",
+  "/register",
+  "/verify-email",
+  "/test"
+]; // TODO: remove test path
 
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);
@@ -15,7 +20,6 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   useEffect(() => {
     (async () => {
       if (!pathWhitelist.some((path) => window.location.pathname.startsWith(path))) {
-        console.log(window.location.pathname);
         const error = await authUser();
         error ? window.location.assign("/login") : setOnRender(true);
       } else {

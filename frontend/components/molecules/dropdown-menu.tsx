@@ -14,49 +14,45 @@ import FieldInput from "../atoms/field-input";
 import ArrowDownSvg from "@/svg/arrow-down";
 import FloatingCard from "../atoms/floating-card";
 import PrimaryButton from "./primary-button";
-import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
+import { useField } from "formik";
 
 type FloatingMenuCardProps = {
   open: Dispatch<SetStateAction<boolean>>;
+  setInputKeyPress: Dispatch<SetStateAction<string>>;
+  inputkeyPress: string;
   items: Array<string>;
   onItemSelected: (item: string) => void;
 };
 
-function FloatingMenuCard({
+function FloatingMenu<T>({
   open,
+  setInputKeyPress,
+  inputkeyPress,
   items,
   onItemSelected,
 }: FloatingMenuCardProps) {
   const [highlightedItem, setHighlightedItem] = useState(0);
 
   useEffect(() => {
-    console.log("creatign open menu...");
-    return () => {
-      console.log("destroying open menu...");
-    };
-  }, []);
-
-  useKeyboardShortcut({
-    keys: ["ArrowUp"],
-    callback: (_) => {
-      if (highlightedItem == 0) setHighlightedItem(items.length - 1);
-      else setHighlightedItem(highlightedItem - 1);
-    },
-  });
-
-  useKeyboardShortcut({
-    keys: ["ArrowDown"],
-    callback: (_) => {
+    if (inputkeyPress === "ArrowDown") {
       if (highlightedItem == items.length - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);
-    },
-  });
+      setInputKeyPress('');
+    } else if (inputkeyPress === "ArrowUp") {
+      if (highlightedItem == 0) setHighlightedItem(items.length - 1);
+      else setHighlightedItem(highlightedItem - 1);
+      setInputKeyPress('');
+    } else if (inputkeyPress === "Enter") {
+      fireItemSelection();
+      setInputKeyPress('');
+    }
+  }, [inputkeyPress]);
 
-  function fireItemSelection() {
-    console.log("fireItemSelection: called");
+  function fireItemSelection(index?: number) {
+    const itemIndex = index ? index : highlightedItem;
     if (items.length > 0) {
-      if (items[highlightedItem] !== undefined) {
-        onItemSelected(items[highlightedItem]);
+      if (items[itemIndex] !== undefined) {
+        onItemSelected(items[itemIndex]);
       } else {
         onItemSelected("");
       }
@@ -64,21 +60,12 @@ function FloatingMenuCard({
     }
   }
 
-  useKeyboardShortcut({
-    keys: ["Enter"],
-    callback: (event: KeyboardEvent) => {
-      console.log("inside evil enter");
-      fireItemSelection();
-      event.stopPropagation();
-    },
-  }, true);
-
-  function onItemClicked(event: MouseEvent<HTMLButtonElement>) {
-    fireItemSelection();
-  }
-
   return (
-    <FloatingCard className="h-fit" direction="top" showCard={open}>
+    <FloatingCard 
+      className="h-fit" 
+      direction="top" 
+      showCard={open}
+    >
       {items.length == 0 ? (
         <p className="p-2 text-sm text-muted">No results found</p>
       ) : (
@@ -86,9 +73,9 @@ function FloatingMenuCard({
           return (
             <PrimaryButton
               key={item}
-              className="flex items-center justify-start p-2 hover:text-foreground"
+              className="w-full flex items-center justify-start p-2 hover:text-foreground"
               hover={index == highlightedItem ? true : false}
-              onClick={onItemClicked}
+              onClick={(e) => fireItemSelection(index)}
             >
               {item}
             </PrimaryButton>
@@ -102,7 +89,8 @@ function FloatingMenuCard({
 export type DropdownmenuProps = {
   placeholder?: string;
   items: Array<string>;
-  fieldName?: string;
+  fieldName: string;
+  setFieldValue: any;
 } & React.ComponentProps<"input">;
 
 export default function DropdownMenu({
@@ -112,28 +100,37 @@ export default function DropdownMenu({
   fieldName,
   onChange,
   value,
+  setFieldValue,
   ...restProps
 }: DropdownmenuProps) {
   const [filteredItems, setFilteredItems] = useState<Array<string>>(items);
   const [openMenu, setOpenMenu] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [inputValue, setInputValue] = useState(value);
+  const [inputkeyPress, setInputKeyPress] = useState('');
 
   const onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setInputValue(value);
-    setOpenMenu(value.length == 0 ? false : true);
-    const results: Array<string> = [];
-    items.forEach((item) => {
-      if (item.toLowerCase().includes(value.toLowerCase())) results.push(item);
-    });
-    setFilteredItems(results);
+    if (onChange) onChange(event);
+    const value = inputRef.current?.value;
+    if (value) {
+      const results: Array<string> = [];
+      items.forEach((item) => {
+        if (item.toLowerCase().includes(value.toLowerCase())) results.push(item);
+      });
+      setFilteredItems(results);
+      setOpenMenu(value?.length == 0 ? false : true); 
+    }  else {
+      setFilteredItems(items);
+    }
   };
 
   function onItemSelected(item: string) {
-    setInputValue(item);
+    setFieldValue(fieldName, item, true);
     setOpenMenu(false);
     setFilteredItems(items);
+    const nextElement = inputRef.current?.parentElement?.nextElementSibling?.firstChild;
+    if (nextElement && nextElement instanceof HTMLInputElement) {
+      nextElement.focus();
+    }
   }
 
   return (
@@ -143,14 +140,13 @@ export default function DropdownMenu({
           "text-md flex h-fit flex-shrink cursor-default justify-between border border-gray-850 bg-gray-850 p-2",
           className
         )}
+        onChange={onFieldChange}
+        value={value}
         placeholder={placeholder}
-        onChange={(event) => {
-          if (onChange) onChange(event);
-          onFieldChange(event);
-        }}
         name={fieldName}
-        value={inputValue}
         autoComplete="off"
+        onKeyDown={(e) => setInputKeyPress(e.key)}
+        innerRef={inputRef}
         {...restProps}
       />
       <ArrowDownSvg
@@ -162,9 +158,11 @@ export default function DropdownMenu({
         }}
       />
       {openMenu && (
-        <FloatingMenuCard
+        <FloatingMenu
           onItemSelected={(item) => onItemSelected(item)}
           open={setOpenMenu}
+          setInputKeyPress={setInputKeyPress}
+          inputkeyPress={inputkeyPress}
           items={filteredItems}
         />
       )}

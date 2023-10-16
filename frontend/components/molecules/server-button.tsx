@@ -28,7 +28,7 @@ export default function ServerButton({ icon, text, selected, ...restProps }: Ser
           selected
             ? "rounded-2xl bg-primary text-white"
             : "rounded-3xl bg-secondary",
-          "relative mx-auto flex h-12 w-12 cursor-pointer items-center justify-center p-1 text-foreground shadow-lg transition-all duration-300 ease-linear last:mt-auto hover:rounded-2xl hover:bg-primary hover:text-white"
+          "relative mx-auto flex h-12 w-12 cursor-pointer items-center justify-center p-3 text-foreground shadow-lg transition-all duration-300 ease-linear last:mt-auto hover:rounded-2xl hover:bg-primary hover:text-white"
         )}
       >
         {icon}

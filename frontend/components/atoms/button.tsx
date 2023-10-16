@@ -5,18 +5,19 @@ import { twMerge } from "tailwind-merge";
 
 export type ButtonProps = {
   children?: React.ReactNode;
+  innerRef?: React.RefObject<HTMLButtonElement>
 } & React.ComponentProps<"button">;
 
 export default function Button({
   children,
   className,
-  ref,
+  innerRef,
   ...restProps
 }: ButtonProps) {
   return (
     <button
       className={twMerge("outline-none rounded-lg bg-transparent text-muted", className)}
-      ref={ref}
+      ref={innerRef}
       {...restProps}
     >
       {children}

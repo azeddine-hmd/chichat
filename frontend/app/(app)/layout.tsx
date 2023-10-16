@@ -1,13 +1,13 @@
 "use client";
 
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
-import Channelbar from "@/components/organisms/channelbar";
 import ServerSidebar from "@/components/organisms/server-sidebar";
-import FloatingShortcutHelper from "@/components/molecules/floating-shortcut-helper";
 import QuickSearchPopup from "@/components/organisms/quick-search-popup";
 import ShortcutPopup from "@/components/organisms/shortcut-popup";
 import React, { useState } from "react";
 import { GlobalContext } from "@/app/global-context";
+import DefaultContentChannel from "@/components/molecules/default-content-channel";
+import ChannelSidebar from "@/components/organisms/channel-sidebar";
 
 export default function HomeLayout({
   children,
@@ -60,10 +60,12 @@ export default function HomeLayout({
       <GlobalContext.Provider value={globalContext}>
         <div className="flex h-full w-full">
           <ServerSidebar />
-          <Channelbar />
+          <ChannelSidebar >
+              <DefaultContentChannel />
+          </ChannelSidebar>
           {children}
           <div className="h-full w-32 bg-gray-700" />
-          {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />}
+          {/* {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />} */}
         </div>
         {isSearchPopupOpen && <QuickSearchPopup />}
         {isShortcutHelpPopupOpen && <ShortcutPopup />}

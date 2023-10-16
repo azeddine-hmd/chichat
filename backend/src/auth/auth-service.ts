@@ -1,14 +1,14 @@
 import { RegisterDto } from './dto/register';
 import { User } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
 import { prisma } from '../config/prisma';
 import { sendVerificationMail } from '../utils/send-mail';
 import { randomUUID } from 'crypto';
 import { HttpError } from '../utils/error';
+import { comparePassword, hashPassword } from '../utils/password';
+import { signJwt } from '../config';
 
 export async function registerUser(registerDto: RegisterDto): Promise<User> {
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(registerDto.password, salt);
+  const hashedPassword = await hashPassword(registerDto.password);
   const birth = registerDto.dateOfBirth;
   const user = await prisma.user.create({
     data: {
@@ -25,10 +25,13 @@ export async function registerUser(registerDto: RegisterDto): Promise<User> {
 
 export async function sendEmailVerification(user: User, sessionId: string) {
   const emailSecret = randomUUID();
+  console.log(
+    `email verification for user(${user.username}) is: ${emailSecret}`
+  );
   const verificationEmailHTML = `
   <h1>Email Verficiation</h1>
   <p>Click the link belwo to verify your email address:</p>
-  <a href="${process.env.FRONTEND_DOMAIN}/auth/verify-email/${emailSecret}">Verify Email</a>
+  <a href="${process.env.FRONTEND_DOMAIN}/verify-email/${emailSecret}">Verify Email</a>
   `;
 
   sendVerificationMail(user.email, verificationEmailHTML);
@@ -44,16 +47,20 @@ export async function sendEmailVerification(user: User, sessionId: string) {
       },
     },
   });
-  setTimeout(async () => {
-    await prisma.codes.deleteMany({
-      where: {
-        id: code.id,
-      },
-    });
-  }, 1_000_000);
+  // uncomment setTimeout below for limited verification time
+  // setTimeout(async () => {
+  // await prisma.codes.deleteMany({
+  //   where: {
+  //     id: code.id,
+  //   },
+  // });
+  // }, 1_000_000);
 }
 
-export async function verifyEmail(code: string, sessionId: string) {
+export async function verifyEmail(
+  code: string,
+  sessionId: string
+): Promise<User> {
   // verify code
   const storedCodes = await prisma.codes.findMany({
     where: {
@@ -77,4 +84,24 @@ export async function verifyEmail(code: string, sessionId: string) {
       active: true,
     },
   });
+  await prisma.codes.delete({
+    where: { id: storedCode.id },
+  });
+  return storedCode.user;
+}
+
+export async function login(email: string, password?: string): Promise<string> {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    select: {
+      id: true,
+      password: true,
+      username: true,
+    },
+  });
+  if (!user || (password && !comparePassword(password, user.password)))
+    throw new HttpError(400, 'The email or password you entered is incorrect');
+  return await signJwt(user.id);
 }

@@ -20,6 +20,7 @@ type LoginFormType = {
 export default function Login() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const loginSchema = Yup.object().shape({
     password: Yup.string().min(8, "Too short").required("Required"),
@@ -37,14 +38,12 @@ export default function Login() {
       const error = await loginUser(values);
       if (!error) {
         router.push("/");
-        console.log("going to path '/'");
       } else {
         setLoadingState(false);
-        console.log("loadign state is false");
         setError(error.message);
-        setTimeout(() => {
-          setError(null);
-        }, 10_000);
+        // setTimeout(() => {
+        //   setError(null);
+        // }, 10_000);
       }
     })();
   }
@@ -78,27 +77,59 @@ export default function Login() {
             >
               {({ values, errors, handleChange, handleSubmit, isValid }) => (
                 <form onSubmit={handleSubmit} className="h-full w-full">
-                  <FormField
-                    name="email"
-                    type="email"
-                    error={errors.email}
-                    onChange={handleChange}
-                    value={values.email}
-                  >
-                    EMAIL
-                  </FormField>
-                  <FormField
-                    name="password"
-                    type="password"
-                    error={errors.password}
-                    onChange={handleChange}
-                    value={values.password}
-                  >
-                    PASSWORD
-                  </FormField>
+                  <div className="relative">
+                    <FormField
+                      layoutClassName="mb-4"
+                      name="email"
+                      type="email"
+                      error={emailError ? emailError : errors.email}
+                      onChange={handleChange}
+                      value={values.email}
+                    >
+                      EMAIL
+                    </FormField>
+                    <div
+                      className="absolute top-[89%] cursor-pointer text-sm text-link hover:underline"
+                      onClick={(e) => {
+                        if (errors["email"] === "Required") {
+                          setEmailError("Email is Required!");
+                          setTimeout(() => {
+                            setEmailError(null);
+                          }, 2_000);
+                        }
+                      }}
+                    >
+                      Resend email activation?
+                    </div>
+                  </div>
+
+                  <div className="relative">
+                    <FormField
+                      name="password"
+                      type="password"
+                      error={errors.password}
+                      onChange={handleChange}
+                      value={values.password}
+                    >
+                      PASSWORD
+                    </FormField>
+                    <div
+                      className="absolute top-[89%] cursor-pointer text-sm text-link hover:underline"
+                      onClick={(e) => {
+                        if (errors["email"] === "Required") {
+                          setEmailError("Email is Required!");
+                          setTimeout(() => {
+                            setEmailError(null);
+                          }, 2_000);
+                        }
+                      }}
+                    >
+                      Forgot password?
+                    </div>
+                  </div>
 
                   <PrimaryDotLoadingButton
-                    className="animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
+                    className="w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
                     type="submit"
                     onButtonClicked={(_, setLoadingState) =>
                       isValid && onSubmit(values, setLoadingState)
@@ -106,12 +137,17 @@ export default function Login() {
                   >
                     Login
                   </PrimaryDotLoadingButton>
+                  {
+                  }
                 </form>
               )}
             </Formik>
             <div className="mt-4 w-full text-sm text-muted">
               <h1 className="inline ">Need an account? </h1>
-              <Link href="/register" className="inline text-sm text-link">
+              <Link
+                href="/register"
+                className="inline cursor-pointer text-sm text-link hover:underline"
+              >
                 Register
               </Link>
             </div>

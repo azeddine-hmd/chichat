@@ -30,7 +30,6 @@ export class DateOfBirthDto {
 
 export class RegisterDto {
   @IsDefined()
-  @IsNotEmpty()
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)

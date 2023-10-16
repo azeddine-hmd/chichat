@@ -1,6 +1,6 @@
 import React from "react";
 import Label from "../atoms/label";
-import FieldInput, { FieldInputProps } from "../atoms/field-input";
+import FieldInput from "../atoms/field-input";
 import { twMerge } from "tailwind-merge";
 
 export type LabelInputFieldProps = {
@@ -8,6 +8,7 @@ export type LabelInputFieldProps = {
   placeholder?: string;
   type?: string;
   error?: string;
+  layoutClassName?: string;
 } & React.ComponentProps<"input">;
 
 export default function FormField({
@@ -16,10 +17,11 @@ export default function FormField({
   type = "text",
   error,
   className,
+  layoutClassName,
   ...restProps
 }: LabelInputFieldProps) {
   return (
-    <div>
+    <div className={layoutClassName} >
       <Label>{children}
         {error === "Required" && (<>&nbsp;&nbsp;<span className="text-red-400" >*</span></>)}
         {error && error !== "Required" && <span className="text-red-400" >&nbsp;&nbsp;-&nbsp;&nbsp;{error}</span>}

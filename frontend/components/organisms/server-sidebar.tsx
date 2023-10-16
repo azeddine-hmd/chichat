@@ -1,10 +1,12 @@
 "use client";
 
-import { BsDiscord, BsRobot, BsTv, BsVr } from "react-icons/bs";
+import { BsDiscord, BsRobot, BsTv } from "react-icons/bs";
 import Divider from "../molecules/divider";
 import ServerButton from "../molecules/server-button";
 import { useState } from "react";
 import { Server } from "@/types/server";
+import Image from "next/image";
+import ChiChatIcon from "@/public/svg/chichat-logo.svg";
 
 export default function ServerSidebar() {
   const [servers, setServers] = useState<Array<Server>>([
@@ -15,7 +17,7 @@ export default function ServerSidebar() {
 
   return (
     <nav className="flex h-full w-[4.5rem] shrink-0 grow-0 flex-col items-center bg-gray-900 pt-3 text-white shadow-lg ">
-      <ServerButton icon={<BsDiscord size="26" />} text="Direct Messages" selected={selectedServer == -1 ? true : false} onClick={e => setSelectedServer(-1)} />
+      <ServerButton icon={<Image priority  src={ChiChatIcon} alt="Main Server" />} text="Direct Messages" selected={selectedServer == -1 ? true : false} onClick={e => setSelectedServer(-1)} />
       <Divider />
       {servers.map((server, index) => {
         return (

@@ -16,7 +16,7 @@ export default function SearchField({ className, onTextChanged, ...restProps }: 
       {...restProps}
     >
       <FieldInput
-        className="text-white"
+        className="text-white focus:outline-transparent"
         placeholder="Where would you like to go?"
         onChange={onTextChanged}
         autoFocus

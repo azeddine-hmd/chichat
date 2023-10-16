@@ -24,7 +24,7 @@ type RegisterFormType = {
   year: string; // number
 };
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const months = [
@@ -76,22 +76,23 @@ export default function Login() {
       await delay(1_000);
       const { day, month, year, ...rest } = values;
       const monthIndex = months.indexOf(month);
-      console.log(`day: ${day} and year: ${year}`);
+      console.log(`day: ${day}, month: ${month}, year: ${year}`);
       const dateOfBirth = {
         day: parseInt(day),
         month: monthIndex,
-        year: parseInt(month),
+        year: parseInt(year),
       };
+      console.log(`dateOfBirth: ${JSON.stringify(dateOfBirth)}`);
       const dto = { ...rest, dateOfBirth };
       const error = await registerUser(dto);
       if (!error) {
-        router.push("/auth/verify-email");
+        router.push("/verify-email");
       } else {
         setLoadingState(false);
         setError(error.message);
-        setTimeout(() => {
-          setError(null);
-        }, 10_000);
+        // setTimeout(() => {
+        //   setError(null);
+        // }, 10_000);
       }
     })();
   }
@@ -125,7 +126,7 @@ export default function Login() {
               onSubmit={() => {}}
               validateOnMount={true}
             >
-              {({ values, errors, handleChange, handleSubmit, isValid }) => (
+              {({ values, setFieldValue, errors, handleChange, handleSubmit, isValid }) => (
                 <form onSubmit={handleSubmit} className="h-full w-full">
                   <FormField
                     name="displayName"
@@ -168,6 +169,7 @@ export default function Login() {
                       fieldName="month"
                       onChange={handleChange}
                       value={values.month}
+                      setFieldValue={setFieldValue}
                     />
                     <Dropdownmenu
                       placeholder="Day"
@@ -175,6 +177,7 @@ export default function Login() {
                       fieldName="day"
                       onChange={handleChange}
                       value={values.day}
+                      setFieldValue={setFieldValue}
                     />
                     <Dropdownmenu
                       placeholder="Year"
@@ -182,13 +185,19 @@ export default function Login() {
                       fieldName="year"
                       onChange={handleChange}
                       value={values.year}
+                      setFieldValue={setFieldValue}
                     />
                   </div>
                   <PrimaryDotLoadingButton
+                    className="w-full"
                     type="submit"
-                    onButtonClicked={(_, setLoadingState) =>
-                      isValid && onSubmit(values, setLoadingState)
-                    }
+                    onButtonClicked={(_, setLoadingState) => {
+                      if (isValid) 
+                        onSubmit(values, setLoadingState)
+                      else
+                        console.error(errors);
+                        console.log(`values: ${JSON.stringify(values)}`);
+                    }}
                   >
                     Continue
                   </PrimaryDotLoadingButton>
@@ -196,7 +205,7 @@ export default function Login() {
               )}
             </Formik>
             <div className="mt-4">
-              <Link href="/login" className="text-sm text-link">
+              <Link href="/login" className="text-sm text-link cursor-pointer hover:underline ">
                 Already have an account?
               </Link>
             </div>

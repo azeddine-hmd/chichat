@@ -10,14 +10,21 @@ module.exports = {
       width: {
         '11': '2.8125rem', /* 45px */
       },
+      borderColor: {
+        separator: {
+          xlight: '#3e4047',
+          light: '#27292d',
+          dark: '#1f2124',
+        },
+      },
       textColor: { //#1f2124
+        icon: '#80848e',
         muted: {
           DEFAULT: '#b5bac1',
           hover: '#fafafa',
           field: '#949BA4',
         },
         foreground: '#dbdee1',
-        link: '#00a8fc',
       },
       fill: {
         muted: {
@@ -32,10 +39,9 @@ module.exports = {
           // DEFAULT: '#5865f2',
           DEFAULT: '#CC5500',
         },
+        accent: '#248046',
         secondary: '#313338',
-        button: {
-          accent: '#248046',
-        },
+        link: '#00a8fc',
         gray: {
           900: '#1e1f22',
           850: '#1f2124',
