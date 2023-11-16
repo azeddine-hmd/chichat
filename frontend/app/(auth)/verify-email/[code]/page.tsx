@@ -3,8 +3,7 @@
 import DotLoading from "@/components/atoms/dot-loading";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { BsX, BsXLg } from "react-icons/bs";
-
+import { BsXLg } from "react-icons/bs";
 
 type CodeAuthVerificationProps = {
   params: {
@@ -16,10 +15,6 @@ async function checkValidationCode(code: string) {
   const data = {
     code: code,
   };
-  console.log(
-    `url: ${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/auth/email-verify`,
-    `data: ${JSON.stringify(data)}`
-  );
   const res = await fetch(
     process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/api/auth/email-verify/",
     {
@@ -52,7 +47,7 @@ export default function CodeAuthVerification({
           setOnValidating(false);
           setTimeout(() => {
             console.log("going to channels/friends");
-            window.location.assign("/channels/friends")
+            window.location.assign("/channels/friends");
           }, 2000);
         }, 1000);
       } else {
@@ -68,7 +63,7 @@ export default function CodeAuthVerification({
     })();
     return () => {
       ignore.current = true;
-    }
+    };
   }, [code]);
 
   return (
@@ -90,11 +85,11 @@ export default function CodeAuthVerification({
             <>
               {validationStatus ? (
                 <div className="text-lg font-semibold text-white">
-                  <span className="text-green-500">✓</span> Email
-                  validation succeeded.
+                  <span className="text-green-500">✓</span> Email validation
+                  succeeded.
                 </div>
               ) : (
-                <div className="font-semibold text-white flex justify-center items-center gap-2 text-lg">
+                <div className="flex items-center justify-center gap-2 text-lg font-semibold text-white">
                   <BsXLg className="text-red-500" size="20" strokeWidth={1} />
                   Email Validation Failed!{" "}
                 </div>

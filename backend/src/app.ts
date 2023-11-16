@@ -1,18 +1,25 @@
 import express from 'express';
 import './config';
-import { setupRoutes } from './route';
+import http from 'http';
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log(`reason: ${JSON.stringify(reason)}`);
+  console.log(`reason: ${JSON.stringify(promise)}`);
+  process.exit(1);
+});
 
 export const app = express();
 
-app.disable('x-powered-by');
-app.set('trust proxy', 1);
+import './route';
 
-setupRoutes(app);
+export const server = http.createServer(app);
 
-app.listen(process.env.EXPRESS_PORT, () => {
-  const a = 1;
-  const b = 2;
-  console.log(
-    `[server]: Server is running at localhost:${process.env.EXPRESS_PORT}`
-  );
-});
+import './sockets';
+
+const port = process.env.EXPRESS_PORT || 3000;
+
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(port, () => {
+    console.log(`[server]: Server is running at localhost:${port}`);
+  });
+}

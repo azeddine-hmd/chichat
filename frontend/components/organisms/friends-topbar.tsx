@@ -5,7 +5,7 @@ import { BsPersonFill } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 
 export enum TopBarOptions {
-  AddFriend,
+  AddFriends,
   Online,
   All,
   Pending,
@@ -29,14 +29,14 @@ export default function FriendsTopBar({
       <PrimaryButton
         className={twMerge(
           "h-6 rounded-[4px] border-2 border-accent p-2 text-[16px] font-medium ",
-          activeOption === TopBarOptions.AddFriend &&
+          activeOption === TopBarOptions.AddFriends &&
           "border-none text-[#2dc06d] hover:bg-transparent hover:text-[#2dc06d] active:bg-transparent active:text-[#2dc06d]",
-          activeOption !== TopBarOptions.AddFriend &&
+          activeOption !== TopBarOptions.AddFriends &&
           "bg-accent text-white hover:bg-accent hover:text-white active:bg-accent active:text-white"
         )}
         onClick={(e) =>
-          activeOption !== TopBarOptions.AddFriend &&
-          activateOption(TopBarOptions.AddFriend)
+          activeOption !== TopBarOptions.AddFriends &&
+          activateOption(TopBarOptions.AddFriends)
         }
       >
         Add Friend

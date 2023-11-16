@@ -4,7 +4,7 @@ import { BsDiscord, BsRobot, BsTv } from "react-icons/bs";
 import Divider from "../molecules/divider";
 import ServerButton from "../molecules/server-button";
 import { useState } from "react";
-import { Server } from "@/types/server";
+import { Server } from "@/models/server";
 import Image from "next/image";
 import ChiChatIcon from "@/public/svg/chichat-logo.svg";
 

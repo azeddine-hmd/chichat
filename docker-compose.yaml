@@ -5,6 +5,8 @@ services:
     container_name: chichat-db
     user: root
     restart: always
+    volumes:
+      - ./db/init-tests-db.sql:/docker-entrypoint-initdb.d/init-tests-db.sql
     environment:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -34,6 +36,7 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
       - EXPRESS_PORT=${EXPRESS_PORT}
       - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+      - TEST_DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/test
       - BACKEND_PROTOCOL=${BACKEND_PROTOCOL}
       - BACKEND_HOST=${BACKEND_HOST}
       - BACKEND_DOMAIN=${BACKEND_DOMAIN}

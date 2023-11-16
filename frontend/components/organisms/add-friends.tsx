@@ -3,7 +3,7 @@ import Hr from "../atoms/hr";
 import FieldInput from "../atoms/field-input";
 import PrimaryButton from "../molecules/primary-button";
 
-export default function OnlineFriends() {
+export default function AddFriends() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

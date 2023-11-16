@@ -8,8 +8,8 @@ import {
 } from "react";
 import { twJoin } from "tailwind-merge";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
-import { Channel } from "@/types/channel";
-import { User } from "@/types/user";
+import { Channel } from "@/models/channel";
+import { User } from "@/models/user";
 import Button from "../atoms/button";
 import React from "react";
 

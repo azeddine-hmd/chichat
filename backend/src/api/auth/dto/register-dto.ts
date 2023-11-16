@@ -4,8 +4,12 @@ import {
   IsNotEmpty,
   IsNumber,
   IsString,
+  Matches,
   MaxLength,
+  MinLength,
   ValidateNested,
+  min,
+  minLength,
 } from 'class-validator';
 
 export class DateOfBirthDto {
@@ -39,21 +43,28 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
-  @IsNotEmpty()
   username: string;
 
   @IsDefined()
   @IsNotEmpty()
   @IsEmail()
   @MaxLength(50)
-  @IsNotEmpty()
   email: string;
 
   @IsDefined()
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
-  @IsNotEmpty()
+  @MinLength(8)
+  @Matches(/^(?=.*[A-Z])/, {
+    message: 'Password must contain at least 1 uppercase letter',
+  })
+  @Matches(/^(?=.*\d)/, {
+    message: 'Password must contain at least 1 number',
+  })
+  @Matches(/^(?=.*[!@#$%^&*()\-_=+{};:,<.>])/, {
+    message: 'Password must contain at least 1 special character',
+  })
   password: string;
 
   @ValidateNested()

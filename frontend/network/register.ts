@@ -27,8 +27,7 @@ export async function registerUser(
         body: JSON.stringify(dto),
       }
     );
-    if (!res.ok) 
-      return await res.json();
+    if (!res.ok) return await res.json();
     return null;
   } catch (err) {
     console.error("network failure");

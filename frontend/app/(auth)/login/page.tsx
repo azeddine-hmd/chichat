@@ -72,7 +72,7 @@ export default function Login() {
                 password: "",
               }}
               validationSchema={loginSchema}
-              onSubmit={() => {}}
+              onSubmit={() => { }}
               validateOnMount={true}
             >
               {({ values, errors, handleChange, handleSubmit, isValid }) => (
@@ -88,21 +88,7 @@ export default function Login() {
                     >
                       EMAIL
                     </FormField>
-                    <div
-                      className="absolute top-[89%] cursor-pointer text-sm text-link hover:underline"
-                      onClick={(e) => {
-                        if (errors["email"] === "Required") {
-                          setEmailError("Email is Required!");
-                          setTimeout(() => {
-                            setEmailError(null);
-                          }, 2_000);
-                        }
-                      }}
-                    >
-                      Resend email activation?
-                    </div>
                   </div>
-
                   <div className="relative">
                     <FormField
                       name="password"

@@ -17,7 +17,7 @@ passport.use(
     {
       secretOrKey: process.env.JWT_SECRET,
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req: Request) => req.cookies['loginId'],
+        (req: Request) => req.cookies[`${process.env.JWT_COOKIE_NAME}`],
       ]),
       issuer: process.env.BACKEND_DOMAIN,
       audience: process.env.FRONTEND_DOMAIN,
@@ -26,18 +26,22 @@ passport.use(
       prisma.user
         .findUnique({
           where: { id: payload.id },
+          select: {
+            id: true,
+            username: true,
+          },
         })
-        .then(({ password, ...user }) => {
-          done(null, { user });
+        .then((user) => {
+          done(null, user);
         })
         .catch((res) => {
-          done(new HttpError(400, 'user not found in database'), false);
+          done(new HttpError(400, 'User not found in database'), false);
         });
     }
   )
 );
 
-export async function signJwt(userId: number): Promise<string> {
+export function signJwt(userId: number): string {
   return jwt.sign(
     {
       id: userId,
@@ -46,4 +50,8 @@ export async function signJwt(userId: number): Promise<string> {
     },
     process.env.JWT_SECRET
   );
+}
+
+export function verifyJwt(token: string): string | jwt.JwtPayload {
+  return jwt.verify(token, process.env.JWT_SECRET);
 }

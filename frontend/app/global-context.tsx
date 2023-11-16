@@ -1,4 +1,4 @@
-import { State } from "@/types/state";
+import { State } from "@/models/state";
 import { createContext } from "react";
 
 export type GlobalContext = {
