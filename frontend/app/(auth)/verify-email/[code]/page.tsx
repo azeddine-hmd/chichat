@@ -38,7 +38,6 @@ export default function CodeAuthVerification({
 
   useEffect(() => {
     if (ignore.current) return;
-    console.log("verification on progress...");
     (async () => {
       const isVerified = await checkValidationCode(code);
       if (isVerified) {
@@ -46,7 +45,6 @@ export default function CodeAuthVerification({
           setValidationStatus(true);
           setOnValidating(false);
           setTimeout(() => {
-            console.log("going to channels/friends");
             window.location.assign("/channels/friends");
           }, 2000);
         }, 1000);
@@ -55,7 +53,6 @@ export default function CodeAuthVerification({
           setValidationStatus(false);
           setOnValidating(false);
           setTimeout(() => {
-            console.log("going to login");
             window.location.assign("/login");
           }, 2000);
         }, 1000);
