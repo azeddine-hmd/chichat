@@ -56,7 +56,6 @@ model Codes {
     code      String
     createdAt DateTime      @default(now())
     userId    Int
-    sessionId String
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
