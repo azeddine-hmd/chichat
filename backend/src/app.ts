@@ -10,7 +10,7 @@ process.on('unhandledRejection', (reason, promise) => {
 
 export const app = express();
 
-import './route';
+import './api/route';
 
 export const server = http.createServer(app);
 
