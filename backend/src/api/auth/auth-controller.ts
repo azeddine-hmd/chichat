@@ -12,7 +12,7 @@ export async function register(req: Request, res: Response) {
   const validationError = await validate(registerDto);
   if (validationError.length > 0) return res.status(400).json(validationError);
   const user = await authService.registerUser(registerDto);
-  await authService.sendEmailVerification(user, req.sessionID);
+  await authService.sendEmailVerification(user);
   res.status(201).send({
     id: user.id,
     username: user.username,
@@ -33,10 +33,7 @@ export async function verifyEmail(req: Request, res: Response) {
   const verifyEmailDto = plainToClass(VerifyEmailDto, req.body);
   const validationError = await validate(verifyEmailDto);
   if (validationError.length > 0) return res.status(400).json(validationError);
-  const user = await authService.verifyEmail(
-    verifyEmailDto.code,
-    req.sessionID
-  );
+  const user = await authService.verifyEmail(verifyEmailDto.code);
   const { token } = await authService.login(user.email);
   res.cookie(`${process.env.JWT_COOKIE_NAME}`, token, defaultCookieOptions);
   res.status(200).send();

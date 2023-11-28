@@ -21,7 +21,7 @@ export async function registerUser(registerDto: RegisterDto): Promise<User> {
   return user;
 }
 
-export async function sendEmailVerification(user: User, sessionId: string) {
+export async function sendEmailVerification(user: User) {
   if (process.env.NODE_ENV === 'test') return;
   const emailSecret = randomUUID();
   const verificationEmailHTML = `
@@ -34,7 +34,6 @@ export async function sendEmailVerification(user: User, sessionId: string) {
     data: {
       operation: CodeOperation.EMAIL_VALIDATION,
       code: emailSecret,
-      sessionId: sessionId,
       user: {
         connect: {
           id: user.id,
@@ -44,15 +43,11 @@ export async function sendEmailVerification(user: User, sessionId: string) {
   });
 }
 
-export async function verifyEmail(
-  code: string,
-  sessionId: string
-): Promise<User> {
+export async function verifyEmail(code: string): Promise<User> {
   // verify code
   const storedCodes = await prisma.codes.findMany({
     where: {
       code: code,
-      sessionId: sessionId,
     },
     include: {
       user: true,
