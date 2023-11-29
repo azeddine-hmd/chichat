@@ -18,7 +18,7 @@ services:
     image: chichat-backend
     container_name: chichat-backend
     build: ./backend
-    user: node
+    user: root
     depends_on:
       - db
       - adminer
@@ -51,7 +51,7 @@ services:
     image: chichat-frontend
     container_name: chichat-frontend
     build: ./frontend
-    user: node
+    user: root
     ports:
       - ${NEXT_PORT}:${NEXT_PORT}
       - 9228:9229
@@ -59,7 +59,6 @@ services:
       - ./frontend:/usr/src/app
     environment:
       - NODE_ENV=${NODE_ENV}
-      - ${NEXT_PORT}:${NEXT_PORT}
       - BACKEND_PROTOCOL=${BACKEND_PROTOCOL}
       - BACKEND_HOST=${BACKEND_HOST}
       - BACKEND_DOMAIN=${BACKEND_DOMAIN}
