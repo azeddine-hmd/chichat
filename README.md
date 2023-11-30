@@ -3,10 +3,14 @@
 
 > A chat website for hang out and talks with friends.
 
-## Local development
-First, run the development server:
+## Run Server
 
 ```bash
-npm run dev
+docker compose up --build
 ```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Features
+* register/login user
+* online/offline status
+* add/remove friendship
+* block/unblock users
