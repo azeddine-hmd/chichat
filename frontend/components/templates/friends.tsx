@@ -24,7 +24,7 @@ export default function FriendsTemplate() {
           case TopBarOptions.All:
             return <h1 className="text-white m-4" >All Friends</h1>
           case TopBarOptions.Online:
-            return <h1 className="text-white m-4" >Online Friends</h1>
+            return <h1 className="text-white m-4" >Online Friendssssssss</h1>
           case TopBarOptions.Pending:
             return <h1 className="text-white m-4" >Pending Friends</h1>
           case TopBarOptions.Blocked:
