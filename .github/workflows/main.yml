@@ -21,10 +21,8 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          sudo su
-          whoami
           cd /usr/src/chichat
-          git stash
-          git pull
-          git stash pop
-          docker compose restart
+          sudo git stash
+          sudo git pull
+          sudo git stash pop
+          sudo docker compose restart
