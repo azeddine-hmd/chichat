@@ -1,0 +1,28 @@
+name: Update Remote Respository and Restart Server
+
+on:
+  push:
+    branches:
+    - main
+    
+jobs:
+  update_remote:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Ssh into remote server and restart server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /usr/src/chichat
+          sudo git stash
+          sudo git pull
+          sudo git stash pop
+          sudo docker compose restart
