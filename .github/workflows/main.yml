@@ -25,4 +25,5 @@ jobs:
           sudo git stash
           sudo git pull
           sudo git stash pop
-          sudo docker compose restart
+          sudo docker compose down
+          sudo docker compose up --build -d

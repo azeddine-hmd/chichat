@@ -81,8 +81,14 @@ export async function login(email: string, password?: string) {
       id: true,
       password: true,
       username: true,
+      active: true,
     },
   });
+  if (!user.active)
+    throw new HttpError(
+      400,
+      'User is not active yet, please check your mail inbox'
+    );
   if (!user || (password && !comparePassword(password, user.password)))
     throw new HttpError(400, 'The email or password you entered is incorrect');
   return {
