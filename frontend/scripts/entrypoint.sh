@@ -1,5 +1,7 @@
 #!/bin/bash
 
+npx update-browserslist-db@latest
+
 if [ "$NODE_ENV" == "production" ]; then
 	npm run build
 	npm run start
