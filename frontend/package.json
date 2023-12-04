@@ -30,7 +30,6 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@types/socket.io-client": "^3.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0"
   },
