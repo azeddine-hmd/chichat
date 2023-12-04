@@ -9,7 +9,7 @@ export const io = new Server(server, {
     name: 'io',
     path: '/',
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production' ? true : false,
     maxAge: COOKIE_MAX_AGE_MILIS,
   },
