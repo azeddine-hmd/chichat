@@ -5,6 +5,7 @@ import FriendsTopBar, {
 } from "@/components/organisms/friends-topbar";
 import React, { useState } from "react";
 import AddFriends from "../organisms/add-friends";
+import FriendsList from "../organisms/friends-list";
 
 export default function FriendsTemplate() {
   const [activeOption, activateOption] = useState<TopBarOptions>(
@@ -20,17 +21,17 @@ export default function FriendsTemplate() {
       {(() => {
         switch (activeOption) {
           case TopBarOptions.AddFriends:
-            return <AddFriends />
+            return <AddFriends />;
           case TopBarOptions.All:
-            return <h1 className="text-white m-4" >All Friends</h1>
+            return <FriendsList filterBy="All" />;
           case TopBarOptions.Online:
-            return <h1 className="text-white m-4" >Online Friendssssssss</h1>
+            return <FriendsList filterBy="Online" />;
           case TopBarOptions.Pending:
-            return <h1 className="text-white m-4" >Pending Friends</h1>
+            return <h1 className="m-4 text-white">Pending Friends</h1>;
           case TopBarOptions.Blocked:
-            return <h1 className="text-white m-4" >Blocked Friends</h1>
+            return <h1 className="m-4 text-white">Blocked Friends</h1>;
           default:
-            return null
+            return null;
         }
       })()}
       {/* {activeOption === TopBarOptions.AddFriends && <AddFriends />} */}

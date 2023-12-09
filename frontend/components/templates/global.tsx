@@ -44,5 +44,5 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
     };
   }, []);
 
-  return <>{onRender && <>{children}</>}</>;
+  return <>{onRender && <div className="h-full w-full overflow-hidden" >{children}</div>}</>;
 }

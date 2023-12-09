@@ -1,27 +1,41 @@
 import React, { ChangeEvent } from "react";
 import Field from "../atoms/field";
-import FieldInput from "../atoms/field-input";
-import { twMerge } from "tailwind-merge";
+import FieldInput, { FieldInputProps } from "../atoms/field-input";
+import { twJoin, twMerge } from "tailwind-merge";
 
 type SearchFieldType = {
+  children?: React.ReactNode;
   className?: string;
   onTextChanged: (event: ChangeEvent<HTMLInputElement>) => void;
-} & React.ComponentProps<"button">;
+  fieldInputProps?: FieldInputProps;
+  fieldInputClassName?: string;
+} & React.ComponentProps<"div">;
 
-export default function SearchField({ className, onTextChanged, ...restProps }: SearchFieldType) {
+export default function SearchField({
+  children,
+  className,
+  fieldInputClassName,
+  onTextChanged,
+  fieldInputProps,
+  ...restProps
+}: SearchFieldType) {
   return (
     <Field
-      className={twMerge("h-[70px] p-3", className)}
-      onClick={ e => e.stopPropagation() }
+      className={twMerge("p-3", className)}
+      onClick={(e) => e.stopPropagation()}
       {...restProps}
     >
       <FieldInput
-        className="text-white focus:outline-transparent"
+        className={twJoin(
+          "text-white focus:outline-transparent",
+          fieldInputClassName
+        )}
         placeholder="Where would you like to go?"
         onChange={onTextChanged}
         autoFocus
+        {...fieldInputProps}
       />
+      {children}
     </Field>
   );
 }
-

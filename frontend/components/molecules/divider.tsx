@@ -1,6 +1,10 @@
 import React from "react";
-import Hr from "../atoms/hr";
+import Hr, { HrProps } from "../atoms/hr";
+import { twJoin } from "tailwind-merge";
 
-export default function Divider() {
-  return <Hr className="mb-2 w-8"></Hr>;
+export type DividerProps = {
+} & HrProps;
+
+export default function Divider({ className }: DividerProps) {
+  return <Hr className={twJoin("mb-2 w-8", className)} ></Hr>;
 }

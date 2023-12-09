@@ -23,7 +23,8 @@
       "@/*": ["./*"]
     },
     "sourceMap": true,
-    "removeComments": true
+    "removeComments": true,
+    "downlevelIteration": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "types/**/*.d.ts"],
   "exclude": ["node_modules"]

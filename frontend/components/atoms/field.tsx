@@ -2,9 +2,10 @@
 
 import { twMerge } from "tailwind-merge";
 import React from "react";
-import Button, { ButtonProps } from "./button";
 
-export type FieldProps = ButtonProps;
+export type FieldProps = {
+  children?: React.ReactNode;
+} & React.ComponentProps<"div">;
 
 export default function Field({
   children,
@@ -13,7 +14,7 @@ export default function Field({
 }: FieldProps) {
 
   return (
-    <Button
+    <div
       className={twMerge(
         "flex h-full w-full cursor-pointer items-center justify-start rounded-[4px] bg-gray-900 px-1 font-sans text-sm leading-[24px] text-muted-field",
         className
@@ -21,6 +22,6 @@ export default function Field({
       {...restProps}
     >
       {children}
-    </Button>
+    </div>
   );
 }

@@ -1,8 +1,9 @@
 import { Server } from 'socket.io';
 import { server } from '../app';
 import { COOKIE_MAX_AGE_MILIS } from '../constants';
-import { corsOptions, prisma } from '../config';
+import { corsOptions, pool, prisma } from '../config';
 import { UserStatus } from '@prisma/client';
+import { createAdapter } from '@socket.io/postgres-adapter';
 
 export const io = new Server(server, {
   cookie: {
@@ -15,6 +16,8 @@ export const io = new Server(server, {
   },
   cors: corsOptions,
 });
+
+io.adapter(createAdapter(pool));
 
 io.on('connection', async (socket) => {
   // handling user status

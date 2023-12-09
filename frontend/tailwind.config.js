@@ -42,6 +42,7 @@ module.exports = {
         accent: '#248046',
         secondary: '#313338',
         link: '#00a8fc',
+        hover: '#a4a8ac',
         gray: {
           900: '#1e1f22',
           850: '#1f2124',
