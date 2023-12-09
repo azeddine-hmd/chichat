@@ -64,7 +64,7 @@ export default function HomeLayout({
               <DefaultContentChannel />
           </ChannelSidebar>
           {children}
-          <div className="h-full w-32 bg-gray-700" />
+          {/* <div className="h-full w-32 bg-gray-700" /> */}
           {/* {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />} */}
         </div>
         {isSearchPopupOpen && <QuickSearchPopup />}

@@ -1,30 +1,32 @@
 "use client";
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-type AvatarStatus = "online" | "offline";
+export type AvatarStatus = "online" | "offline";
 
-interface AvatarType {
-  className?: string;
-}
+export type AvatarType = {
+  status: "online" | "offline";
+  imageSrc: string;
+} & React.ComponentProps<"div">;
 
-export default function Avatar({ className }: AvatarType) {
-  const [status, setStatus] = useState<AvatarStatus>("online");
+export default function Avatar({ className, status, imageSrc }: AvatarType) {
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <div className={twMerge("relative pr-2", className)} >
+    <div className={twMerge("relative pr-2 overflow-hidden", className)} >
       <Image
         className="h-[32px] w-[32px] rounded-full"
-        src="https://cdn.discordapp.com/avatars/346352416897105920/6d0b746cce5af403d51ed738624c6028.webp?size=32"
+        src={imageSrc}
         width={32}
         height={32}
-        alt="user avatar"
+        alt=""
+        onLoadingComplete={(e) => setIsLoading(false)}
       />
       <span
         className={
           (status == "online" ? "bg-[#23a55a] " : "bg-[#80848e]") +
-          " absolute bottom-[0px] left-[21px] h-[15px] w-[15px] rounded-full border-2 border-gray-700"
+          " absolute bottom-[0px] left-[21px] h-[15px] w-[15px] rounded-[999px] border-2 border-gray-700"
         }
       >
         {status == "offline" ? (

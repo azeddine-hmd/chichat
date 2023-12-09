@@ -43,7 +43,7 @@ export default function UserSection({ className }: UserSectionProps) {
   return (
     <section className={twMerge("flex h-[52px] w-full bg-gray-800 p-2", className)}>
       <Button className="relative group mr-2 flex items-center justify-start rounded-[4px] pl-[2px] hover:bg-[#4E5058]/60">
-        <Avatar />
+        <Avatar status="online" imageSrc="https://i.pravatar.cc/150?img=4" />
         <div className="flex w-[78px] flex-col items-start justify-start">
           <div className="w-full text-start text-sm font-medium text-white">
             Azeddine
