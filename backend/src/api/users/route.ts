@@ -37,6 +37,12 @@ usersRouter.post(
   passport.authenticate('jwt', { session: false }),
   relationshipController.acceptFriendRequest
 );
+usersRouter.post(
+  prefix + '/friends/reject/:id',
+  passport.authenticate('jwt', { session: false }),
+  relationshipController.rejectFriendRequest
+);
+
 usersRouter.delete(
   prefix + '/friends/remove/:id',
   passport.authenticate('jwt', { session: false }),

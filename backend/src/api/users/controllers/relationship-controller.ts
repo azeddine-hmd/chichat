@@ -16,6 +16,13 @@ export async function acceptFriendRequest(req: Request, res: Response) {
   res.status(204).send();
 }
 
+export async function rejectFriendRequest(req: Request, res: Response) {
+  const id = parseInt(req.query.id.toString());
+  if (!id) throw new HttpError(400, 'Invalid id');
+  await relationshipService.rejectFriendRequest(req.user, id);
+  res.status(204).send();
+}
+
 export async function removeFriend(req: Request, res: Response) {
   const id = parseInt(req.query.id.toString());
   if (!id) throw new HttpError(400, 'Invalid id');
