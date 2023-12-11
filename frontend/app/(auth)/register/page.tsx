@@ -126,7 +126,14 @@ export default function Register() {
               onSubmit={() => {}}
               validateOnMount={true}
             >
-              {({ values, setFieldValue, errors, handleChange, handleSubmit, isValid }) => (
+              {({
+                values,
+                setFieldValue,
+                errors,
+                handleChange,
+                handleSubmit,
+                isValid,
+              }) => (
                 <form onSubmit={handleSubmit} className="h-full w-full">
                   <FormField
                     name="displayName"
@@ -189,14 +196,12 @@ export default function Register() {
                     />
                   </div>
                   <PrimaryDotLoadingButton
-                    className="w-full"
+                    className="mt-5 h-[44px] w-full"
                     type="submit"
                     onButtonClicked={(_, setLoadingState) => {
-                      if (isValid) 
-                        onSubmit(values, setLoadingState)
-                      else
-                        console.error(errors);
-                        console.log(`values: ${JSON.stringify(values)}`);
+                      if (isValid) onSubmit(values, setLoadingState);
+                      else console.error(errors);
+                      console.log(`values: ${JSON.stringify(values)}`);
                     }}
                   >
                     Continue
@@ -205,7 +210,10 @@ export default function Register() {
               )}
             </Formik>
             <div className="mt-4">
-              <Link href="/login" className="text-sm text-link cursor-pointer hover:underline ">
+              <Link
+                href="/login"
+                className="cursor-pointer text-sm text-link hover:underline "
+              >
                 Already have an account?
               </Link>
             </div>

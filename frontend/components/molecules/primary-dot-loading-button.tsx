@@ -29,7 +29,7 @@ export default function PrimaryDotLoadingButton({
     <PrimaryButton
       className={twMerge(
         "text-md flex items-center justify-center bg-primary font-semibold text-white transition-all duration-300 ease-in-out hover:bg-primary/80 hover:transition-all hover:duration-300 active:bg-primary/60 disabled:bg-primary/30 disabled:text-white/30 disabled:cursor-not-allowed",
-        className /* mt-5 h-[44px] */
+        className
       )}
       onClick={continueOnClick}
       {...restProps}
