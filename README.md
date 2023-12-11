@@ -1,4 +1,4 @@
-![status](https://flat-badgen.vercel.app/uptime-robot/status/m795898289-e987fe50c6d8fe6c2b9a5391)
+![uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fchichat.azeddine.xyz%2Fstatus)
 # Chichat 
 <img style="width: 100%;" src="https://raw.githubusercontent.com/azeddine-hmd/chichat/main/frontend/public/svg/chichat-logo.svg" width="100" height="100">
 
@@ -10,8 +10,19 @@
 docker compose up --build
 ```
 
-## Features
-* register/login user
-* online/offline status
-* add/remove friendship
-* block/unblock users
+## Technologies
+*backend:*
+  * Typescript
+  * Expressjs 5-beta (async/await)
+  * prisma (orm/migrations)
+  * postgresql (database)
+  * Socket.io (advanced websocket)
+
+*frontend:*
+  * Typescript
+  * Nextjs 13
+  * Server/Client component
+  * Tailwindcss
+
+## Example :
+  Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)
