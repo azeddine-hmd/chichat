@@ -86,6 +86,25 @@ export async function acceptFriendRequest(me: Express.User, senderId: number) {
   });
 }
 
+export async function rejectFriendRequest(me: Express.User, senderId: number) {
+  await checkUserExists(senderId);
+  if (me.id == senderId)
+    throw new HttpError(400, 'You cannot perform this action on yourself');
+
+  const pendingFriendship = await prisma.pendingFriendship.findFirst({
+    where: { senderId: senderId, recipientId: me.id },
+  });
+  if (!pendingFriendship)
+    throw new HttpError(400, 'Friend request doeds not exist');
+
+  const { user1Id, user2Id } = normalizeId(me.id, senderId);
+  await prisma.pendingFriendship.delete({
+    where: {
+      unique_user_combination: { senderId: user1Id, recipientId: user2Id },
+    },
+  });
+}
+
 export async function blockUser(me: Express.User, targetId: number) {
   if (me.id == targetId)
     throw new HttpError(400, 'You cannot perform this action on yourself');

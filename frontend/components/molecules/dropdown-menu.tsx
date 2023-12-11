@@ -33,6 +33,18 @@ function FloatingMenu<T>({
 }: FloatingMenuCardProps) {
   const [highlightedItem, setHighlightedItem] = useState(0);
 
+  function fireItemSelection(index?: number) {
+    const itemIndex = index ? index : highlightedItem;
+    if (items.length > 0) {
+      if (items[itemIndex] !== undefined) {
+        onItemSelected(items[itemIndex]);
+      } else {
+        onItemSelected("");
+      }
+      setHighlightedItem(0);
+    }
+  }
+
   useEffect(() => {
     if (inputkeyPress === "ArrowDown") {
       if (highlightedItem == items.length - 1) setHighlightedItem(0);
@@ -46,19 +58,7 @@ function FloatingMenu<T>({
       fireItemSelection();
       setInputKeyPress('');
     }
-  }, [inputkeyPress]);
-
-  function fireItemSelection(index?: number) {
-    const itemIndex = index ? index : highlightedItem;
-    if (items.length > 0) {
-      if (items[itemIndex] !== undefined) {
-        onItemSelected(items[itemIndex]);
-      } else {
-        onItemSelected("");
-      }
-      setHighlightedItem(0);
-    }
-  }
+  }, [inputkeyPress, fireItemSelection, highlightedItem, items.length, setInputKeyPress]);
 
   return (
     <FloatingCard 

@@ -12,7 +12,7 @@ export default function DisabledSearchField({
 }: DisabledSearchFieldType) {
   const searchPopup = useContext(GlobalContext)!!.searchPopup;
 
-  const clickHandler = (_: MouseEvent<HTMLButtonElement>) => {
+  const clickHandler = (_: MouseEvent<HTMLDivElement>) => {
     searchPopup.set(true);
   };
 
