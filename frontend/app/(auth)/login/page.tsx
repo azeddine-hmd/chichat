@@ -72,7 +72,7 @@ export default function Login() {
                 password: "",
               }}
               validationSchema={loginSchema}
-              onSubmit={() => { }}
+              onSubmit={() => {}}
               validateOnMount={true}
             >
               {({ values, errors, handleChange, handleSubmit, isValid }) => (
@@ -115,7 +115,7 @@ export default function Login() {
                   </div>
 
                   <PrimaryDotLoadingButton
-                    className="w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
+                    className="mt-5 h-[44px] w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
                     type="submit"
                     onButtonClicked={(_, setLoadingState) =>
                       isValid && onSubmit(values, setLoadingState)
@@ -123,8 +123,7 @@ export default function Login() {
                   >
                     Login
                   </PrimaryDotLoadingButton>
-                  {
-                  }
+                  {}
                 </form>
               )}
             </Formik>
