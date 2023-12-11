@@ -71,12 +71,13 @@ function InitialResults() {
       username: "faysal#444",
       displayName: "fbouibao",
       avatar: "",
+      status: "online",
     }),
-    new User({ id: 1, username: "Fati#32", displayName: "Fati", avatar: "" }),
-    new User({ id: 2, username: "John#13", displayName: "John", avatar: "" }),
-    new User({ id: 3, username: "John2#14", displayName: "John2", avatar: "" }),
-    new User({ id: 4, username: "John3#15", displayName: "John3", avatar: "" }),
-    new User({ id: 5, username: "John4#16", displayName: "John4", avatar: "" }),
+    new User({ id: 1, username: "Fati#32", displayName: "Fati", avatar: "", status: "online" }),
+    new User({ id: 2, username: "John#13", displayName: "John", avatar: "", status: "online" }),
+    new User({ id: 3, username: "John2#14", displayName: "John2", avatar: "", status: "online" }),
+    new User({ id: 4, username: "John3#15", displayName: "John3", avatar: "", status: "online" }),
+    new User({ id: 5, username: "John4#16", displayName: "John4", avatar: "", status: "online" }),
   ]);
 
   const maxLen = prevChannels.length + prevUsers.length;
@@ -175,9 +176,9 @@ function HotResult({ text }: HotResultType) {
     new Channel({id: 0, name: "general"}),
     new Channel({id: 1, name: "announcement"}),
     new Channel({id: 3, name: "lost-found3"}),
-    new User({id: 0, username: "faysal#444", displayName: "fbouibao", avatar: ""}),
-    new User({id: 1, username: "Fati#32", displayName: "Fati", avatar: ""}),
-    new User({id: 2, username: "John#13", displayName: "John", avatar: ""}),
+    new User({id: 0, username: "faysal#444", displayName: "fbouibao", avatar: "", status: "online"}),
+    new User({id: 1, username: "Fati#32", displayName: "Fati", avatar: "", status: "online"}),
+    new User({id: 2, username: "John#13", displayName: "John", avatar: "", status: "online"}),
   ]));
 
   useKeyboardShortcut({

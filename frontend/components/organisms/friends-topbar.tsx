@@ -23,7 +23,7 @@ export default function FriendsTopBar({
     <TopBar>
       <div className="flex w-fit gap-2">
         <BsPersonFill size="22" className="text-icon" />
-        <span className="text-white">Friends</span>
+        <span className="text-white select-none">Friends</span>
       </div>
 
       <PrimaryButton

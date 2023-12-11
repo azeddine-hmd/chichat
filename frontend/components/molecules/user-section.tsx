@@ -59,7 +59,7 @@ export default function UserSection({ className }: UserSectionProps) {
         onClick={setMicOnClick}
       >
         <MicSvg muted={isMicMuted} />
-        <Tooltip direction="top" margin={4} >Mute</Tooltip>
+        <Tooltip direction="top" margin={1} >Mute</Tooltip>
       </Button>
 
       <Button
@@ -67,12 +67,12 @@ export default function UserSection({ className }: UserSectionProps) {
         onClick={setHeadphoneOnClick}
       >
         <HeadphoneSvg muted={isHeadphoneMuted} />
-        <Tooltip direction="top" margin={4} >Defean</Tooltip>
+        <Tooltip direction="top" margin={1} >Defean</Tooltip>
       </Button>
 
       <Button className="group relative flex w-8 items-center justify-center hover:bg-[#4E5058]/60">
         <BsGearFill size="18" />
-        <Tooltip direction="top" margin={4} >User Settings</Tooltip>
+        <Tooltip direction="top" margin={1} >User Settings</Tooltip>
       </Button>
     </section>
   );
