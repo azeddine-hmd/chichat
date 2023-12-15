@@ -1,5 +1,5 @@
 import { api } from "@/config";
-import { HttpError } from "@/network";
+import { HttpError } from "@/types/http-error";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
