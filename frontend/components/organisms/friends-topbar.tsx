@@ -23,16 +23,16 @@ export default function FriendsTopBar({
     <TopBar>
       <div className="flex w-fit gap-2">
         <BsPersonFill size="22" className="text-icon" />
-        <span className="text-white select-none">Friends</span>
+        <span className="select-none text-white">Friends</span>
       </div>
 
       <IconButton
         className={twMerge(
           "h-6 rounded-[4px] border-2 border-accent p-2 text-[16px] font-medium ",
           activeOption === TopBarOptions.AddFriends &&
-          "border-none text-[#2dc06d] hover:bg-transparent hover:text-[#2dc06d] active:bg-transparent active:text-[#2dc06d]",
+            "border-none text-[#2dc06d] hover:bg-transparent hover:text-[#2dc06d] active:bg-transparent active:text-[#2dc06d]",
           activeOption !== TopBarOptions.AddFriends &&
-          "bg-accent text-white hover:bg-accent hover:text-white active:bg-accent active:text-white"
+            "bg-accent text-white hover:bg-accent hover:text-white active:bg-accent active:text-white"
         )}
         onClick={(e) =>
           activeOption !== TopBarOptions.AddFriends &&

@@ -2,7 +2,7 @@
 
 import React, { useState, MouseEvent } from "react";
 import SearchField from "../molecules/search-field";
-import { BsCheck, BsCheckCircle, BsCheckCircleFill, BsPersonDash, BsPersonDashFill, BsSearch, BsX } from "react-icons/bs";
+import { BsCheck, BsPersonDashFill, BsSearch, BsX } from "react-icons/bs";
 import SearchResults from "../molecules/search-result-new";
 import UserListItem from "../molecules/user-list-item";
 import { User } from "@/models/user";
