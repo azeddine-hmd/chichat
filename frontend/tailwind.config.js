@@ -38,6 +38,7 @@ module.exports = {
         primary: {
           // DEFAULT: '#5865f2',
           DEFAULT: '#CC5500',
+          foreground: '#ffffff',
         },
         accent: '#248046',
         secondary: '#313338',
@@ -60,5 +61,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 }

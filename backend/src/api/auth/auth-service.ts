@@ -21,6 +21,15 @@ export async function registerUser(registerDto: RegisterDto): Promise<User> {
   return user;
 }
 
+export async function getUser(email: string, password: string) {
+  const user = await prisma.user.findFirst({
+    where: { email: email },
+  });
+  if (!(await comparePassword(password, user.password)))
+    throw new HttpError(400, 'no such user with email and password');
+  return user;
+}
+
 export async function sendEmailVerification(user: User) {
   if (process.env.NODE_ENV === 'test') return;
   const emailSecret = randomUUID();
@@ -82,6 +91,7 @@ export async function login(email: string, password?: string) {
       password: true,
       username: true,
       active: true,
+      avatar: true,
     },
   });
   if (!user || (password && !comparePassword(password, user.password)))

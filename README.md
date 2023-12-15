@@ -23,6 +23,7 @@ docker compose up --build
   * Nextjs 13
   * Server/Client component
   * Tailwindcss
+  * Framer-Motion (animation)
 
 ## Example :
   Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)

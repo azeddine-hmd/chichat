@@ -9,7 +9,7 @@ export type FieldInputProps = React.ComponentProps<"input"> & {
 export default function FieldInput({ className, placeholder = "", type = "text", ref, innerRef, ...restProps }: FieldInputProps) {
   return (
     <input
-      className={twMerge("h-full w-full cursor-pointer bg-transparent text-2xl text-muted-field focus:outline focus:outline-offset-2 focus:outline-2 focus:outline-cyan-500 rounded-sm", className)}
+      className={twMerge("h-full w-full cursor-pointer bg-transparent text-2xl text-muted-field focus:outline focus:outline-offset-2 focus:outline-2 focus:outline-cyan-500 rounded-sm file:bg-transparent file:border-0 file:text-sm file:font-medium file:text-gray-300", className)}
       type={type}
       placeholder={placeholder}
       ref={innerRef}

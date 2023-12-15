@@ -1,8 +1,10 @@
 "use client";
 
 import { authUser } from "@/network";
-import React, { useEffect, useRef, useState } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 let pathWhitelist = ["/login", "/register", "/verify-email"];
 
@@ -12,12 +14,12 @@ type GlobalTemplateProps = {
   children?: React.ReactNode;
 };
 
+const queryClient = new QueryClient();
+
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);
-  const ignore = useRef(false);
 
   useEffect(() => {
-    if (ignore.current) return;
     (async () => {
       if (
         !pathWhitelist.some((path) => window.location.pathname.startsWith(path))
@@ -39,10 +41,16 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
         setOnRender(true);
       }
     })();
-    return () => {
-      ignore.current = true;
-    };
   }, []);
 
-  return <>{onRender && <div className="h-full w-full overflow-hidden" >{children}</div>}</>;
+  return (
+    <>
+      {onRender && (
+        <QueryClientProvider client={queryClient}>
+          <div className="h-full w-full overflow-hidden">{children}</div>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      )}
+    </>
+  );
 }

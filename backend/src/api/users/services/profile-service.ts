@@ -5,17 +5,19 @@ export async function getProfile(id: number) {
   const user = await prisma.user.findUnique({
     where: { id: id },
     include: {
-      files: true,
+      avatar: true,
     },
   });
-  const avatar = user.files.find((file) => file['fieldname'] === 'avatar');
   return {
-    user: user,
-    avatar: avatar,
+    profile: user,
+    avatar: user.avatar,
   };
 }
 
-export async function uploadFile(me: Express.User, file: Express.Multer.File) {
+export async function uploadAvatar(
+  me: Express.User,
+  file: Express.Multer.File
+) {
   try {
     const avatar = await prisma.file.create({
       data: {
