@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config/axios";
 import { RegisterForm } from "@/app/(auth)/register/page";
-import { HttpError } from "@/network";
 import { MONTHS } from "@/lib/constants";
 import { AxiosError } from "axios";
+import { HttpError } from "@/types/http-error";
 
 export type RegisterDto = {
   displayName: string;
