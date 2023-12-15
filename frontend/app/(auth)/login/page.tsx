@@ -12,7 +12,7 @@ import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config";
 import { AxiosError } from "axios";
-import { HttpError } from "@/network";
+import { HttpError } from "@/types/http-error";
 
 type LoginForm = {
   email: string;

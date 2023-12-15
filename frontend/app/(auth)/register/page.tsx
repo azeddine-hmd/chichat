@@ -12,7 +12,6 @@ import React, { MouseEvent, useState } from "react";
 import * as Yup from "yup";
 import AvatarSelection from "@/components/organisms/avatar-selection";
 import { useRegistrationMut } from "@/hooks/use-registration-mut";
-import { HttpError } from "@/network";
 import { DAYS, MONTHS, YEARS } from "@/lib/constants";
 
 export type RegisterForm = {
