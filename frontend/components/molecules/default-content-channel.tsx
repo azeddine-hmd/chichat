@@ -1,9 +1,9 @@
 "use client";
 
-import { BsPerson, BsPersonFill } from "react-icons/bs";
-import PrimaryButton from "./primary-button";
+import { BsPersonFill } from "react-icons/bs";
 import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
+import IconButton from "./icon-button";
 
 export default function DefaultContentChannel() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function DefaultContentChannel() {
   }
 
   return (
-    <PrimaryButton 
+    <IconButton 
       className="h-[42px] w-full" onClick={onClickFriends}
       active={selectedItem == 0}
     >
@@ -25,6 +25,6 @@ export default function DefaultContentChannel() {
         <BsPersonFill size="22" />
         <div>Friends</div>
       </div>
-    </PrimaryButton>
+    </IconButton>
   );
 }

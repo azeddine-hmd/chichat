@@ -3,8 +3,8 @@
 import FormField from "@/components/molecules/form-field";
 import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
 import { loginUser } from "@/network/login";
-import { delay } from "@/utils/delay";
-import { strongEmail } from "@/utils/yup-extra";
+import { delay } from "@/lib/delay";
+import { strongEmail } from "@/lib/yup-extra";
 import { Formik } from "formik";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -41,9 +41,6 @@ export default function Login() {
       } else {
         setLoadingState(false);
         setError(error.message);
-        // setTimeout(() => {
-        //   setError(null);
-        // }, 10_000);
       }
     })();
   }

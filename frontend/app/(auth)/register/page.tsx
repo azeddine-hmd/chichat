@@ -4,97 +4,73 @@ import Label from "@/components/atoms/label";
 import Dropdownmenu from "@/components/molecules/dropdown-menu";
 import FormField from "@/components/molecules/form-field";
 import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
-import { registerUser } from "@/network/register";
-import { delay } from "@/utils/delay";
-import { strongEmail, strongPassword } from "@/utils/yup-extra";
-import { Formik } from "formik";
+import { strongEmail, strongPassword } from "@/lib/yup-extra";
+import { useFormik } from "formik";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import * as Yup from "yup";
+import AvatarSelection from "@/components/organisms/avatar-selection";
+import { useRegistrationMut } from "@/hooks/use-registration-mut";
+import { HttpError } from "@/network";
+import { DAYS, MONTHS, YEARS } from "@/lib/constants";
 
-type RegisterFormType = {
+export type RegisterForm = {
   displayName: string;
   username: string;
   password: string;
   email: string;
-  day: string; // number
+  day: string;
   month: string;
-  year: string; // number
+  year: string;
 };
 
+const registrationSchema = Yup.object().shape({
+  displayName: Yup.string()
+    .min(6, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  username: Yup.string()
+    .min(6, "Too Short!")
+    .max(20, "Too Long!")
+    .required("Required"),
+  password: strongPassword().required("Required"),
+  email: strongEmail().required("Required"),
+  day: Yup.string().required("Required"),
+  month: Yup.string().required("Required"),
+  year: Yup.string().required("Required"),
+});
+
 export default function Register() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const days = Array.from({ length: 31 }, (_, index) => String(index + 1));
-  const years = Array.from({ length: 40 }, (_, index) => String(2020 - index));
+  const [onAvatarSelection, switchToAvatarSelection] = useState(false);
 
-  const registrationSchema = Yup.object().shape({
-    displayName: Yup.string()
-      .min(6, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-
-    username: Yup.string()
-      .min(6, "Too Short!")
-      .max(20, "Too Long!")
-      .required("Required"),
-
-    password: strongPassword().required("Required"),
-
-    email: strongEmail().required("Required"),
-
-    day: Yup.string().required("Required"),
-
-    month: Yup.string().required("Required"),
-
-    year: Yup.string().required("Required"),
+  const formik = useFormik({
+    initialValues: {
+      displayName: "",
+      username: "",
+      password: "",
+      email: "",
+      day: "",
+      month: "",
+      year: "",
+    },
+    validationSchema: registrationSchema,
+    onSubmit: () => {},
+    validateOnMount: true,
   });
 
-  function onSubmit(
-    values: RegisterFormType,
-    setLoadingState: Dispatch<SetStateAction<boolean>>
-  ) {
+  const registrationMut = useRegistrationMut({
+    onSuccess: () => { 
+      console.log("onSuccess of registration mutation");
+      switchToAvatarSelection(true)
+    },
+    onError: (error) => setError(error.message),
+  });
+
+  function onSubmit(e: MouseEvent<HTMLButtonElement>) {
     setError(null);
-    (async () => {
-      setLoadingState(true);
-      await delay(1_000);
-      const { day, month, year, ...rest } = values;
-      const monthIndex = months.indexOf(month);
-      console.log(`day: ${day}, month: ${month}, year: ${year}`);
-      const dateOfBirth = {
-        day: parseInt(day),
-        month: monthIndex,
-        year: parseInt(year),
-      };
-      console.log(`dateOfBirth: ${JSON.stringify(dateOfBirth)}`);
-      const dto = { ...rest, dateOfBirth };
-      const error = await registerUser(dto);
-      if (!error) {
-        router.push("/verify-email");
-      } else {
-        setLoadingState(false);
-        setError(error.message);
-        // setTimeout(() => {
-        //   setError(null);
-        // }, 10_000);
-      }
-    })();
+    registrationMut.mutate(formik.values);
   }
 
   return (
@@ -105,66 +81,48 @@ export default function Register() {
     >
       <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
         <div className="flex h-fit w-[480px] flex-col items-center">
-          <h1 className="text-2xl font-semibold text-white/90">
-            Create an account
-          </h1>
-          {error && (
-            <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
-          )}
-          <div className="mt-5 h-full w-full">
-            <Formik
-              initialValues={{
-                displayName: "",
-                username: "",
-                password: "",
-                email: "",
-                day: "",
-                month: "",
-                year: "",
-              }}
-              validationSchema={registrationSchema}
-              onSubmit={() => {}}
-              validateOnMount={true}
-            >
-              {({
-                values,
-                setFieldValue,
-                errors,
-                handleChange,
-                handleSubmit,
-                isValid,
-              }) => (
-                <form onSubmit={handleSubmit} className="h-full w-full">
+          {!onAvatarSelection ? (
+            <>
+              <h1 className="text-2xl font-semibold text-white/90">
+                Create an account
+              </h1>
+              {error && (
+                <h3 className="mt-2 text-lg font-semibold text-red-400">
+                  {error}
+                </h3>
+              )}
+              <div className="mt-5 h-full w-full">
+                <form onSubmit={formik.handleSubmit} className="h-full w-full">
                   <FormField
                     name="displayName"
-                    error={errors.displayName}
-                    onChange={handleChange}
-                    value={values.displayName}
+                    error={formik.errors.displayName}
+                    onChange={formik.handleChange}
+                    value={formik.values.displayName}
                   >
                     DISPLAY NAME
                   </FormField>
                   <FormField
                     name="username"
-                    error={errors.username}
-                    onChange={handleChange}
-                    value={values.username}
+                    error={formik.errors.username}
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
                   >
                     USERNAME
                   </FormField>
                   <FormField
                     type="password"
                     name="password"
-                    error={errors.password}
-                    onChange={handleChange}
-                    value={values.password}
+                    error={formik.errors.password}
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
                   >
                     PASSWORD
                   </FormField>
                   <FormField
                     name="email"
-                    error={errors.email}
-                    onChange={handleChange}
-                    value={values.email}
+                    error={formik.errors.email}
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
                   >
                     EMAIL
                   </FormField>
@@ -172,52 +130,55 @@ export default function Register() {
                   <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
                     <Dropdownmenu
                       placeholder="Month"
-                      items={months}
+                      items={MONTHS}
                       fieldName="month"
-                      onChange={handleChange}
-                      value={values.month}
-                      setFieldValue={setFieldValue}
+                      onChange={formik.handleChange}
+                      value={formik.values.month}
+                      setFieldValue={formik.setFieldValue}
                     />
                     <Dropdownmenu
                       placeholder="Day"
-                      items={days}
+                      items={DAYS}
                       fieldName="day"
-                      onChange={handleChange}
-                      value={values.day}
-                      setFieldValue={setFieldValue}
+                      onChange={formik.handleChange}
+                      value={formik.values.day}
+                      setFieldValue={formik.setFieldValue}
                     />
                     <Dropdownmenu
                       placeholder="Year"
-                      items={years}
+                      items={YEARS}
                       fieldName="year"
-                      onChange={handleChange}
-                      value={values.year}
-                      setFieldValue={setFieldValue}
+                      onChange={formik.handleChange}
+                      value={formik.values.year}
+                      setFieldValue={formik.setFieldValue}
                     />
                   </div>
                   <PrimaryDotLoadingButton
                     className="mt-5 h-[44px] w-full"
                     type="submit"
-                    onButtonClicked={(_, setLoadingState) => {
-                      if (isValid) onSubmit(values, setLoadingState);
-                      else console.error(errors);
-                      console.log(`values: ${JSON.stringify(values)}`);
-                    }}
+                    onClick={onSubmit}
+                    disabled={!formik.isValid}
+                    onLoading={registrationMut.isPending}
                   >
                     Continue
                   </PrimaryDotLoadingButton>
                 </form>
-              )}
-            </Formik>
-            <div className="mt-4">
-              <Link
-                href="/login"
-                className="cursor-pointer text-sm text-link hover:underline "
-              >
-                Already have an account?
-              </Link>
-            </div>
-          </div>
+                <div className="mt-4">
+                  <Link
+                    href="/login"
+                    className="cursor-pointer text-sm text-link hover:underline "
+                  >
+                    Already have an account?
+                  </Link>
+                </div>
+              </div>
+            </>
+          ) : (
+            <AvatarSelection
+              email={formik.values.email}
+              password={formik.values.password}
+            />
+          )}
         </div>
       </div>
     </motion.div>

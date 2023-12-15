@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as authController from './auth-controller';
 import passport from 'passport';
+import { upload } from '../../config';
 
 const prefix = '/auth';
 
@@ -13,5 +14,23 @@ authRouter.get(
 );
 
 authRouter.post(prefix + '/register', authController.register);
-authRouter.post(prefix + '/email-verify', authController.verifyEmail);
+authRouter.post(
+  prefix + '/upload/avatar',
+  upload.fields([
+    {
+      name: 'email',
+    },
+    {
+      name: 'password',
+    },
+    {
+      name: 'avatar',
+    },
+  ]),
+  authController.uploadAvatar
+);
+authRouter.post(
+  prefix + '/email-verify',
+  authController.verifyEmail
+);
 authRouter.post(prefix + '/login', authController.login);

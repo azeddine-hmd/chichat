@@ -2,25 +2,25 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 import Button from "../atoms/button";
 
-export type PrimaryButtonProps = {
+export type IconButtonProps = {
   children?: React.ReactNode;
   active?: boolean;
   hover?: boolean;
   innerRef?: React.RefObject<HTMLButtonElement>;
 } & React.ComponentProps<"button">;
 
-export default function PrimaryButton({
+export default function IconButton({
   children,
   className,
   active = false,
   hover = false,
   innerRef,
   ...restProps
-}: PrimaryButtonProps) {
+}: IconButtonProps) {
   return (
     <Button
       className={twMerge(
-        "flex items-center justify-start rounded-md font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2",
+        "flex h-fit w-fit items-center justify-start rounded-[4px] rounded-s px-2 hover:bg-[#4E5058]/60 hover:text-foreground active:bg-[#4E5058]/60 active:text-white",
         active && "bg-[#4E5058]/60 text-white",
         hover && "bg-[#4E5058]/60 text-foreground",
         className

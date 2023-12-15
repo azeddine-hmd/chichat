@@ -15,19 +15,18 @@ function mapToProfileResponse(user: User, avatar?: File) {
 }
 
 export async function myProfile(req: Request, res: Response) {
-  const { user, avatar } = await profileService.getProfile(req.user.id);
-  res.status(200).send(mapToProfileResponse(user, avatar));
+  const { profile, avatar } = await profileService.getProfile(req.user.id);
+  res.status(200).send(mapToProfileResponse(profile, avatar));
 }
 
 export async function otherProfile(req: Request, res: Response) {
   const id = parseInt(req.params.id);
   if (!id) throw new HttpError(400, 'Invalid id');
-  const { user, avatar } = await profileService.getProfile(id);
-  res.status(200).send(mapToProfileResponse(user, avatar));
+  const { profile, avatar } = await profileService.getProfile(id);
+  res.status(200).send(mapToProfileResponse(profile, avatar));
 }
 
 export async function uploadAvatar(req: Request, res: Response) {
-  console.log('Uploaded file: ', req.file);
-  const avatar = await profileService.uploadFile(req.user, req.file);
+  const avatar = await profileService.uploadAvatar(req.user, req.file);
   res.status(201).send({ url: avatar.url });
 }

@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import TopBar from "../molecules/topbar";
-import PrimaryButton from "../molecules/primary-button";
+import IconButton from "../molecules/primary-button";
 import { BsPersonFill } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 
@@ -26,7 +26,7 @@ export default function FriendsTopBar({
         <span className="text-white select-none">Friends</span>
       </div>
 
-      <PrimaryButton
+      <IconButton
         className={twMerge(
           "h-6 rounded-[4px] border-2 border-accent p-2 text-[16px] font-medium ",
           activeOption === TopBarOptions.AddFriends &&
@@ -40,9 +40,9 @@ export default function FriendsTopBar({
         }
       >
         Add Friend
-      </PrimaryButton>
+      </IconButton>
 
-      <PrimaryButton
+      <IconButton
         active={activeOption === TopBarOptions.Online}
         onClick={(e) =>
           activeOption !== TopBarOptions.Online &&
@@ -50,9 +50,9 @@ export default function FriendsTopBar({
         }
       >
         Online
-      </PrimaryButton>
+      </IconButton>
 
-      <PrimaryButton
+      <IconButton
         active={activeOption === TopBarOptions.All}
         onClick={(e) =>
           activeOption !== TopBarOptions.All &&
@@ -60,9 +60,9 @@ export default function FriendsTopBar({
         }
       >
         All
-      </PrimaryButton>
+      </IconButton>
 
-      <PrimaryButton
+      <IconButton
         active={activeOption === TopBarOptions.Pending}
         onClick={(e) =>
           activeOption !== TopBarOptions.Pending &&
@@ -70,9 +70,9 @@ export default function FriendsTopBar({
         }
       >
         Pending
-      </PrimaryButton>
+      </IconButton>
 
-      <PrimaryButton
+      <IconButton
         active={activeOption === TopBarOptions.Blocked}
         onClick={(e) =>
           activeOption !== TopBarOptions.Blocked &&
@@ -80,7 +80,7 @@ export default function FriendsTopBar({
         }
       >
         Blocked
-      </PrimaryButton>
+      </IconButton>
     </TopBar>
   );
 }

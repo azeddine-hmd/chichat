@@ -2,8 +2,12 @@
 
 import DotLoading from "@/components/atoms/dot-loading";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { BsXLg } from "react-icons/bs";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/config/axios";
+import { AxiosError } from "axios";
+import { HttpError } from "@/network";
 
 type CodeAuthVerificationProps = {
   params: {
@@ -11,57 +15,20 @@ type CodeAuthVerificationProps = {
   };
 };
 
-async function checkValidationCode(code: string) {
-  const data = {
-    code: code,
-  };
-  const res = await fetch(
-    process.env.NEXT_PUBLIC_BACKEND_DOMAIN + "/api/auth/email-verify/",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
-    }
-  );
-  return res.ok ? true : false;
-}
-
 export default function CodeAuthVerification({
   params: { code },
 }: CodeAuthVerificationProps) {
-  const [onValidating, setOnValidating] = useState(true);
-  const [validationStatus, setValidationStatus] = useState(false);
-  const ignore = useRef(false);
+  const verifyEmail = useMutation({
+    mutationFn: (code: string) => {
+      return api.post("/api/auth/email-verify", { code: code });
+    },
+    onSuccess: () => {}, // window.location.assign("/channels/friends"),
+    onError: () => {},// window.location.assign("/login"),
+  });
 
   useEffect(() => {
-    if (ignore.current) return;
-    (async () => {
-      const isVerified = await checkValidationCode(code);
-      if (isVerified) {
-        setTimeout(() => {
-          setValidationStatus(true);
-          setOnValidating(false);
-          setTimeout(() => {
-            window.location.assign("/channels/friends");
-          }, 2000);
-        }, 1000);
-      } else {
-        setTimeout(() => {
-          setValidationStatus(false);
-          setOnValidating(false);
-          setTimeout(() => {
-            window.location.assign("/login");
-          }, 2000);
-        }, 1000);
-      }
-    })();
-    return () => {
-      ignore.current = true;
-    };
-  }, [code]);
+    verifyEmail.mutate(code);
+  }, []);
 
   return (
     <motion.div
@@ -71,7 +38,7 @@ export default function CodeAuthVerification({
     >
       <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
         <div className="flex flex-col items-center justify-center">
-          {onValidating ? (
+          {verifyEmail.isPending ? (
             <>
               <div className="mb-4 text-lg font-semibold text-foreground">
                 Validating Email
@@ -80,15 +47,16 @@ export default function CodeAuthVerification({
             </>
           ) : (
             <>
-              {validationStatus ? (
+              {verifyEmail.isSuccess && (
                 <div className="text-lg font-semibold text-white">
                   <span className="text-green-500">✓</span> Email validation
                   succeeded.
                 </div>
-              ) : (
+              )}
+              {verifyEmail.isError && (
                 <div className="flex items-center justify-center gap-2 text-lg font-semibold text-white">
                   <BsXLg className="text-red-500" size="20" strokeWidth={1} />
-                  Email Validation Failed!{" "}
+                  Email Validation Failed! <br />
                 </div>
               )}
             </>

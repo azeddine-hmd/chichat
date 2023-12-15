@@ -3,7 +3,6 @@
 import React, {
   ChangeEvent,
   Dispatch,
-  MouseEvent,
   SetStateAction,
   useEffect,
   useRef,
@@ -13,8 +12,7 @@ import { twMerge } from "tailwind-merge";
 import FieldInput from "../atoms/field-input";
 import ArrowDownSvg from "@/svg/arrow-down";
 import FloatingCard from "../atoms/floating-card";
-import PrimaryButton from "./primary-button";
-import { useField } from "formik";
+import IconButton from "./icon-button";
 
 type FloatingMenuCardProps = {
   open: Dispatch<SetStateAction<boolean>>;
@@ -46,39 +44,36 @@ function FloatingMenu<T>({
   }
 
   useEffect(() => {
+    console.log(`inputKeyPress: ${inputkeyPress}\nhighlightedItem: ${highlightedItem}\nitems.length: ${items.length}`);
     if (inputkeyPress === "ArrowDown") {
       if (highlightedItem == items.length - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);
-      setInputKeyPress('');
+      setInputKeyPress("");
     } else if (inputkeyPress === "ArrowUp") {
       if (highlightedItem == 0) setHighlightedItem(items.length - 1);
       else setHighlightedItem(highlightedItem - 1);
-      setInputKeyPress('');
+      setInputKeyPress("");
     } else if (inputkeyPress === "Enter") {
       fireItemSelection();
-      setInputKeyPress('');
+      setInputKeyPress("");
     }
-  }, [inputkeyPress, fireItemSelection, highlightedItem, items.length, setInputKeyPress]);
+  }, [setInputKeyPress]);
 
   return (
-    <FloatingCard 
-      className="h-fit" 
-      direction="top" 
-      showCard={open}
-    >
+    <FloatingCard className="h-fit" direction="top" showCard={open}>
       {items.length == 0 ? (
         <p className="p-2 text-sm text-muted">No results found</p>
       ) : (
         items.map((item, index) => {
           return (
-            <PrimaryButton
+            <IconButton
               key={item}
-              className="w-full flex items-center justify-start p-2 hover:text-foreground"
+              className="flex w-full items-center justify-start p-2 hover:text-foreground"
               hover={index == highlightedItem ? true : false}
               onClick={(e) => fireItemSelection(index)}
             >
               {item}
-            </PrimaryButton>
+            </IconButton>
           );
         })
       )}
@@ -106,7 +101,7 @@ export default function DropdownMenu({
   const [filteredItems, setFilteredItems] = useState<Array<string>>(items);
   const [openMenu, setOpenMenu] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [inputkeyPress, setInputKeyPress] = useState('');
+  const [inputkeyPress, setInputKeyPress] = useState("");
 
   const onFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(event);
@@ -114,11 +109,12 @@ export default function DropdownMenu({
     if (value) {
       const results: Array<string> = [];
       items.forEach((item) => {
-        if (item.toLowerCase().includes(value.toLowerCase())) results.push(item);
+        if (item.toLowerCase().includes(value.toLowerCase()))
+          results.push(item);
       });
       setFilteredItems(results);
-      setOpenMenu(value?.length == 0 ? false : true); 
-    }  else {
+      setOpenMenu(value?.length == 0 ? false : true);
+    } else {
       setFilteredItems(items);
     }
   };
@@ -127,7 +123,8 @@ export default function DropdownMenu({
     setFieldValue(fieldName, item, true);
     setOpenMenu(false);
     setFilteredItems(items);
-    const nextElement = inputRef.current?.parentElement?.nextElementSibling?.firstChild;
+    const nextElement =
+      inputRef.current?.parentElement?.nextElementSibling?.firstChild;
     if (nextElement && nextElement instanceof HTMLInputElement) {
       nextElement.focus();
     }
