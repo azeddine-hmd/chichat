@@ -33,7 +33,7 @@ model User {
     Block2         Block[]             @relation("Block2")
     PendingFriend1 PendingFriendship[] @relation("PendingFriend1")
     PendingFriend2 PendingFriendship[] @relation("PendingFriend2")
-    files          File[]
+    avatar         File?
     sockets        UserSockets[]
 }
 
@@ -104,9 +104,9 @@ model File {
     url          String
     mimeType     String
     fileSize     Int
-    uploadedById Int
+    uploadedById Int      @unique
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    uploadedBy User @relation(fields: [uploadedById], references: [id])
+    uploadedBy User @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
 }
