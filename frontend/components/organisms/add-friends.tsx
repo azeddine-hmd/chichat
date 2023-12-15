@@ -1,22 +1,22 @@
-import React, { MouseEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Hr from "../atoms/hr";
 import FieldInput from "../atoms/field-input";
 import PrimaryDotLoadingButton from "../molecules/primary-dot-loading-button";
 
 export default function AddFriends() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
+  const [onLoading, setOnLoading] = useState(false);
 
   useEffect(() => {
     inputRef?.current?.focus();
   }, [inputRef]);
 
-  function onSendFriendRequestClicked(
-    e: MouseEvent<HTMLButtonElement>,
-    setLoadingState: React.Dispatch<React.SetStateAction<boolean>>
-  ) {
-    setLoadingState(true);
-    setTimeout(() => { console.log('simulating network request'); setLoadingState(false); }, 5000);
+  function sendFriendRequest() {
+    setOnLoading(true);
+    setTimeout(() => {
+      setOnLoading(false);
+    }, 5000);
   }
 
   return (
@@ -34,9 +34,8 @@ export default function AddFriends() {
           <PrimaryDotLoadingButton
             disabled={inputText.length == 0}
             className="absolute right-4 top-1/2 h-8 -translate-y-1/2 bg-primary text-sm text-white"
-            onButtonClicked={(e, setLoadingState) =>
-              onSendFriendRequestClicked(e, setLoadingState)
-            }
+            onClick={() => sendFriendRequest()}
+            onLoading={onLoading}
           >
             Send Friend Request
           </PrimaryDotLoadingButton>

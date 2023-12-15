@@ -1,6 +1,6 @@
 "use client";
 
-import { BsDiscord, BsRobot, BsTv } from "react-icons/bs";
+import { BsRobot, BsTv } from "react-icons/bs";
 import Divider from "../molecules/divider";
 import ServerButton from "../molecules/server-button";
 import { useState } from "react";
