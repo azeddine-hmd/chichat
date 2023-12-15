@@ -24,6 +24,8 @@ docker compose up --build
   * Server/Client component
   * Tailwindcss
   * Framer-Motion (animation)
+  * React-Query (managing network state/caching etc)
+  * Axios (http request)
 
 ## Example :
   Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)
