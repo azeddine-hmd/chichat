@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import { BsXLg } from "react-icons/bs";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config/axios";
-import { AxiosError } from "axios";
-import { HttpError } from "@/network";
 
 type CodeAuthVerificationProps = {
   params: {
