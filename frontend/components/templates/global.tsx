@@ -1,10 +1,15 @@
 "use client";
 
-import { authUser } from "@/network";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+} from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { api } from "@/config";
+import { AxiosError } from "axios";
 
 let pathWhitelist = ["/login", "/register", "/verify-email"];
 
@@ -19,28 +24,29 @@ const queryClient = new QueryClient();
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      if (
-        !pathWhitelist.some((path) => window.location.pathname.startsWith(path))
-      ) {
-        const error = await authUser();
-        if (error) {
-          console.log(`authUser error: ${error.message}`);
-          window.location.assign("/login");
+  const passMut = useMutation({
+    mutationFn: () => api.get("/api/auth/pass"),
+    onSuccess: () => {
+      setOnRender(true);
+      window.clientSocket = io(
+        process.env.NEXT_PUBLIC_BACKEND_DOMAIN as string,
+        {
+          transports: ["websocket"],
+          withCredentials: true,
         }
-        setOnRender(true);
-        window.clientSocket = io(
-          process.env.NEXT_PUBLIC_BACKEND_DOMAIN as string,
-          {
-            transports: ["websocket"],
-            withCredentials: true,
-          }
-        );
-      } else {
-        setOnRender(true);
-      }
-    })();
+      );
+    },
+    onError: (err: AxiosError) => window.location.assign("/login"),
+  });
+
+  useEffect(() => {
+    if (
+      !pathWhitelist.some((path) => window.location.pathname.startsWith(path))
+    ) {
+      passMut.mutate();
+    } else {
+      setOnRender(true);
+    }
   }, []);
 
   return (

@@ -2,47 +2,59 @@
 
 import FormField from "@/components/molecules/form-field";
 import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
-import { loginUser } from "@/network/login";
-import { delay } from "@/lib/delay";
 import { strongEmail } from "@/lib/yup-extra";
-import { Formik } from "formik";
+import { useFormik } from "formik";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/config";
+import { AxiosError } from "axios";
+import { HttpError } from "@/network";
 
-type LoginFormType = {
+type LoginForm = {
   email: string;
   password: string;
 };
+
+const loginSchema = Yup.object().shape({
+  password: Yup.string().min(8, "Too short").required("Required"),
+  email: strongEmail().required("Required"),
+});
 
 export default function Login() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [onLoading, setOnLoading] = useState(false);
 
-  const loginSchema = Yup.object().shape({
-    password: Yup.string().min(8, "Too short").required("Required"),
-    email: strongEmail().required("Required"),
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: () => {},
+    validateOnMount: true,
   });
 
-  function onSubmit(
-    values: LoginFormType,
-    setLoadingState: Dispatch<SetStateAction<boolean>>
-  ) {
+  const loginMut = useMutation({
+    mutationFn: (form: LoginForm) => {
+      return api.post("/api/auth/login", { ...form });
+    },
+    onSuccess: () => router.push("/"),
+    onError: (error: AxiosError) => {
+      setOnLoading(false);
+      setError((error.response?.data as HttpError).message);
+    },
+  });
+
+  function onSubmit(values: LoginForm) {
     setError(null);
-    (async () => {
-      setLoadingState(true);
-      await delay(1_000);
-      const error = await loginUser(values);
-      if (!error) {
-        router.push("/");
-      } else {
-        setLoadingState(false);
-        setError(error.message);
-      }
-    })();
+    setOnLoading(true);
+    loginMut.mutate(values);
   }
 
   return (
@@ -63,67 +75,53 @@ export default function Login() {
             <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
           )}
           <div className="mt-4 flex h-full w-full flex-col items-center justify-start">
-            <Formik
-              initialValues={{
-                email: "",
-                password: "",
-              }}
-              validationSchema={loginSchema}
-              onSubmit={() => {}}
-              validateOnMount={true}
-            >
-              {({ values, errors, handleChange, handleSubmit, isValid }) => (
-                <form onSubmit={handleSubmit} className="h-full w-full">
-                  <div className="relative">
-                    <FormField
-                      layoutClassName="mb-4"
-                      name="email"
-                      type="email"
-                      error={emailError ? emailError : errors.email}
-                      onChange={handleChange}
-                      value={values.email}
-                    >
-                      EMAIL
-                    </FormField>
-                  </div>
-                  <div className="relative">
-                    <FormField
-                      name="password"
-                      type="password"
-                      error={errors.password}
-                      onChange={handleChange}
-                      value={values.password}
-                    >
-                      PASSWORD
-                    </FormField>
-                    <div
-                      className="absolute top-[89%] cursor-pointer text-sm text-link hover:underline"
-                      onClick={(e) => {
-                        if (errors["email"] === "Required") {
-                          setEmailError("Email is Required!");
-                          setTimeout(() => {
-                            setEmailError(null);
-                          }, 2_000);
-                        }
-                      }}
-                    >
-                      Forgot password?
-                    </div>
-                  </div>
-
-                  <PrimaryDotLoadingButton
-                    className="mt-5 h-[44px] w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
-                    type="submit"
-                    onButtonClicked={(_, setLoadingState) =>
-                      isValid && onSubmit(values, setLoadingState)
+            <form onSubmit={formik.handleSubmit} className="h-full w-full">
+              <div className="relative">
+                <FormField
+                  layoutClassName="mb-4"
+                  name="email"
+                  type="email"
+                  error={emailError ? emailError : formik.errors.email}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                >
+                  EMAIL
+                </FormField>
+              </div>
+              <div className="relative">
+                <FormField
+                  name="password"
+                  type="password"
+                  error={formik.errors.password}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                >
+                  PASSWORD
+                </FormField>
+                <div
+                  className="absolute top-[89%] cursor-pointer text-sm text-link hover:underline"
+                  onClick={(e) => {
+                    if (formik.errors["email"] === "Required") {
+                      setEmailError("Email is Required!");
+                      setTimeout(() => {
+                        setEmailError(null);
+                      }, 2_000);
                     }
-                  >
-                    Login
-                  </PrimaryDotLoadingButton>
-                  {}
-                </form>
-              )}
-            </Formik>
+                  }}
+                >
+                  Forgot password?
+                </div>
+              </div>
+
+              <PrimaryDotLoadingButton
+                className="mt-5 h-[44px] w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
+                type="submit"
+                onLoading={onLoading}
+                onClick={(e) => formik.isValid && onSubmit(formik.values)}
+              >
+                Login
+              </PrimaryDotLoadingButton>
+            </form>
             <div className="mt-4 w-full text-sm text-muted">
               <h1 className="inline ">Need an account? </h1>
               <Link
