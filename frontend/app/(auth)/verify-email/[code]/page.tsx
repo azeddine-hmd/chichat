@@ -20,13 +20,13 @@ export default function CodeAuthVerification({
     mutationFn: (code: string) => {
       return api.post("/api/auth/email-verify", { code: code });
     },
-    onSuccess: () => {}, // window.location.assign("/channels/friends"),
-    onError: () => {},// window.location.assign("/login"),
+    onSuccess: () => window.location.assign("/channels/friends"),
+    onError: () => window.location.assign("/login"),
   });
 
   useEffect(() => {
     verifyEmail.mutate(code);
-  }, []);
+  }, [code, verifyEmail]);
 
   return (
     <motion.div

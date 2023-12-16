@@ -7,9 +7,8 @@ import {
 } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { api } from "@/config";
-import { AxiosError } from "axios";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 let pathWhitelist = ["/login", "/register", "/verify-email"];
 
@@ -20,6 +19,21 @@ type GlobalTemplateProps = {
 };
 
 const queryClient = new QueryClient();
+
+export function GlobalTemplateConfig({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <QueryClientProvider client={queryClient}>
+        <GlobalTemplate>{children}</GlobalTemplate>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </>
+  );
+}
 
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);
@@ -36,26 +50,23 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
         }
       );
     },
-    onError: (err: AxiosError) => window.location.assign("/login"),
+    onError: () => window.location.assign("/login"),
   });
 
+  const pathName = window.location.pathname;
+
   useEffect(() => {
-    if (
-      !pathWhitelist.some((path) => window.location.pathname.startsWith(path))
-    ) {
+    if (!pathWhitelist.some((path) => pathName.startsWith(path))) {
       passMut.mutate();
     } else {
       setOnRender(true);
     }
-  }, []);
+  }, [passMut, pathName]);
 
   return (
     <>
       {onRender && (
-        <QueryClientProvider client={queryClient}>
-          <div className="h-full w-full overflow-hidden">{children}</div>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <div className="h-full w-full overflow-hidden">{children}</div>
       )}
     </>
   );

@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 export type SearchResultItemProps<T> = {
   result: T;
   children: (result: T) => React.ReactNode;
@@ -22,11 +24,16 @@ export default function SearchResults<T>({
   searchText,
   title,
 }: SearchResultsProps<T>) {
-  const filteredResults = [...results].filter((result) =>
-    ((result as any)[targetKey] as string)
-      .toLowerCase()
-      .includes(searchText.toLowerCase())
+  const filteredResults = useMemo(
+    () =>
+      [...results].filter((result) =>
+        ((result as any)[targetKey] as string)
+          .toLowerCase()
+          .includes(searchText.toLowerCase())
+      ),
+    [results, searchText]
   );
+
   return (
     <div className="h-full w-full pt-4">
       <h2 className="text-grey-500 mb-4 text-[12px] uppercase leading-4 text-muted">

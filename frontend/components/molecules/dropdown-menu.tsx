@@ -22,7 +22,7 @@ type FloatingMenuCardProps = {
   onItemSelected: (item: string) => void;
 };
 
-function FloatingMenu<T>({
+function FloatingMenu({
   open,
   setInputKeyPress,
   inputkeyPress,
@@ -44,7 +44,9 @@ function FloatingMenu<T>({
   }
 
   useEffect(() => {
-    console.log(`inputKeyPress: ${inputkeyPress}\nhighlightedItem: ${highlightedItem}\nitems.length: ${items.length}`);
+    console.log(
+      `inputKeyPress: ${inputkeyPress}\nhighlightedItem: ${highlightedItem}\nitems.length: ${items.length}`
+    );
     if (inputkeyPress === "ArrowDown") {
       if (highlightedItem == items.length - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);
@@ -57,7 +59,7 @@ function FloatingMenu<T>({
       fireItemSelection();
       setInputKeyPress("");
     }
-  }, [setInputKeyPress]);
+  }, [inputkeyPress, setInputKeyPress, items.length]);
 
   return (
     <FloatingCard className="h-fit" direction="top" showCard={open}>
