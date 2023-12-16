@@ -59,6 +59,7 @@ function FloatingMenu({
       fireItemSelection();
       setInputKeyPress("");
     }
+    // eslint-disable-next-line
   }, [inputkeyPress, setInputKeyPress, items.length]);
 
   return (

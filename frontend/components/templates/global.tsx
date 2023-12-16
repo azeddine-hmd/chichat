@@ -1,39 +1,15 @@
 "use client";
 
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-} from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { api } from "@/config";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 let pathWhitelist = ["/login", "/register", "/verify-email"];
-
-if (process.env.NODE_ENV === "development") pathWhitelist.push("/test");
 
 type GlobalTemplateProps = {
   children?: React.ReactNode;
 };
-
-const queryClient = new QueryClient();
-
-export function GlobalTemplateConfig({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <GlobalTemplate>{children}</GlobalTemplate>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </>
-  );
-}
 
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const [onRender, setOnRender] = useState(false);

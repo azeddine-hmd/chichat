@@ -1,7 +1,7 @@
 import "./globals.css";
 import React from "react";
 import { Inter } from "next/font/google";
-import { GlobalTemplateConfig } from "@/components/templates/global";
+import GlobalTemplateConfig from "@/components/templates/global-config";
 
 export const metadata = {
   title: "ChiChat | Chat and Hang Out With Friends",
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <GlobalTemplateConfig>{children}</GlobalTemplateConfig>
+        <GlobalTemplateConfig>{children}</GlobalTemplateConfig>
       </body>
     </html>
   );

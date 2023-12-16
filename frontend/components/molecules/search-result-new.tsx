@@ -31,7 +31,7 @@ export default function SearchResults<T>({
           .toLowerCase()
           .includes(searchText.toLowerCase())
       ),
-    [results, searchText]
+    [results, searchText, targetKey]
   );
 
   return (
