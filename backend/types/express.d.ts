@@ -3,4 +3,8 @@ declare namespace Express {
     id: number;
     username: string;
   }
+
+  export interface Request {
+    files: { [filename: string]: Express.Multer.File[] };
+  }
 }
