@@ -29,15 +29,14 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
     onError: () => window.location.assign("/login"),
   });
 
-  const pathName = window.location.pathname;
-
   useEffect(() => {
+    const pathName = window.location.pathname;
     if (!pathWhitelist.some((path) => pathName.startsWith(path))) {
       passMut.mutate();
     } else {
       setOnRender(true);
     }
-  }, [passMut, pathName]);
+  }, [passMut]);
 
   return (
     <>
