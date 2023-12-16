@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import TopBar from "../molecules/topbar";
-import IconButton from "../molecules/primary-button";
+import IconButton from "../molecules/icon-button";
 import { BsPersonFill } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 

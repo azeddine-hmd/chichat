@@ -1,6 +1,5 @@
 #!/bin/bash
 
-npx next telemetry disable
 npx update-browserslist-db@latest
 
 if [ "$NODE_ENV" == "production" ]; then
