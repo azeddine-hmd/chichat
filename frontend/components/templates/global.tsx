@@ -2,45 +2,40 @@
 
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { io } from "socket.io-client";
 import { api } from "@/config";
+import { connectSocket } from "@/config/socket-client";
 
-let pathWhitelist = ["/login", "/register", "/verify-email"];
+let publicPages = ["/login", "/register", "/verify-email"];
 
 type GlobalTemplateProps = {
   children?: React.ReactNode;
 };
 
 export default function GlobalTemplate({ children }: GlobalTemplateProps) {
-  const [onRender, setOnRender] = useState(false);
+  const [showPage, setShowPage] = useState(false);
 
   const passMut = useMutation({
     mutationFn: () => api.get("/api/auth/pass"),
     onSuccess: () => {
-      setOnRender(true);
-      window.clientSocket = io(
-        process.env.NEXT_PUBLIC_BACKEND_DOMAIN as string,
-        {
-          transports: ["websocket"],
-          withCredentials: true,
-        }
-      );
+      connectSocket();
+      setShowPage(true);
     },
     onError: () => window.location.assign("/login"),
   });
 
   useEffect(() => {
     const pathName = window.location.pathname;
-    if (!pathWhitelist.some((path) => pathName.startsWith(path))) {
+    if (!publicPages.some((page) => pathName.startsWith(page))) {
       passMut.mutate();
     } else {
-      setOnRender(true);
+      setShowPage(true);
     }
-  }, [passMut]);
+  // eslint-disable-next-line
+  }, []);
 
   return (
     <>
-      {onRender && (
+      {showPage && (
         <div className="h-full w-full overflow-hidden">{children}</div>
       )}
     </>

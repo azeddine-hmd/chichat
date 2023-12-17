@@ -13,19 +13,19 @@ docker compose up --build
 ## Technologies
 *backend:*
   * Typescript
-  * Expressjs 5-beta (async/await)
+  * Expressjs 5-beta (async/await handlers)
   * prisma (orm/migrations)
   * postgresql (database)
-  * Socket.io (advanced websocket)
+  * Socket.io (websocket)
 
 *frontend:*
   * Typescript
-  * Nextjs 13
-  * Server/Client component
-  * Tailwindcss
+  * Nextjs 13 (Server/Client component)
+  * Tailwindcss (styling)
   * Framer-Motion (animation)
-  * React-Query (managing network state/caching etc)
-  * Axios (http request)
+  * Axios (http client)
+  * React-Query (network fetching)
+  * zustand (state management)
 
 ## Example :
   Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)

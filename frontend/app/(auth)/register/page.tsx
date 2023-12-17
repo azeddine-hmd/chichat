@@ -60,9 +60,9 @@ export default function Register() {
   });
 
   const registrationMut = useRegistrationMut({
-    onSuccess: () => { 
+    onSuccess: () => {
       console.log("onSuccess of registration mutation");
-      switchToAvatarSelection(true)
+      switchToAvatarSelection(true);
     },
     onError: (error) => setError(error.message),
   });
@@ -73,113 +73,116 @@ export default function Register() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, translateY: -50 }}
-      animate={{ opacity: 1, translateY: 0 }}
-      transition={{ duration: 0.7 }}
-    >
-      <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
-        <div className="flex h-fit w-[480px] flex-col items-center">
-          {!onAvatarSelection ? (
-            <>
-              <h1 className="text-2xl font-semibold text-white/90">
-                Create an account
-              </h1>
-              {error && (
-                <h3 className="mt-2 text-lg font-semibold text-red-400">
-                  {error}
-                </h3>
-              )}
-              <div className="mt-5 h-full w-full">
-                <form onSubmit={formik.handleSubmit} className="h-full w-full">
-                  <FormField
-                    name="displayName"
-                    error={formik.errors.displayName}
-                    onChange={formik.handleChange}
-                    value={formik.values.displayName}
+    <>
+      {!onAvatarSelection ? (
+        <motion.div
+          initial={{ opacity: 0, translateY: -50 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
+            <div className="flex h-fit w-[480px] flex-col items-center">
+                <h1 className="text-2xl font-semibold text-white/90">
+                  Create an account
+                </h1>
+                {error && (
+                  <h3 className="mt-2 text-lg font-semibold text-red-400">
+                    {error}
+                  </h3>
+                )}
+                <div className="mt-5 h-full w-full">
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    className="h-full w-full"
                   >
-                    DISPLAY NAME
-                  </FormField>
-                  <FormField
-                    name="username"
-                    error={formik.errors.username}
-                    onChange={formik.handleChange}
-                    value={formik.values.username}
-                  >
-                    USERNAME
-                  </FormField>
-                  <FormField
-                    type="password"
-                    name="password"
-                    error={formik.errors.password}
-                    onChange={formik.handleChange}
-                    value={formik.values.password}
-                  >
-                    PASSWORD
-                  </FormField>
-                  <FormField
-                    name="email"
-                    error={formik.errors.email}
-                    onChange={formik.handleChange}
-                    value={formik.values.email}
-                  >
-                    EMAIL
-                  </FormField>
-                  <Label>DATE OF BIRTH</Label>
-                  <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
-                    <Dropdownmenu
-                      placeholder="Month"
-                      items={MONTHS}
-                      fieldName="month"
+                    <FormField
+                      name="displayName"
+                      error={formik.errors.displayName}
                       onChange={formik.handleChange}
-                      value={formik.values.month}
-                      setFieldValue={formik.setFieldValue}
-                    />
-                    <Dropdownmenu
-                      placeholder="Day"
-                      items={DAYS}
-                      fieldName="day"
+                      value={formik.values.displayName}
+                    >
+                      DISPLAY NAME
+                    </FormField>
+                    <FormField
+                      name="username"
+                      error={formik.errors.username}
                       onChange={formik.handleChange}
-                      value={formik.values.day}
-                      setFieldValue={formik.setFieldValue}
-                    />
-                    <Dropdownmenu
-                      placeholder="Year"
-                      items={YEARS}
-                      fieldName="year"
+                      value={formik.values.username}
+                    >
+                      USERNAME
+                    </FormField>
+                    <FormField
+                      type="password"
+                      name="password"
+                      error={formik.errors.password}
                       onChange={formik.handleChange}
-                      value={formik.values.year}
-                      setFieldValue={formik.setFieldValue}
-                    />
+                      value={formik.values.password}
+                    >
+                      PASSWORD
+                    </FormField>
+                    <FormField
+                      name="email"
+                      error={formik.errors.email}
+                      onChange={formik.handleChange}
+                      value={formik.values.email}
+                    >
+                      EMAIL
+                    </FormField>
+                    <Label>DATE OF BIRTH</Label>
+                    <div className="mt-2 flex w-full flex-nowrap justify-start gap-2">
+                      <Dropdownmenu
+                        placeholder="Month"
+                        items={MONTHS}
+                        fieldName="month"
+                        onChange={formik.handleChange}
+                        value={formik.values.month}
+                        setFieldValue={formik.setFieldValue}
+                      />
+                      <Dropdownmenu
+                        placeholder="Day"
+                        items={DAYS}
+                        fieldName="day"
+                        onChange={formik.handleChange}
+                        value={formik.values.day}
+                        setFieldValue={formik.setFieldValue}
+                      />
+                      <Dropdownmenu
+                        placeholder="Year"
+                        items={YEARS}
+                        fieldName="year"
+                        onChange={formik.handleChange}
+                        value={formik.values.year}
+                        setFieldValue={formik.setFieldValue}
+                      />
+                    </div>
+                    <PrimaryDotLoadingButton
+                      className="mt-5 h-[44px] w-full"
+                      type="submit"
+                      onClick={onSubmit}
+                      disabled={!formik.isValid}
+                      onLoading={registrationMut.isPending}
+                    >
+                      Continue
+                    </PrimaryDotLoadingButton>
+                  </form>
+                  <div className="mt-4">
+                    <Link
+                      href="/login"
+                      className="cursor-pointer text-sm text-link hover:underline "
+                    >
+                      Already have an account?
+                    </Link>
                   </div>
-                  <PrimaryDotLoadingButton
-                    className="mt-5 h-[44px] w-full"
-                    type="submit"
-                    onClick={onSubmit}
-                    disabled={!formik.isValid}
-                    onLoading={registrationMut.isPending}
-                  >
-                    Continue
-                  </PrimaryDotLoadingButton>
-                </form>
-                <div className="mt-4">
-                  <Link
-                    href="/login"
-                    className="cursor-pointer text-sm text-link hover:underline "
-                  >
-                    Already have an account?
-                  </Link>
                 </div>
-              </div>
-            </>
-          ) : (
-            <AvatarSelection
-              email={formik.values.email}
-              password={formik.values.password}
-            />
-          )}
-        </div>
-      </div>
-    </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <AvatarSelection
+          email={formik.values.email}
+          password={formik.values.password}
+        />
+      )}
+    </>
   );
 }

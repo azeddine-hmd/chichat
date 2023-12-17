@@ -68,7 +68,7 @@ export default function FriendsTemplate() {
           case TopBarOptions.Blocked:
             return <UsersList filterBy="Blocked" users={users} />;
           default:
-            return <></>;
+            return null;
         }
       })()}
       {/* {activeOption === TopBarOptions.AddFriends && <AddFriends />} */}

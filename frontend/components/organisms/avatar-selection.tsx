@@ -36,8 +36,14 @@ export default function AvatarSelection({
 
   function upload(e: MouseEvent<HTMLButtonElement>) {
     if (selectedFile) {
-      const avatarUrlencoded = editor.current?.getImageScaledToCanvas().toDataURL();
-      const avatar = base64toFile(avatarUrlencoded!!, "avatar.jpeg", "image/jpeg");
+      const avatarUrlencoded = editor.current
+        ?.getImageScaledToCanvas()
+        .toDataURL();
+      const avatar = base64toFile(
+        avatarUrlencoded!!,
+        "avatar.jpeg",
+        "image/jpeg"
+      );
       uploadAvatarMut.mutate({
         email: email,
         password: password,
@@ -55,44 +61,53 @@ export default function AvatarSelection({
       animate={{ opacity: 1, translateY: 0 }}
       transition={{ duration: 0.7 }}
     >
-      <h1 className="mb-5 text-2xl font-medium text-white">choose avatar</h1>
-      <div
-        className="relative mb-4 flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border border-gray-100/10 bg-gray-100/10 shadow-lg"
-        onWheel={(e) => {
-          e.deltaY > 0 &&
-            imageScale - 0.1 > 1 &&
-            setImageScale(imageScale - 0.1);
-          e.deltaY < 0 &&
-            imageScale + 0.1 < 2 &&
-            setImageScale(imageScale + 0.1);
-        }}
-      >
-        {!selectedFile ? (
-          <BsImageFill className="fill-white" size="30" />
-        ) : (
-          <>
-            <AvatarEditor
-              image={selectedFile}
-              width={250}
-              height={250}
-              border={50}
-              scale={imageScale}
-              rotate={0}
-              ref={editor}
+      <div className="mb-10 rounded-md bg-gray-600 p-8 shadow-2xl">
+        <div className="flex h-fit w-[480px] flex-col items-center">
+          <h1 className="mb-5 text-2xl font-medium text-white">
+            choose avatar
+          </h1>
+          <div
+            className="relative mb-4 flex h-60 w-60 items-center justify-center overflow-hidden rounded-full border border-gray-100/10 bg-gray-100/10 shadow-lg"
+            onWheel={(e) => {
+              e.deltaY > 0 &&
+                imageScale - 0.1 > 1 &&
+                setImageScale(imageScale - 0.1);
+              e.deltaY < 0 &&
+                imageScale + 0.1 < 2 &&
+                setImageScale(imageScale + 0.1);
+            }}
+          >
+            {!selectedFile ? (
+              <BsImageFill className="fill-white" size="30" />
+            ) : (
+              <>
+                <AvatarEditor
+                  image={selectedFile}
+                  width={250}
+                  height={250}
+                  border={50}
+                  scale={imageScale}
+                  rotate={0}
+                  ref={editor}
+                />
+              </>
+            )}
+          </div>
+          <div className="flex w-80  items-center justify-center space-x-2">
+            <FieldInput
+              className="h-10 rounded-md border border-gray-50/30 p-2 text-sm font-medium"
+              type="file"
+              id="avatar"
+              onChange={handleAvatarChange}
             />
-          </>
-        )}
-      </div>
-      <div className="flex w-80  items-center justify-center space-x-2">
-        <FieldInput
-          className="h-10 rounded-md border border-gray-50/30 p-2 text-sm font-medium"
-          type="file"
-          id="avatar"
-          onChange={handleAvatarChange}
-        />
-        <PrimaryButton disabled={uploadAvatarMut.isPending} onClick={upload}>
-          Uplaod
-        </PrimaryButton>
+            <PrimaryButton
+              disabled={uploadAvatarMut.isPending}
+              onClick={upload}
+            >
+              Uplaod
+            </PrimaryButton>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
