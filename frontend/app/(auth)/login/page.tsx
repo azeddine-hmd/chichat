@@ -123,7 +123,7 @@ export default function Login() {
               </PrimaryDotLoadingButton>
             </form>
             <div className="mt-4 w-full text-sm text-muted">
-              <h1 className="inline ">Need an account? </h1>
+              <h1 className="inline text-muted-field">Need an account? </h1>
               <Link
                 href="/register"
                 className="inline cursor-pointer text-sm text-link hover:underline"
