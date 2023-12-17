@@ -65,6 +65,9 @@ export class RegisterDto {
   @Matches(/^(?=.*[!@#$%^&*()\-_=+{};:,<.>])/, {
     message: 'Password must contain at least 1 special character',
   })
+  @Matches(/^(?=.*[a-z])/, {
+    message: 'Password must contain at least 1 lowercase letter',
+  })
   password: string;
 
   @ValidateNested()
