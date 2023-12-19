@@ -74,20 +74,20 @@ usersRouter.post(
 
 /**
  * @openapi
- * /api/users/friends/send/{id}:
+ * /api/users/friends/send/{username}:
  *    post:
- *      summary: Send friend request by id
+ *      summary: Send friend request by username
  *      tags:
  *        - Friendship
  *      parameters:
- *        - name: id
+ *        - name: username
  *          in: path
  *          required: true
  *          schema:
  *            type: integer
  */
 usersRouter.post(
-  prefix + '/friends/send/:id',
+  prefix + '/friends/send/:username',
   passport.authenticate('jwt', { session: false }),
   relationshipController.sendFriendRequest
 );

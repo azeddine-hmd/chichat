@@ -3,9 +3,10 @@ import * as relationshipService from '../services/relationship-service';
 import { HttpError } from '../../../utils/error';
 
 export async function sendFriendRequest(req: Request, res: Response) {
-  const id = parseInt(req.params.id);
-  if (!id) throw new HttpError(400, 'Invalid id');
-  await relationshipService.sendFriendRequest(req.user, id);
+  const recipientUsername = req.params.username;
+  if (!recipientUsername || recipientUsername === '')
+    throw new HttpError(400, 'Invalid recipient username');
+  await relationshipService.sendFriendRequest(req.user, recipientUsername);
   res.status(204).send();
 }
 

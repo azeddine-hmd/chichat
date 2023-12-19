@@ -8,10 +8,13 @@ function normalizeId(firstId: number, secondId: number) {
     : { user1Id: secondId, user2Id: firstId };
 }
 
-export async function sendFriendRequest(me: Express.User, recipientId: number) {
-  if (me.id == recipientId)
+export async function sendFriendRequest(
+  me: Express.User,
+  recipientUsername: string
+) {
+  if (me.username == recipientUsername)
     throw new HttpError(400, 'You cannot perform this action on yourself');
-  await checkUserExists(recipientId);
+  const { id: recipientId } = await checkUserExists(recipientUsername);
 
   const { user1Id, user2Id } = normalizeId(me.id, recipientId);
   const friendship = await prisma.friendship.findUnique({
