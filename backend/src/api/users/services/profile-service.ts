@@ -32,6 +32,7 @@ export async function uploadAvatar(
     });
     return avatar;
   } catch (err) {
+    console.error('file upload failed: ', err);
     throw new HttpError(500, 'File upload failed');
   }
 }

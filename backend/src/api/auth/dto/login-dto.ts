@@ -5,7 +5,20 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-
+/**
+ * @openapi
+ * definitions:
+ *   Login:
+ *     type: object
+ *     required:
+ *       - email
+ *       - password
+ *     properties:
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ */
 export class LoginDto {
   @IsDefined()
   @IsNotEmpty()
