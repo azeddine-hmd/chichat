@@ -1,20 +1,20 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  port: 465,
+  service: process.env.NODEMAILER_SERVICE,
+  host: process.env.NODEMAILER_HOST,
+  port: parseInt(process.env.NODEMAILER_PORT),
   secure: true,
   auth: {
     type: 'login',
-    user: process.env.GMAIL_EMAIL,
-    pass: process.env.GMAIL_APP_PASSWORD,
+    user: process.env.NODEMAILER_EMAIL,
+    pass: process.env.NODEMAILER_APP_PASSWORD,
   },
 });
 
 export async function sendVerificationMail(to: string, htmlContent: string) {
   await transporter.sendMail({
-    from: 'Azeddine Hamdaoui  <azeddine.hmd@gmail.com>',
+    from: `${process.env.NODEMAILER_FROM}  <${process.env.NODEMAILER_EMAIL}>`,
     to: [to],
     subject: 'Email Validation',
     text: 'This is just for development application!',
