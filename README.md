@@ -17,6 +17,7 @@ docker compose up --build
   * prisma (orm/migrations)
   * postgresql (database)
   * Socket.io (websocket)
+  * Swagger (api documentation)
 
 *frontend:*
   * Typescript
@@ -29,3 +30,7 @@ docker compose up --build
 
 ## Example :
   Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)
+  
+## Openapi Specificication Using Swagger
+In order to navigate RESTFUL Apis that backend provides quickly. a Swagger-Ui-Express handler running on endpoint '$BACKEND_DOMAIN/docs'.
+also, you can obtain openapi document as json by visting '$BACKEND_DOMAIN/docs.json'
