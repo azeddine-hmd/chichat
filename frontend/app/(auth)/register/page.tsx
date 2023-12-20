@@ -3,7 +3,7 @@
 import Label from "@/components/atoms/label";
 import Dropdownmenu from "@/components/molecules/dropdown-menu";
 import FormField from "@/components/molecules/form-field";
-import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
+import PrimaryLoadingButton from "@/components/molecules/primary-dot-loading-button";
 import { strongEmail, strongPassword } from "@/lib/yup-extra";
 import { useFormik } from "formik";
 import { motion } from "framer-motion";
@@ -155,7 +155,7 @@ export default function Register() {
                         setFieldValue={formik.setFieldValue}
                       />
                     </div>
-                    <PrimaryDotLoadingButton
+                    <PrimaryLoadingButton
                       className="mt-5 h-[44px] w-full"
                       type="submit"
                       onClick={onSubmit}
@@ -163,7 +163,7 @@ export default function Register() {
                       onLoading={registrationMut.isPending}
                     >
                       Continue
-                    </PrimaryDotLoadingButton>
+                    </PrimaryLoadingButton>
                   </form>
                   <div className="mt-4">
                     <Link

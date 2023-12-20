@@ -9,7 +9,7 @@
     "dev": "NODE_ENV=development DEBUG=express:* DEBUG_COLORS=true  npm-run-all -p watch:ts start:dev",
     "watch:ts": "tsc --watch",
     "start:dev": "node --inspect=0.0.0.0 --watch dist/app.js",
-    "test": "NODE_ENV=test jest --detectOpenHandles"
+    "test": "NODE_ENV=test jest"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -40,6 +40,8 @@
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.3",
     "socket.io": "^4.7.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
@@ -58,6 +60,8 @@
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
     "@types/supertest": "^2.0.15",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",

@@ -8,9 +8,42 @@ import {
   MaxLength,
   MinLength,
   ValidateNested,
-  min,
-  minLength,
 } from 'class-validator';
+
+/**
+ * @openapi
+ * definitions:
+ *   Register:
+ *     type: object
+ *     required:
+ *       - displayName
+ *       - username
+ *       - email
+ *       - password
+ *       - dateOfBirth
+ *     properties:
+ *       displayName:
+ *         type: string
+ *       username:
+ *         type: string
+ *       password:
+ *         type: string
+ *       email:
+ *         type: string
+ *       dateOfBirth:
+ *         type: object
+ *         required:
+ *           - day
+ *           - month
+ *           - year
+ *         properties:
+ *           day:
+ *             type: integer
+ *           month:
+ *             type: integer
+ *           year:
+ *             type: integer
+ */
 
 export class DateOfBirthDto {
   @IsDefined()

@@ -1,8 +1,13 @@
 import request from 'supertest';
 import { app } from '../src/app';
-import { RegisterDto } from '../src/auth/dto/register-dto';
+import { RegisterDto } from '../src/api/auth/dto/register-dto';
+import { prisma } from '../src/config';
 
 describe('test register', () => {
+
+  afterAll(() => {
+    prisma.$disconnect();
+  });
 
   test('valid user register', async () => {
     const res = await request(app)
@@ -11,7 +16,7 @@ describe('test register', () => {
         username: 'test',
         displayName: 'test',
         email: 'test@test.com',
-        password: '123456789_Q',
+        password: '123456789_Qw',
         dateOfBirth: {
           day: 14,
           month: 5,
@@ -19,7 +24,7 @@ describe('test register', () => {
         },
       } as RegisterDto)
       .set('Accept', 'application/json');
-    expect(res.statusCode).toBe(201);
+    expect(res.statusCode).toBe(204);
   });
 
 });

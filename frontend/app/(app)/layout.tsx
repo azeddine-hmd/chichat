@@ -67,8 +67,8 @@ export default function HomeLayout({
           {/* <div className="h-full w-32 bg-gray-700" /> */}
           {/* {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />} */}
         </div>
-        {isSearchPopupOpen && <QuickSearchPopup />}
-        {isShortcutHelpPopupOpen && <ShortcutPopup />}
+        {/* {isSearchPopupOpen && <QuickSearchPopup />} */}
+        {/* {isShortcutHelpPopupOpen && <ShortcutPopup />} */}
       </GlobalContext.Provider>
     </div>
   );

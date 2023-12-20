@@ -27,13 +27,13 @@ function authentication(socket: Socket, next: (err?: Error) => void) {
       })
       .then((user) => {
         socket.user = user;
+        next();
       })
       .catch((error) => {
         console.error('socket:authentication: ', error);
         next(new Error('User not found'));
         socket.disconnect();
       });
-    next();
   }
 }
 io.use(authentication);

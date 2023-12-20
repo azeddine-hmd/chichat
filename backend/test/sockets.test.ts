@@ -4,7 +4,8 @@ import { io } from '../src/sockets';
 import { io as ioc, type Socket as ClientSocket } from 'socket.io-client';
 import { AddressInfo } from 'net';
 import { Socket } from 'socket.io';
-import { LoginDto } from '../src/auth/dto/login-dto';
+import { LoginDto } from '../src/api/auth/dto/login-dto';
+import { prisma } from '../src/config';
 
 describe('test socket connection', () => {
   let clientSocket: ClientSocket;
@@ -41,8 +42,9 @@ describe('test socket connection', () => {
   });
 
   afterAll(() => {
+    prisma.$disconnect();
     io.close();
-    clientSocket.disconnect();
+    clientSocket.close();
   });
 
   test('should work', (done) => {
