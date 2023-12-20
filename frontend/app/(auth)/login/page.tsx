@@ -1,7 +1,7 @@
 "use client";
 
 import FormField from "@/components/molecules/form-field";
-import PrimaryDotLoadingButton from "@/components/molecules/primary-dot-loading-button";
+import PrimaryLoadingButton from "@/components/molecules/primary-dot-loading-button";
 import { strongEmail } from "@/lib/yup-extra";
 import { useFormik } from "formik";
 import { motion } from "framer-motion";
@@ -113,14 +113,14 @@ export default function Login() {
                 </div>
               </div>
 
-              <PrimaryDotLoadingButton
+              <PrimaryLoadingButton
                 className="mt-5 h-[44px] w-full animate-none focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-cyan-500"
                 type="submit"
                 onLoading={onLoading}
                 onClick={(e) => formik.isValid && onSubmit(formik.values)}
               >
                 Login
-              </PrimaryDotLoadingButton>
+              </PrimaryLoadingButton>
             </form>
             <div className="mt-4 w-full text-sm text-muted">
               <h1 className="inline text-muted-field">Need an account? </h1>

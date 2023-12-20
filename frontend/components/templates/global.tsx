@@ -17,20 +17,29 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   const passMut = useMutation({
     mutationFn: () => api.get("/api/auth/pass"),
     onSuccess: () => {
-      connectSocket();
-      setShowPage(true);
+      const pathName: string = window.location.pathname;
+      const isPublic = publicPages.some((page) => pathName === page);
+      if (isPublic) {
+        window.location.assign("/channels/friends");
+      } else {
+        connectSocket();
+        setShowPage(true);
+      }
     },
-    onError: () => window.location.assign("/login"),
+    onError: () => {
+      const pathName: string = window.location.pathname;
+      if (!publicPages.some((page) => pathName === page)) {
+        window.location.assign("/login");
+      } else {
+        setShowPage(true);
+      }
+    },
   });
 
   useEffect(() => {
-    const pathName = window.location.pathname;
-    if (!publicPages.some((page) => pathName.startsWith(page))) {
-      passMut.mutate();
-    } else {
-      setShowPage(true);
-    }
-  // eslint-disable-next-line
+    // debugger
+    passMut.mutate();
+    // eslint-disable-next-line
   }, []);
 
   return (
