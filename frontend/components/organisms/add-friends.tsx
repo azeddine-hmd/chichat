@@ -1,9 +1,4 @@
-import React, {
-  ChangeEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import Hr from "../atoms/hr";
 import FieldInput from "../atoms/field-input";
 import PrimaryLoadingButton from "../molecules/primary-dot-loading-button";
@@ -13,6 +8,7 @@ import { delay } from "@/lib/delay";
 
 export default function AddFriends() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const [inputText, setInputText] = useState("");
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -39,6 +35,12 @@ export default function AddFriends() {
     setIsError(false);
   }
 
+  function handleInputKey(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key=== "Enter") {
+      buttonRef?.current?.click();
+    }
+  }
+
   return (
     <>
       <main className="flex w-full flex-col p-4 px-8">
@@ -52,12 +54,14 @@ export default function AddFriends() {
             innerRef={inputRef}
             isError={isError}
             isSuccess={isSuccess}
+            onKeyDown={handleInputKey}
           />
           <PrimaryLoadingButton
             disabled={inputText.length == 0 || sendFriendReqMut.isPending}
             className="absolute right-4 top-1/2 h-8 w-40 -translate-y-1/2 rounded-sm bg-primary text-xs font-medium text-white"
             onClick={() => sendFriendRequest()}
             onLoading={sendFriendReqMut.isPending}
+            innerRef={buttonRef}
           >
             Send Friend Request
           </PrimaryLoadingButton>

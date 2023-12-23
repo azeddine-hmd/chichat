@@ -11,6 +11,10 @@ const nextConfig = {
         hostname: "i.pravatar.cc",
         protocol: "https",
       },
+      {
+        hostname: "localhost",
+        protocol: "http",
+      },
     ],
   },
   productionBrowserSourceMaps: true,

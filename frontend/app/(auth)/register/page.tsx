@@ -27,11 +27,11 @@ export type RegisterForm = {
 const registrationSchema = Yup.object().shape({
   displayName: Yup.string()
     .min(6, "Too Short!")
-    .max(50, "Too Long!")
+    .max(22, "Too Long!")
     .required("Required"),
   username: Yup.string()
     .min(6, "Too Short!")
-    .max(20, "Too Long!")
+    .max(12, "Too Long!")
     .required("Required"),
   password: strongPassword().required("Required"),
   email: strongEmail().required("Required"),

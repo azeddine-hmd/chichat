@@ -3,51 +3,30 @@
 import FriendsTopBar, {
   TopBarOptions,
 } from "@/components/organisms/friends-topbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddFriends from "../organisms/add-friends";
 import UsersList from "../organisms/users-list";
+import { useUserStore } from "@/stores/user-store";
+import { User } from "@/models/user";
 
 export default function FriendsTemplate() {
   const [activeOption, activateOption] = useState<TopBarOptions>(
     TopBarOptions.AddFriends
   );
-  const users = [
-    {
-      id: 1,
-      username: "sbenjami",
-      displayName: "Sarah Benjamin",
-      status: "online" as const,
-      avatar: "https://i.pravatar.cc/150?img=1",
-    },
-    {
-      id: 2,
-      username: "kwells",
-      displayName: "Kyro Wells",
-      status: "online" as const,
-      avatar: "https://i.pravatar.cc/150?img=2",
-    },
-    {
-      id: 3,
-      username: "cpayne",
-      displayName: "Cecilia Payne",
-      status: "online" as const,
-      avatar: "https://i.pravatar.cc/150?img=3",
-    },
-    {
-      id: 4,
-      username: "eboyle",
-      displayName: "Edward Boyle",
-      status: "online" as const,
-      avatar: "https://i.pravatar.cc/150?img=7",
-    },
-    {
-      id: 5,
-      username: "akaur",
-      displayName: "Aliya Kaur",
-      status: "online" as const,
-      avatar: "https://i.pravatar.cc/150?img=5",
-    },
-  ];
+  const { friends, blocked, setFriends, setBlocked } = useUserStore();
+
+  useEffect(() => {
+    window.clientSocket.once("relation", (...args) => {
+      const relation: { friends: User[]; blocked: User[] } = args[0];
+      setFriends(relation.friends);
+      console.log("received friends:", JSON.stringify(relation.friends));
+      setBlocked(relation.blocked);
+      console.log("received blocked:", JSON.stringify(relation.blocked));
+    });
+    window.clientSocket.emit("relation");
+    console.log("fetching relation...");
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="h-full w-full bg-gray-600">
@@ -60,13 +39,22 @@ export default function FriendsTemplate() {
           case TopBarOptions.AddFriends:
             return <AddFriends />;
           case TopBarOptions.All:
-            return <UsersList filterBy="All" users={users} />;
+            return <UsersList filterBy="All" users={friends} />;
           case TopBarOptions.Online:
-            return <UsersList filterBy="Online" users={users} />;
+            return (
+              <UsersList
+                filterBy="Online"
+                users={
+                  friends
+                    ? friends.filter((friend) => friend.status === "online")
+                    : []
+                }
+              />
+            );
           case TopBarOptions.Pending:
-            return <UsersList filterBy="Pending" users={users} />;
+            return <UsersList filterBy="Pending" users={[]} />;
           case TopBarOptions.Blocked:
-            return <UsersList filterBy="Blocked" users={users} />;
+            return <UsersList filterBy="Blocked" users={blocked} />;
           default:
             return null;
         }

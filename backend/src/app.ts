@@ -14,7 +14,7 @@ import './api/route';
 
 export const server = http.createServer(app);
 
-import './sockets';
+import './api/sockets/socket';
 
 const port = process.env.EXPRESS_PORT || 3000;
 

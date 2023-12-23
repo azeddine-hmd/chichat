@@ -17,29 +17,29 @@ enum UserStatus {
 }
 
 model User {
-    id          Int        @id @default(autoincrement())
+    id          Int           @id @default(autoincrement())
     displayName String
-    username    String     @unique
-    email       String     @unique
+    username    String        @unique
+    email       String        @unique
     password    String
     dateOfBirth DateTime
-    active      Boolean    @default(false)
-    status      UserStatus @default(OFFLINE)
+    active      Boolean       @default(false)
+    status      UserStatus    @default(OFFLINE)
+    avatar      File?
+    Codes       Codes[]
+    sockets     UserSockets[]
 
-    Codes          Codes[]
-    Friend1        Friendship[]        @relation("Friend1")
-    Friend2        Friendship[]        @relation("Friend2")
-    Block1         Block[]             @relation("Block1")
-    Block2         Block[]             @relation("Block2")
-    PendingFriend1 PendingFriendship[] @relation("PendingFriend1")
-    PendingFriend2 PendingFriendship[] @relation("PendingFriend2")
-    avatar         File?
-    sockets        UserSockets[]
+    Friend1         Friendship[]        @relation("Friend1")
+    Friend2         Friendship[]        @relation("Friend2")
+    friendSender    PendingFriendship[] @relation("friendSender")
+    friendRecipient PendingFriendship[] @relation("friendRecipient")
+    blocked         Block[]             @relation("blocked")
+    blockedBy       Block[]             @relation("blockedBy")
 }
 
 model UserSockets {
-    socketId     String @id
-    userId Int
+    socketId String @id
+    userId   Int
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -78,22 +78,22 @@ model PendingFriendship {
     senderId    Int
     recipientId Int
 
-    user1 User @relation("PendingFriend1", references: [id], onDelete: Cascade, fields: [senderId])
-    user2 User @relation("PendingFriend2", references: [id], onDelete: Cascade, fields: [recipientId])
+    sender    User @relation("friendSender", references: [id], onDelete: Cascade, fields: [senderId])
+    recipient User @relation("friendRecipient", references: [id], onDelete: Cascade, fields: [recipientId])
 
     @@unique([senderId, recipientId], name: "unique_user_combination")
 }
 
 model Block {
-    id        Int      @id @default(autoincrement())
-    sinceDate DateTime @default(now())
-    user1Id   Int
-    user2Id   Int
+    id          Int      @id @default(autoincrement())
+    sinceDate   DateTime @default(now())
+    blockedId   Int
+    blockedById Int
 
-    user1 User @relation("Block1", references: [id], onDelete: Cascade, fields: [user1Id])
-    user2 User @relation("Block2", references: [id], onDelete: Cascade, fields: [user2Id])
+    blocked   User @relation("blocked", references: [id], onDelete: Cascade, fields: [blockedId])
+    blockedBy User @relation("blockedBy", references: [id], onDelete: Cascade, fields: [blockedById])
 
-    @@unique([user1Id, user2Id], name: "unique_user_combination")
+    @@unique([blockedId, blockedById], name: "unique_user_combination")
 }
 
 model File {

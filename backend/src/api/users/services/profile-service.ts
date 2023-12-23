@@ -6,6 +6,7 @@ export async function getProfile(id: number) {
     where: { id: id },
     include: {
       avatar: true,
+      blocked: true,
     },
   });
   return {
@@ -35,4 +36,32 @@ export async function uploadAvatar(
     console.error('file upload failed: ', err);
     throw new HttpError(500, 'File upload failed');
   }
+}
+
+export async function getBlockedUsersProfile(id: number) {
+  const blockRecords = await prisma.block.findMany({
+    where: { blockedById: id },
+    include: { blocked: true },
+  });
+  console.log('blockRecords result:', blockRecords);
+  const blockedUsersProfile = blockRecords.map((blockRecord) => {
+    return blockRecord.blocked;
+  });
+  return blockedUsersProfile;
+}
+
+export async function getFriendsProfile(id: number) {
+  const friendshipRecords = await prisma.friendship.findMany({
+    where: {
+      OR: [{ user1Id: id }, { user2Id: id }],
+    },
+    include: { user1: true, user2: true },
+  });
+  console.log('friendshipRecords result:', friendshipRecords);
+  const friendsProfile = friendshipRecords.map((friendshipRecord) => {
+    return friendshipRecord.user1.id === id
+      ? friendshipRecord.user2
+      : friendshipRecord.user1;
+  });
+  return friendsProfile;
 }

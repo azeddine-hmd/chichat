@@ -1,9 +1,9 @@
-import { io } from '.';
 import helmet from 'helmet';
 import cookie from 'cookie';
-import { prisma, verifyJwt } from '../config';
-import { sessionMiddleware } from '../api/middlewares/express-session';
 import { Socket } from 'socket.io';
+import { io } from './socket';
+import { sessionMiddleware } from '../middlewares/express-session';
+import { prisma, verifyJwt } from '../../config';
 
 io.engine.use(sessionMiddleware);
 io.engine.use(helmet());

@@ -6,6 +6,7 @@ import { twMerge } from "tailwind-merge";
 export type PrimaryDotLoadingButtonProps = {
   children?: React.ReactNode;
   onLoading: boolean;
+  innerRef?: React.RefObject<HTMLButtonElement>;
 } & PrimaryButtonProps;
 
 export default function PrimaryLoadingButton({

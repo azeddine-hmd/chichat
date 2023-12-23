@@ -1,5 +1,3 @@
-"use client";
-
 import { BsGearFill } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 import { MouseEvent, useState } from "react";
@@ -8,12 +6,14 @@ import Avatar from "../atoms/avatar";
 import { MicSvg } from "@/svg/mic";
 import { HeadphoneSvg } from "@/svg/headphone";
 import Tooltip from "./tooltip";
+import { User } from "@/models/user";
 
 interface UserSectionProps {
   className?: string;
+  user: User;
 }
 
-export default function UserSection({ className }: UserSectionProps) {
+export default function UserSection({ className, user }: UserSectionProps) {
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [isHeadphoneMuted, setIsHeadphoneMuted] = useState(false);
 
@@ -43,13 +43,15 @@ export default function UserSection({ className }: UserSectionProps) {
   return (
     <section className={twMerge("flex h-[52px] w-full bg-gray-800 p-2", className)}>
       <Button className="relative group mr-2 flex items-center justify-start rounded-[4px] pl-[2px] hover:bg-[#4E5058]/60">
-        <Avatar status="online" imageSrc="https://i.pravatar.cc/150?img=4" />
+        <Avatar status="online" imageSrc={user.avatar} />
         <div className="flex w-[78px] flex-col items-start justify-start">
           <div className="w-full text-start text-sm font-medium text-white">
-            Azeddine
+            <h1 className="whitespace-nowrap text-ellipsis overflow-hidden" >
+            {user.displayName}
+            </h1>
           </div>
           <div className="w-[78px] overflow-hidden text-ellipsis whitespace-nowrap text-left text-xs font-light">
-            Azeddine#5554
+            {user.username}
           </div>
         </div>
       </Button>

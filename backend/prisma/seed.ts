@@ -43,6 +43,55 @@ async function fakeUsers() {
       },
     ]
   })
+  await prisma.file.createMany({
+    data: [
+      {
+        filename: 'test1-avatar',
+        fieldname: 'avatar',
+        filePath: 'wefwefA',
+        url: 'https://i.pravatar.cc/150?img=1',
+        mimeType: 'image/jpg',
+        fileSize: 5000,
+        uploadedBy: { connect: { username: 'test1'  } },
+      },
+      {
+        filename: 'test2-avatar',
+        fieldname: 'avatar',
+        filePath: 'wefwefA',
+        url: 'https://i.pravatar.cc/150?img=2',
+        mimeType: 'image/jpg',
+        fileSize: 5000,
+        uploadedBy: { connect: { username: 'test2'  } },
+      },
+      {
+        filename: 'test3-avatar',
+        fieldname: 'avatar',
+        filePath: 'wefwefA',
+        url: 'https://i.pravatar.cc/150?img=3',
+        mimeType: 'image/jpg',
+        fileSize: 5000,
+        uploadedBy: { connect: { username: 'test3'  } },
+      },
+      {
+        filename: 'test4-avatar',
+        fieldname: 'avatar',
+        filePath: 'wefwefA',
+        url: 'https://i.pravatar.cc/150?img=4',
+        mimeType: 'image/jpg',
+        fileSize: 5000,
+        uploadedBy: { connect: { username: 'test4'  } },
+      },
+      {
+        filename: 'test5-avatar',
+        fieldname: 'avatar',
+        filePath: 'wefwefA',
+        url: 'https://i.pravatar.cc/150?img=5',
+        mimeType: 'image/jpg',
+        fileSize: 5000,
+        uploadedBy: { connect: { username: 'test5'  } },
+      },
+    ],
+  });
 }
 
 async function main() {
