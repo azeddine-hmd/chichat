@@ -16,7 +16,6 @@ import swaggerUI from 'swagger-ui-express';
 const prefix = '/api';
 
 // bind middlewares before routes mount
-app.use(helmet());
 app.use(cookieParserMiddleware);
 app.use(bodyParser.json());
 app.use(sessionMiddleware);
@@ -33,6 +32,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // module routes
 app.use('/static', express.static('uploads'));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: true,
+    crossOriginOpenerPolicy: true,
+  })
+);
 app.use(prefix, authRouter);
 app.use(prefix, usersRouter);
 

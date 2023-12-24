@@ -14,7 +14,7 @@ export type FilterBy = "All" | "Online" | "Pending" | "Blocked";
 
 export type UsersListProps = {
   filterBy: FilterBy;
-  users: User[];
+  users: User[] | null;
 } & React.ComponentProps<"main">;
 
 export default function UsersList({ filterBy, users }: UsersListProps) {
@@ -45,7 +45,7 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
       </SearchField>
       <SearchResults
         targetKey={"displayName"}
-        results={users}
+        results={users ? users : []}
         searchText={searchText}
         title={filterBy}
       >
@@ -54,7 +54,6 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
             user={user}
             onItemClicked={(e) => onFriendItemClicked(e, user.displayName)}
           >
-
             {(filterBy === "Online" || filterBy === "All") && (
               <>
                 <Button
@@ -77,7 +76,7 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
 
             {filterBy === "Blocked" && (
               <>
-                <Button className="bg-grey-800 group group/unblock relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5">
+                <Button className="bg-grey-800 group/unblock group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5">
                   <BsPersonDashFill className="text-lg group-hover/unblock:fill-red-500" />
                   <Tooltip direction="top" margin={2}>
                     Unblock
@@ -88,13 +87,16 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
 
             {filterBy === "Pending" && (
               <>
-                <Button className="bg-grey-800 group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5 group/check">
-                  <BsCheck className="text-lg group-hover/check:fill-green-500" size={20} />
+                <Button className="bg-grey-800 group/check group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5">
+                  <BsCheck
+                    className="text-lg group-hover/check:fill-green-500"
+                    size={20}
+                  />
                   <Tooltip direction="top" margin={2}>
                     Accept
                   </Tooltip>
                 </Button>
-                <Button className="bg-grey-800 group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5 group/reject">
+                <Button className="bg-grey-800 group/reject group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5">
                   <BsX className="text-lg group-hover/reject:fill-red-500" />
                   <Tooltip direction="top" margin={2}>
                     Reject
@@ -102,7 +104,6 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
                 </Button>
               </>
             )}
-
           </UserListItem>
         )}
       </SearchResults>

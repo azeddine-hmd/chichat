@@ -11,18 +11,9 @@ export type AvatarType = {
 } & React.ComponentProps<"div">;
 
 export default function Avatar({ className, status, imageSrc }: AvatarType) {
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
-    <div className={twMerge("relative pr-2 overflow-hidden", className)} >
-      <Image
-        className="h-[32px] w-[32px] rounded-full"
-        src={imageSrc}
-        width={32}
-        height={32}
-        alt=""
-        onLoadingComplete={(e) => setIsLoading(false)}
-      />
+    <div className={twMerge("relative overflow-hidden pr-2", className)}>
+      <img className="h-[32px] w-[32px] rounded-full" src={imageSrc} />
       <span
         className={
           (status == "online" ? "bg-[#23a55a] " : "bg-[#80848e]") +

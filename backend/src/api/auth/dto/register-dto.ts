@@ -69,13 +69,13 @@ export class RegisterDto {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(50)
+  @MaxLength(22)
   displayName: string;
 
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  @MaxLength(50)
+  @MaxLength(12)
   username: string;
 
   @IsDefined()
@@ -87,7 +87,7 @@ export class RegisterDto {
   @IsDefined()
   @IsNotEmpty()
   @IsString()
-  @MaxLength(50)
+  @MaxLength(22)
   @MinLength(8)
   @Matches(/^(?=.*[A-Z])/, {
     message: 'Password must contain at least 1 uppercase letter',

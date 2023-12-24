@@ -30,17 +30,19 @@ export async function sendFriendRequest(
       ],
     },
   });
+
   if (pendingFriendship)
-    throw new HttpError(
-      409,
-      'Friendship request already been sent or You have to accept'
-    );
+    // throw new HttpError(
+    //   409,
+    //   'Friendship request already been sent or You have to accept'
+    // );
+    return;
 
   try {
     await prisma.pendingFriendship.create({
       data: {
-        user1: { connect: { id: me.id } },
-        user2: { connect: { id: recipientId } },
+        sender: { connect: { id: me.id } },
+        recipient: { connect: { id: recipientId } },
       },
     });
   } catch (err) {
@@ -113,17 +115,18 @@ export async function blockUser(me: Express.User, targetId: number) {
     throw new HttpError(400, 'You cannot perform this action on yourself');
   await checkUserExists(targetId);
 
-  const blockRecord = await prisma.block.findUnique({
+  const blockRecord = await prisma.block.findFirst({
     where: {
-      unique_user_combination: { user1Id: me.id, user2Id: targetId },
+      blockedById: me.id,
+      blockedId: targetId,
     },
   });
   if (blockRecord) throw new HttpError(409, 'User already blocked');
 
   await prisma.block.create({
     data: {
-      user1: { connect: { id: me.id } },
-      user2: { connect: { id: targetId } },
+      blockedBy: { connect: { id: me.id } },
+      blocked: { connect: { id: targetId } },
     },
   });
 }
@@ -133,17 +136,20 @@ export async function unblockUser(me: Express.User, targetId: number) {
     throw new HttpError(400, 'You cannot perform this action on yourself');
   await checkUserExists(targetId);
 
-  // error: check if user is unblocked
-  const blockRecord = await prisma.block.findUnique({
+  const blockRecord = await prisma.block.findFirst({
     where: {
-      unique_user_combination: { user1Id: me.id, user2Id: targetId },
+      blockedById: me.id,
+      blockedId: targetId,
     },
   });
-  if (!blockRecord) throw new HttpError(409, 'User already ublocked');
+  if (!blockRecord) throw new HttpError(409, 'User already unblocked');
 
   await prisma.block.delete({
     where: {
-      unique_user_combination: { user1Id: me.id, user2Id: targetId },
+      unique_user_combination: {
+        blockedById: me.id,
+        blockedId: targetId,
+      },
     },
   });
 }
