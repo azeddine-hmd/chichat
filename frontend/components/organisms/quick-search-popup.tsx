@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useContext, useState } from "react";
 import SearchField from "../molecules/search-field";
-import SearchResult from "../molecules/search-result";
+// import SearchResult from "../molecules/search-result";
 import Popup from "../molecules/popup";
 import { GlobalContext } from "@/app/global-context";
 
@@ -32,7 +32,7 @@ export default function QuickSearchPopup() {
         </div>
 
         <div className="h-[365px] w-[570px] rounded-lg bg-gray-600 p-5 pb-0">
-          <SearchField onTextChanged={(e) => onSearchTextChanged(e)} />
+          {/* <SearchField onTextChanged={(e) => onSearchTextChanged(e)} /> */}
           {/* <SearchResult searchText={searchText} /> */}
         </div>
       </nav>
