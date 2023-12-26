@@ -12,11 +12,9 @@ export default function ChannelSidebar({ children }: { children: ReactNode }) {
     if (profile) return;
     window.clientSocket.once('profile', (...args) => {
       const profile: User = args[0];
-      console.log('received profile:', JSON.stringify(profile));
       setProfile(profile);
     })
     window.clientSocket.emit('profile');
-    console.log('fetching profile...');
     // eslint-disable-next-line
   }, [profile]);
 

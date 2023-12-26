@@ -13,11 +13,15 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function sendVerificationMail(to: string, htmlContent: string) {
-  await transporter.sendMail({
-    from: `${process.env.NODEMAILER_FROM}  <${process.env.NODEMAILER_EMAIL}>`,
-    to: [to],
-    subject: 'Email Validation',
-    text: 'This is just for development application!',
-    html: htmlContent,
-  });
+  try {
+    await transporter.sendMail({
+      from: `${process.env.NODEMAILER_FROM}  <${process.env.NODEMAILER_EMAIL}>`,
+      to: [to],
+      subject: 'Email Validation',
+      text: 'This is just for development application!',
+      html: htmlContent,
+    });
+  } catch (error) {
+    console.error('error in sendVerificationMail:', error);
+  }
 }

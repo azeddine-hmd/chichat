@@ -5,7 +5,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { RelationshipActions } from '../types/relationship-actions';
+import { RelationshipActions } from '../relationship-actions';
 
 export class RelationshipDto {
   @IsDefined()

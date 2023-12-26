@@ -101,7 +101,7 @@ export default function AvatarSelection({
               onChange={handleAvatarChange}
             />
             <PrimaryButton
-              disabled={uploadAvatarMut.isPending}
+              disabled={selectedFile == null || uploadAvatarMut.isPending}
               onClick={upload}
             >
               Uplaod

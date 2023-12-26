@@ -33,7 +33,7 @@ export default function SplashScreen({ className }: SplashScreenProps) {
         <Image className="text-primary" priority src={ChichatSvg} alt="Chichat logo" />
       </motion.div>
       <h1 className="font-bold text-lg text-primary" >
-        Chichat is loading
+        Connecting to Chichat server...
       </h1>
     </motion.div>
   );

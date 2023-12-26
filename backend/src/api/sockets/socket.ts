@@ -20,6 +20,13 @@ export const io = new Server(server, {
 
 io.adapter(createAdapter(pool));
 
+(async () => {
+  await prisma.userSockets.deleteMany({});
+  await prisma.user.updateMany({
+    where: {},
+    data: { status: UserStatus.OFFLINE },
+  });
+})();
 require('./middlewares');
 
 const onConnection = listenerWrapper(async (socket) => {

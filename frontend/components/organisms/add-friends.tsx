@@ -5,6 +5,8 @@ import PrimaryLoadingButton from "../molecules/primary-dot-loading-button";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config";
 import { delay } from "@/lib/delay";
+import { User } from "@/models/user";
+import { useUserStore } from "@/stores/user-store";
 
 export default function AddFriends() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -12,14 +14,24 @@ export default function AddFriends() {
   const [inputText, setInputText] = useState("");
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const { pendingFR, setPendingFR } = useUserStore();
 
   const sendFriendReqMut = useMutation({
     mutationFn: async (username: string) => {
       await delay(1_000);
-      return await api.post(`/api/users/friends/send/${username}`);
+      return await api.post<User>(`/api/users/friends/send/${username}`);
     },
-    onSuccess: () => setIsSuccess(true),
-    onError: () => setIsError(true),
+    onSuccess: (response) => {
+      const user = response.data;
+      if (pendingFR && !pendingFR?.some((profile) => profile.id === user.id))
+        setPendingFR([...pendingFR, { ...user, isSentFR: true }]);
+      setIsError(false);
+      setIsSuccess(true);
+    },
+    onError: () => {
+      setIsSuccess(false);
+      setIsError(true);
+    },
   });
 
   useEffect(() => {
