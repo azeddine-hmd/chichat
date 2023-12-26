@@ -33,7 +33,7 @@ export default function QuickSearchPopup() {
 
         <div className="h-[365px] w-[570px] rounded-lg bg-gray-600 p-5 pb-0">
           <SearchField onTextChanged={(e) => onSearchTextChanged(e)} />
-          <SearchResult searchText={searchText} />
+          {/* <SearchResult searchText={searchText} /> */}
         </div>
       </nav>
     </Popup>
