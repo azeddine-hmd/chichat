@@ -84,12 +84,32 @@ usersRouter.post(
  *          in: path
  *          required: true
  *          schema:
- *            type: integer
+ *            type: string
  */
 usersRouter.post(
   prefix + '/friends/send/:username',
   passport.authenticate('jwt', { session: false }),
   relationshipController.sendFriendRequest
+);
+
+/**
+ * @openapi
+ * /api/users/friends/cancel/{username}:
+ *    delete:
+ *      summary: Cancel friend request by username
+ *      tags:
+ *        - Friendship
+ *      parameters:
+ *        - name: username
+ *          in: path
+ *          required: true
+ *          schema:
+ *            type: string
+ */
+usersRouter.delete(
+  prefix + '/friends/cancel/:username',
+  passport.authenticate('jwt', { session: false }),
+  relationshipController.cancelFriendRequest
 );
 
 /**

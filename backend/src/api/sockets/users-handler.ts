@@ -1,31 +1,30 @@
 import { Socket } from 'socket.io';
 import * as profileService from '../users/services/profile-service';
 import { listenerWrapper } from '../../utils/listener-wrapper';
+import { mapToPrivateProfile, mapToPublicProfile } from '../users/users-mapper';
 
 module.exports = (io: Socket, socket: Socket) => {
   const profile = async () => {
     console.log('recieving listener for event:', 'profile');
-    const { profile, avatar } = await profileService.getProfile(socket.user.id);
+    const profile = await profileService.getProfile(socket.user.id);
+
     socket.emit('profile', {
-      id: profile.id,
-      username: profile.username,
-      displayName: profile.displayName,
-      avatar: avatar.url,
-      status: profile.status.toLowerCase(),
+      ...mapToPrivateProfile(profile),
     });
   };
 
   const relation = async () => {
     console.log('recieving listener for event:', 'relation');
-    const blockedUsersprofile = await profileService.getBlockedUsersProfile(
-      socket.user.id
-    );
-    const friendsProfile = await profileService.getFriendsProfile(
-      socket.user.id
-    );
+    const id = socket.user.id;
+    const friends = await profileService.getFriendsProfile(id);
+    const blocked = await profileService.getBlockedUsersProfile(id);
+    const { acceptFR, sentFR } = await profileService.getPendingFRProfile(id);
+
     socket.emit('relation', {
-      friends: friendsProfile,
-      blocked: blockedUsersprofile,
+      friends: friends.map((profile) => mapToPublicProfile(profile)),
+      blocked: blocked.map((profile) => mapToPublicProfile(profile)),
+      sentFR: sentFR.map((profile) => mapToPublicProfile(profile)),
+      acceptFR: acceptFR.map((profile) => mapToPublicProfile(profile)),
     });
   };
 

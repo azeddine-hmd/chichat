@@ -1,14 +1,19 @@
-import { RegisterDto } from './dto/register-dto';
 import { CodeOperation, User } from '@prisma/client';
 import { randomUUID } from 'crypto';
 import { comparePassword, hashPassword } from '../../utils/password';
 import { prisma, signJwt } from '../../config';
 import { sendVerificationMail } from '../../utils/send-mail';
 import { HttpError } from '../../utils/error';
+import { RegisterDto } from './types/dto/register-dto';
 
 export async function registerUser(registerDto: RegisterDto): Promise<User> {
   const hashedPassword = await hashPassword(registerDto.password);
   const birth = registerDto.dateOfBirth;
+  const oldUser = await prisma.user.findFirst({
+    where: { username: registerDto.username },
+  });
+  if (oldUser && !oldUser.active)
+    await prisma.user.delete({ where: { id: oldUser.id } });
   const user = await prisma.user.create({
     data: {
       displayName: registerDto.displayName,

@@ -1,20 +1,6 @@
 import { prisma } from '../../../config';
 import { HttpError } from '../../../utils/error';
 
-export async function getProfile(id: number) {
-  const user = await prisma.user.findUnique({
-    where: { id: id },
-    include: {
-      avatar: true,
-      blocked: true,
-    },
-  });
-  return {
-    profile: user,
-    avatar: user.avatar,
-  };
-}
-
 export async function uploadAvatar(
   me: Express.User,
   file: Express.Multer.File
@@ -38,16 +24,24 @@ export async function uploadAvatar(
   }
 }
 
+export async function getProfile(id: number) {
+  const user = await prisma.user.findUnique({
+    where: { id: id },
+    include: {
+      avatar: true,
+      blocked: true,
+    },
+  });
+  return user;
+}
+
 export async function getBlockedUsersProfile(id: number) {
   const blockRecords = await prisma.block.findMany({
     where: { blockedById: id },
-    include: { blocked: true },
+    include: { blocked: { include: { avatar: true } } },
   });
-  console.log('blockRecords result:', blockRecords);
-  const blockedUsersProfile = blockRecords.map((blockRecord) => {
-    return blockRecord.blocked;
-  });
-  return blockedUsersProfile;
+  const blockedUsers = blockRecords.map((blockRecord) => blockRecord.blocked);
+  return blockedUsers;
 }
 
 export async function getFriendsProfile(id: number) {
@@ -55,13 +49,43 @@ export async function getFriendsProfile(id: number) {
     where: {
       OR: [{ user1Id: id }, { user2Id: id }],
     },
-    include: { user1: true, user2: true },
+    include: {
+      user1: { include: { avatar: true } },
+      user2: { include: { avatar: true } },
+    },
   });
-  console.log('friendshipRecords result:', friendshipRecords);
   const friendsProfile = friendshipRecords.map((friendshipRecord) => {
     return friendshipRecord.user1.id === id
       ? friendshipRecord.user2
       : friendshipRecord.user1;
   });
   return friendsProfile;
+}
+
+// get pending friend requests
+export async function getPendingFRProfile(id: number) {
+  const pendingFriendshipRecords = await prisma.pendingFriendship.findMany({
+    where: {
+      OR: [{ sender: { id: id } }, { recipient: { id: id } }],
+    },
+    include: {
+      sender: { include: { avatar: true } },
+      recipient: { include: { avatar: true } },
+    },
+  });
+  const sentFR = pendingFriendshipRecords
+    .map((pFRRecord) => {
+      return pFRRecord.senderId === id ? pFRRecord.recipient : null;
+    })
+    .filter((record) => record != null);
+  const acceptFR = pendingFriendshipRecords
+    .map((pFRRecord) => {
+      return pFRRecord.recipientId === id ? pFRRecord.sender : null;
+    })
+    .filter((record) => record != null);
+
+  return {
+    sentFR: sentFR,
+    acceptFR: acceptFR,
+  };
 }

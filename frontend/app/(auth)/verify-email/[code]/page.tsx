@@ -26,6 +26,7 @@ export default function CodeAuthVerification({
 
   useEffect(() => {
     verifyEmail.mutate(code);
+    // eslint-disable-next-line
   }, [code]);
 
   return (

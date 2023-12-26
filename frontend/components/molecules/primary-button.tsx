@@ -20,7 +20,7 @@ export default function PrimaryButton({
   return (
     <Button
       className={twMerge(
-        "flex items-center justify-start rounded-md font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2",
+        "flex items-center justify-start rounded-md font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 disabled:bg-primary/30 disabled disabled:cursor-not-allowed",
         active && "bg-[#4E5058]/60 text-white",
         hover && "bg-[#4E5058]/60 text-foreground",
         className

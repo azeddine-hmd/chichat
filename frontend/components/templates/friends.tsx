@@ -8,25 +8,25 @@ import AddFriends from "../organisms/add-friends";
 import UsersList from "../organisms/users-list";
 import { useUserStore } from "@/stores/user-store";
 import { User } from "@/models/user";
+import { useRelationEvent } from "@/hooks/use-relation-event";
 
 export default function FriendsTemplate() {
   const [activeOption, activateOption] = useState<TopBarOptions>(
     TopBarOptions.AddFriends
   );
-  const { friends, blocked, setFriends, setBlocked } = useUserStore();
+  const { friends, blocked, pendingFR } = useUserStore();
+  const [onlineFriends, setOnlineFriends] = useState<User[] | null>(null);
+
+  useRelationEvent();
 
   useEffect(() => {
-    window.clientSocket.once("relation", (...args) => {
-      const relation: { friends: User[]; blocked: User[] } = args[0];
-      setFriends(relation.friends);
-      console.log("received friends:", JSON.stringify(relation.friends));
-      setBlocked(relation.blocked);
-      console.log("received blocked:", JSON.stringify(relation.blocked));
-    });
     window.clientSocket.emit("relation");
-    console.log("fetching relation...");
-    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!friends) return;
+    setOnlineFriends(friends.filter((friend) => friend.status === "online"));
+  }, [friends]);
 
   return (
     <div className="h-full w-full bg-gray-600">
@@ -39,27 +39,17 @@ export default function FriendsTemplate() {
           case TopBarOptions.AddFriends:
             return <AddFriends />;
           case TopBarOptions.All:
-            return <UsersList filterBy="All" users={friends} />;
+            return <UsersList filterBy="All" users={friends || []} />;
           case TopBarOptions.Online:
-            return (
-              <UsersList
-                filterBy="Online"
-                users={
-                  friends
-                    ? friends.filter((friend) => friend.status === "online")
-                    : []
-                }
-              />
-            );
+            return <UsersList filterBy="Online" users={onlineFriends || []} />;
           case TopBarOptions.Pending:
-            return <UsersList filterBy="Pending" users={[]} />;
+            return <UsersList filterBy="Pending" users={pendingFR || []} />;
           case TopBarOptions.Blocked:
-            return <UsersList filterBy="Blocked" users={blocked} />;
+            return <UsersList filterBy="Blocked" users={blocked || []} />;
           default:
             return null;
         }
       })()}
-      {/* {activeOption === TopBarOptions.AddFriends && <AddFriends />} */}
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
-import { RegisterDto } from './dto/register-dto';
+import { RegisterDto } from './types/dto/register-dto';
 import { validate } from 'class-validator';
 import * as authService from './auth-service';
-import { VerifyEmailDto } from './dto/verify-email';
-import { LoginDto } from './dto/login-dto';
+import { VerifyEmailDto } from './types/dto/verify-email';
+import { LoginDto } from './types/dto/login-dto';
 import { defaultCookieOptions } from '../../config';
 import * as profileService from '../users/services/profile-service';
 
