@@ -10,6 +10,7 @@ export default function ChannelSidebar({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (profile) return;
+    console.log('inside useEffect of ChannelSidebar');
     window.clientSocket.once('profile', (...args) => {
       const profile: User = args[0];
       setProfile(profile);
