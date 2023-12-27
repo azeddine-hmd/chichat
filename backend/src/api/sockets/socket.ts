@@ -5,6 +5,7 @@ import { corsOptions, pool, prisma } from '../../config';
 import { createAdapter } from '@socket.io/postgres-adapter';
 import { listenerWrapper } from '../../utils/listener-wrapper';
 import { UserStatus } from '@prisma/client';
+import { mapToPublicProfile } from '../users/users-mapper';
 
 export const io = new Server(server, {
   cookie: {
@@ -31,12 +32,14 @@ require('./middlewares');
 
 const onConnection = listenerWrapper(async (socket) => {
   const start = new Date();
+
   // handling user status
   console.log(`client(id=${socket.user.id}, sid=${socket.id}) connected!`);
-  await prisma.$transaction([
+  const [user, _] = await prisma.$transaction([
     prisma.user.update({
       where: { id: socket.user.id },
       data: { status: UserStatus.ONLINE },
+      include: { avatar: true },
     }),
     prisma.userSockets.create({
       data: {
@@ -45,6 +48,10 @@ const onConnection = listenerWrapper(async (socket) => {
       },
     }),
   ]);
+  io.to('profile:' + socket.user.id).emit('profile updated', {
+    ...mapToPublicProfile(user),
+  });
+
   socket.on('disconnect', async () => {
     console.log(`client(id=${socket.user.id}, sid=${socket.id}) disconnected!`);
     const [_, userSocketsCount] = await prisma.$transaction([
@@ -54,12 +61,17 @@ const onConnection = listenerWrapper(async (socket) => {
       prisma.userSockets.count({ where: { userId: socket.user.id } }),
     ]);
     if (userSocketsCount == 0) {
-      await prisma.user.update({
+      const user = await prisma.user.update({
         where: { id: socket.user.id },
         data: { status: UserStatus.OFFLINE },
+        include: { avatar: true },
+      });
+      io.to('profile:' + socket.user.id).emit('profile updated', {
+        ...mapToPublicProfile(user),
       });
     }
   });
+
   require('./users-handler')(io, socket);
   const diffTime = new Date().getTime() - start.getTime();
   const seconds = (diffTime / 1000).toFixed(4);
