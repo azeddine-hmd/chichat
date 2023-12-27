@@ -24,10 +24,10 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
       if (isPublic) {
         window.location.assign("/channels/friends");
       } else {
-        await connectSocket({ onReady: () => { setShowPage(true) } });
-        window.clientSocket.on('disconnect', () => {
-          setShowPage(false);
-        })
+        await connectSocket({
+          onReady: () => setShowPage(true),
+          onDisconnect: () => setShowPage(false),
+        });
       }
     },
     onError: () => {
