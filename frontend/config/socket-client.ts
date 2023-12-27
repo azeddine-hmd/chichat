@@ -1,6 +1,11 @@
 import { io } from "socket.io-client";
 
-export function connectSocket({ onReady }: { onReady: () => void }) {
+export type ConnectSocket = {
+  onReady: () => void
+  onDisconnect: () => void
+};
+
+export function connectSocket({ onReady, onDisconnect }: ConnectSocket) {
   return new Promise((resolve) => {
     if (!window.clientSocket?.connected) {
       window.clientSocket = io(process.env.NEXT_PUBLIC_BACKEND_DOMAIN as string, {
@@ -15,6 +20,9 @@ export function connectSocket({ onReady }: { onReady: () => void }) {
         })
         // setTimeout(() => resolve(window.clientSocket), 5_000);
       });
+      window.clientSocket.on('disconnect', () => {
+        onDisconnect();
+      })
     } else {
       resolve(window.clientSocket);
     }
