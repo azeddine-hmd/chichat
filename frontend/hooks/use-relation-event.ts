@@ -38,4 +38,10 @@ export function useRelationEvent() {
       setFriends([...friends, data.user]);
     }
   });
+
+  useEvent("profile updated", (...args) => {
+    const updated: User = args[0];
+    console.log("updating friend profile:", updated);
+    setFriends([...friends.filter((friend) => friend.id === updated.id), updated])
+  });
 }

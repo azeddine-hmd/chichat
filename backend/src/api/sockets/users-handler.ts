@@ -17,6 +17,9 @@ module.exports = (io: Socket, socket: Socket) => {
     console.log('recieving listener for event:', 'relation');
     const id = socket.user.id;
     const friends = await profileService.getFriendsProfile(id);
+    friends.forEach((friend) => {
+      socket.join('profile:' + friend.id);
+    });
     const blocked = await profileService.getBlockedUsersProfile(id);
     const { acceptFR, sentFR } = await profileService.getPendingFRProfile(id);
 
