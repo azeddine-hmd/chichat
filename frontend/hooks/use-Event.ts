@@ -9,6 +9,7 @@ export function useEvent(event: string, on: (...args: any[]) => void) {
 		return () => {
 			window.clientSocket.off(event, on);
 		};
+		// eslint-disable-next-line
 	}, []);
 }
 
@@ -21,5 +22,6 @@ export function useOneTimeEvent(event: string, once: (...args: any[]) => void) {
 		return () => {
 			window.clientSocket.off(event, once);
 		}
+		// eslint-disable-next-line
 	}, []);
 }

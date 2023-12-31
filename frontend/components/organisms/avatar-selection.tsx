@@ -52,8 +52,6 @@ export default function AvatarSelection({
     }
   }
 
-  console.log("inside avatar selection");
-
   return (
     <motion.div
       className="flex flex-col items-center justify-center"

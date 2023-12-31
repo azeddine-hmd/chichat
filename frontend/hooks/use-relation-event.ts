@@ -21,7 +21,7 @@ export function useRelationEvent() {
     setPendingFR(pendingFR);
   });
 
-  useEvent("relation:pending:updates", (...args) => {
+  useEvent("relation:updates", (...args) => {
     const data: { operation: string; user: User } = args[0];
     if (data.operation === "sentFR") {
       data.user.isAcceptFR = true;
@@ -36,12 +36,13 @@ export function useRelationEvent() {
         ...pendingFR.filter((profile) => profile.id === data.user.id),
       ]);
       setFriends([...friends, data.user]);
+    } else if (data.operation === "removeFriend") {
+      setFriends(friends.filter((friend) => friend.id != data.user.id))
     }
   });
 
-  useEvent("profile updated", (...args) => {
+  useEvent("profile:updates", (...args) => {
     const updated: User = args[0];
-    console.log("updating friend profile:", updated);
     setFriends([...friends.filter((friend) => friend.id === updated.id), updated])
   });
 }

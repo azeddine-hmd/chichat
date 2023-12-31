@@ -10,6 +10,7 @@ import OnlineAllItem from "../molecules/user-list-items/online-all-item";
 import PendingSentFRItem from "../molecules/user-list-items/pending-sent-fr-item";
 import BlockedItem from "../molecules/user-list-items/blocked-item";
 import PendingAcceptFRItem from "../molecules/user-list-items/pending-accept-fr-item";
+import Button from "../atoms/button";
 
 export type FilterBy = "All" | "Online" | "Pending" | "Blocked";
 
