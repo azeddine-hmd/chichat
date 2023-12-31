@@ -45,7 +45,7 @@ export async function sendFriendRequest(
     sender: UserIncludeRelations
   ) => {
     forEachSocket(recipientId, (socket) => {
-      socket.emit('relation:pending:updates', {
+      socket.emit('relation:updates', {
         operation: 'sentFR',
         user: { ...mapToPublicProfile(sender) },
       });
@@ -90,7 +90,7 @@ export async function cancelFriendRequest(
   if (!pendingFR) throw new HttpError(400, 'Friend request does not exist');
 
   forEachSocket(pendingFR.recipientId, (socket) => {
-    socket.emit('relation:pending:updates', {
+    socket.emit('relation:updates', {
       operation: 'cancelFR',
       user: { ...mapToPublicProfile(pendingFR.recipient) },
     });
@@ -116,7 +116,7 @@ export async function rejectFriendRequest(me: Express.User, senderId: number) {
   if (!pendingFR) throw new HttpError(400, 'Friend request does not exist');
 
   forEachSocket(pendingFR.senderId, (socket) => {
-    socket.emit('relation:pending:updates', {
+    socket.emit('relation:updates', {
       operation: 'rejectFR',
       user: { ...mapToPublicProfile(pendingFR.recipient) },
     });
@@ -147,7 +147,7 @@ export async function acceptFriendRequest(me: Express.User, senderId: number) {
   });
 
   forEachSocket(pendingFR.senderId, (socket) => {
-    socket.emit('relation:pending:updates', {
+    socket.emit('relation:updates', {
       operation: 'acceptFR',
       user: { ...mapToPublicProfile(pendingFR.recipient) },
     });
@@ -170,8 +170,21 @@ export async function removeFriend(me: Express.User, friendId: number) {
   const { user1Id, user2Id } = normalizeId(me.id, friendId);
   const friendship = await prisma.friendship.findUnique({
     where: { unique_user_combination: { user1Id: user1Id, user2Id: user2Id } },
+    include: {
+      user1: { include: { avatar: true } },
+      user2: { include: { avatar: true } },
+    },
   });
   if (!friendship) throw new HttpError(400, 'Friendship does not exist');
+
+  let from = friendship.user1.id == me.id ? friendship.user2 : friendship.user1;
+  let to = friendship.user1.id == me.id ? friendship.user1 : friendship.user2;
+  forEachSocket(from.id, (socket) => {
+    socket.emit('relation:updates', {
+      operation: 'removeFriend',
+      user: { ...mapToPublicProfile(to) },
+    });
+  });
 
   await prisma.friendship.delete({
     where: { unique_user_combination: { user1Id: user1Id, user2Id: user2Id } },

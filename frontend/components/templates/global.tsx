@@ -25,7 +25,9 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
         window.location.assign("/channels/friends");
       } else {
         await connectSocket({
-          onReady: () => setShowPage(true),
+          onReady: () => {
+            setShowPage(true);
+          },
           onDisconnect: () => setShowPage(false),
         });
       }

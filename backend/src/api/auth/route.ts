@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as authController from './auth-controller';
-import passport from 'passport';
 import { upload } from '../../config';
+import { authenticated } from '../middlewares/authenticated';
 
 const prefix = '/auth';
 
@@ -20,10 +20,8 @@ export const authRouter = Router();
  *       400:
  *         description: Not Authenticated
  */
-authRouter.get(
-  prefix + '/pass',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => res.status(204).send()
+authRouter.get(prefix + '/pass', authenticated, (req, res) =>
+  res.status(204).send()
 );
 
 /**

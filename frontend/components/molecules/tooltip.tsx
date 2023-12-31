@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 import Arrow from "../atoms/arrow";
 
+type Direction = "top" | "bottom" | "left" | "right";
+
 type TooltipType = {
   children?: React.ReactNode;
-  direction: "top" | "bottom" | "left" | "right";
+  direction: Direction;
   margin?: number;
   unit?: "px" | "rem";
   arrow?: boolean;
@@ -32,30 +34,32 @@ export default function Tooltip({
         direction == "right" && "top-1/2 -translate-y-1/2 shadow-black",
         direction == "top" && "left-[50%] -translate-x-1/2"
       )}
-      // onMouseEnter={() => setVisibility(true)}
-      // onMouseLeave={() => setVisibility(false)}
       style={
         direction == "right"
           ? {
-            left: `calc(100% + 4px + ${margin}${unit})`,
-          }
+              left: `calc(100% + 4px + ${margin}${unit})`,
+            }
           : direction == "top"
-            ? {
+          ? {
               top: `calc(-100% - 4px - ${margin}${unit})`,
             }
-            : {}
+          : {}
       }
       {...restProps}
     >
       <div className={twMerge("relative h-fit w-fit", className)}>
-        {arrow && direction === "right" && <Arrow direction="left" />}
-        {arrow && direction === "top" && <Arrow direction="bottom" />}
-        {arrow && direction === "left" && <Arrow direction="right" />}
-        {arrow && direction === "bottom" && <Arrow direction="top" />}
+        {arrow && (
+          <>
+            {direction === "right" && <Arrow direction="left" />}
+            {direction === "top" && <Arrow direction="bottom" />}
+            {direction === "left" && <Arrow direction="right" />}
+            {direction === "bottom" && <Arrow direction="top" />}
+          </>
+        )}
         <div className="rounded-md bg-black p-2 px-3 text-xs font-semibold text-[#dbdfe2] shadow-md">
           {children}
         </div>
       </div>
     </div>
-  )
-};
+  );
+}

@@ -6,5 +6,6 @@ declare namespace Express {
 
   export interface Request {
     files: { [filename: string]: Express.Multer.File[] };
+    requestTime: Date;
   }
 }

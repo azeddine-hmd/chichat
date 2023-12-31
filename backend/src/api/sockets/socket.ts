@@ -48,7 +48,7 @@ const onConnection = listenerWrapper(async (socket) => {
       },
     }),
   ]);
-  io.to('profile:' + socket.user.id).emit('profile updated', {
+  io.to('profile:' + socket.user.id).emit('profile:updates', {
     ...mapToPublicProfile(user),
   });
 
@@ -66,7 +66,7 @@ const onConnection = listenerWrapper(async (socket) => {
         data: { status: UserStatus.OFFLINE },
         include: { avatar: true },
       });
-      io.to('profile:' + socket.user.id).emit('profile updated', {
+      io.to('profile:' + socket.user.id).emit('profile:updates', {
         ...mapToPublicProfile(user),
       });
     }
