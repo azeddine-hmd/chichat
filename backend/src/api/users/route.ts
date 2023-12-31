@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import * as relationshipController from './controllers/relationship-controller';
 import * as profileController from './controllers/profile-controller';
-import passport from 'passport';
 import { upload } from '../../config';
+import { authenticated } from '../middlewares/authenticated';
 
 const prefix = '/users';
 
@@ -20,7 +20,7 @@ export const usersRouter = Router();
  */
 usersRouter.get(
   prefix + '/profile/me',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   profileController.myProfile
 );
 
@@ -40,7 +40,7 @@ usersRouter.get(
  */
 usersRouter.get(
   prefix + '/profile/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   profileController.otherProfile
 );
 
@@ -65,7 +65,7 @@ usersRouter.get(
  */
 usersRouter.post(
   prefix + '/upload/avatar',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   upload.single('avatar'),
   profileController.uploadAvatar
 );
@@ -88,7 +88,7 @@ usersRouter.post(
  */
 usersRouter.post(
   prefix + '/friends/send/:username',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.sendFriendRequest
 );
 
@@ -108,7 +108,7 @@ usersRouter.post(
  */
 usersRouter.delete(
   prefix + '/friends/cancel/:username',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.cancelFriendRequest
 );
 
@@ -128,7 +128,7 @@ usersRouter.delete(
  */
 usersRouter.post(
   prefix + '/friends/accept/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.acceptFriendRequest
 );
 
@@ -148,7 +148,7 @@ usersRouter.post(
  */
 usersRouter.delete(
   prefix + '/friends/reject/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.rejectFriendRequest
 );
 
@@ -168,7 +168,7 @@ usersRouter.delete(
  */
 usersRouter.delete(
   prefix + '/friends/remove/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.removeFriend
 );
 
@@ -188,7 +188,7 @@ usersRouter.delete(
  */
 usersRouter.post(
   prefix + '/block/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.blockUser
 );
 
@@ -208,6 +208,6 @@ usersRouter.post(
  */
 usersRouter.patch(
   prefix + '/unblock/:id',
-  passport.authenticate('jwt', { session: false }),
+  authenticated,
   relationshipController.unblockUser
 );

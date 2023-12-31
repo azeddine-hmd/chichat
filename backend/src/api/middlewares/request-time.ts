@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 export async function requestTimeMiddleware(
-  req: any,
+  req: Request,
   res: Response,
   next: NextFunction
 ) {
-  req.requestTime = Date.now();
+  req.requestTime = new Date();
   next();
 }
