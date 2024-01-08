@@ -13,6 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config";
 import { AxiosError } from "axios";
 import { HttpError } from "@/types/http-error"; 
+import { delay } from "@/lib/delay";
 
 type LoginForm = {
   email: string;
@@ -41,10 +42,11 @@ export default function Login() {
   });
 
   const loginMut = useMutation({
-    mutationFn: (form: LoginForm) => {
-      return api.post("/api/auth/login", { ...form });
+    mutationFn: async (form: LoginForm) => {
+      await delay(500);
+      return await api.post("/api/auth/login", { ...form });
     },
-    onSuccess: () => router.push("/"),
+    onSuccess: () => window.location.assign("/channels/friends"),
     onError: (error: AxiosError) => {
       setOnLoading(false);
       setError((error.response?.data as HttpError).message);
