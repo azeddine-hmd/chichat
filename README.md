@@ -28,9 +28,14 @@ docker compose up --build
   * React-Query (network fetching)
   * zustand (state management)
 
-## Example :
-  Check hosted webserver on: [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)
-  
-## Openapi Specificication Using Swagger
-In order to navigate RESTFUL Apis that backend provides quickly. a Swagger-Ui-Express handler running on endpoint '$BACKEND_DOMAIN/docs'.
-also, you can obtain openapi document as json by visting '$BACKEND_DOMAIN/docs.json'
+## Openapi
+swagger ui endpoint: `$BACKEND_DOMAIN/docs`<br/>
+openapi json file endpoint: `$BACKEND_DOMAIN/docs.json`
+
+## Demo
+  [Chichat | talk and hang out with friends](https://chichat.azeddine.xyz)
+
+## Screenshots
+![Imgur](https://i.imgur.com/5O9A0Vj.png)
+![Imgur](https://i.imgur.com/YH6hU55.png)
+![Imgur](https://i.imgur.com/eBSNtT2.png)
