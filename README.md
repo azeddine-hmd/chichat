@@ -38,4 +38,4 @@ openapi json file endpoint: `$BACKEND_DOMAIN/docs.json`
 ## Screenshots
 ![Imgur](https://i.imgur.com/5O9A0Vj.png)
 ![Imgur](https://i.imgur.com/YH6hU55.png)
-![Imgur](https://i.imgur.com/eBSNtT2.png)
+![Imgur](https://i.imgur.com/dKG3lj0.png)
