@@ -61,7 +61,6 @@ export default function Register() {
 
   const registrationMut = useRegistrationMut({
     onSuccess: () => {
-      console.log("onSuccess of registration mutation");
       switchToAvatarSelection(true);
     },
     onError: (error) => setError(error.message),

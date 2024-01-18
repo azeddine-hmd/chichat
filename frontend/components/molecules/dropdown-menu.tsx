@@ -44,9 +44,6 @@ function FloatingMenu({
   }
 
   useEffect(() => {
-    console.log(
-      `inputKeyPress: ${inputkeyPress}\nhighlightedItem: ${highlightedItem}\nitems.length: ${items.length}`
-    );
     if (inputkeyPress === "ArrowDown") {
       if (highlightedItem == items.length - 1) setHighlightedItem(0);
       else setHighlightedItem(highlightedItem + 1);

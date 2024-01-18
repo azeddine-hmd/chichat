@@ -1,11 +1,11 @@
 import request from 'supertest';
 import { app, server } from '../src/app';
-import { io } from '../src/sockets';
+import { io } from '../src/api/sockets/socket';
 import { io as ioc, type Socket as ClientSocket } from 'socket.io-client';
 import { AddressInfo } from 'net';
 import { Socket } from 'socket.io';
-import { LoginDto } from '../src/api/auth/dto/login-dto';
 import { prisma } from '../src/config';
+import { LoginDto } from '../src/api/auth/types/dto/login-dto';
 
 describe('test socket connection', () => {
   let clientSocket: ClientSocket;

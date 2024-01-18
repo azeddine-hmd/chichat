@@ -1,6 +1,6 @@
 "use client";
+import { cn } from "@/lib/cn";
 import Image from "next/image";
-import { twMerge } from "tailwind-merge";
 
 export type AvatarStatus = "online" | "offline";
 
@@ -11,21 +11,28 @@ export type AvatarType = {
 
 export default function Avatar({ className, status, imageSrc }: AvatarType) {
   return (
-    <div className={twMerge("relative overflow-hidden pr-2", className)}>
-      {/* eslint-disable-next-line */}
-      <img className="h-[32px] w-[32px] rounded-full" src={imageSrc} alt="avatar" />
-      <span
-        className={
-          (status == "online" ? "bg-[#23a55a] " : "bg-[#80848e]") +
-          " absolute bottom-[0px] left-[21px] h-[15px] w-[15px] rounded-[999px] border-2 border-gray-700"
-        }
-      >
-        {status == "offline" ? (
-          <span className="absolute bottom-[3px] left-[3px] h-[5px] w-[5px] rounded-full border-2 border-gray-700 bg-gray-700" />
-        ) : (
-          <></>
+    <div className={cn("overflow-hidden pr-2", className)}>
+      <div className="relative inline-block">
+        <Image
+          className="h-8 w-8 rounded-full"
+          width={32}
+          height={32}
+          src={imageSrc}
+          alt="avatar"
+        />
+        <span
+          className={cn(
+            "absolute left-[28px] top-[26px] h-[16px] w-[16px] rounded-full border-[4px] border-gray-700 -translate-x-1/2 -translate-y-1/2",
+            {
+              "bg-[#23a55a]": status === "online",
+              "bg-[#80848e]": status === "offline",
+            }
+          )}
+        />
+        {status === "offline" && (
+          <span className="absolute inset-0 left-[28px] top-[26px] h-[4px] w-[4px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-700" />
         )}
-      </span>
+      </div>
     </div>
   );
 }

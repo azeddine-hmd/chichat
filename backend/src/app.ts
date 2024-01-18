@@ -4,7 +4,8 @@ import http from 'http';
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log(`reason: ${JSON.stringify(reason)}`);
-  console.log(`reason: ${JSON.stringify(promise)}`);
+  console.log(`promise: ${JSON.stringify(promise)}`);
+  console.trace();
   process.exit(1);
 });
 

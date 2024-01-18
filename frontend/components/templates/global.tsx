@@ -49,7 +49,14 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   return (
     <>
       {showPage && (
-        <div className="h-full w-full overflow-hidden">{children}</div>
+        <div
+          className="h-full w-full overflow-hidden"
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
+        >
+          {children}
+        </div>
       )}
       {!showPage && !isPublic && <SplashScreen />}
     </>

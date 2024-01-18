@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 export type SearchResultItemProps<T> = {
   result: T;
-  children: (result: T) => React.ReactNode;
+  children: (result: T) => React.ReactNode | undefined;
 };
 
 function SearchResultItem<T>({ result, children }: SearchResultItemProps<T>) {
@@ -10,7 +10,7 @@ function SearchResultItem<T>({ result, children }: SearchResultItemProps<T>) {
 }
 
 export type SearchResultsProps<T> = {
-  children: (result: T) => React.ReactNode;
+  children: (result: T) => React.ReactNode | undefined;
   targetKey: string;
   results: T[];
   searchText: string;
@@ -39,13 +39,11 @@ export default function SearchResults<T>({
       <h2 className="text-grey-500 mb-4 text-[12px] uppercase leading-4 text-muted">
         {title} - {filteredResults.length}
       </h2>
-      <div className="">
-        {filteredResults.map((result) => (
-          <SearchResultItem key={(result as any)[targetKey]} result={result}>
-            {children}
-          </SearchResultItem>
-        ))}
-      </div>
+      {filteredResults.map((result) => (
+        <SearchResultItem key={(result as any)[targetKey]} result={result}>
+          {children}
+        </SearchResultItem>
+      ))}
     </div>
   );
 }

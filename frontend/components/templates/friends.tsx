@@ -20,6 +20,7 @@ export default function FriendsTemplate() {
   useRelationEvent();
 
   useEffect(() => {
+    console.log("emitting to event: relation");
     window.clientSocket.emit("relation");
   }, []);
 

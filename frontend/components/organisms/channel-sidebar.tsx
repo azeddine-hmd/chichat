@@ -24,7 +24,7 @@ export default function ChannelSidebar({ children }: { children: ReactNode }) {
     <nav className="flex h-full w-[240px] shrink-0 grow-0 flex-col bg-gray-700 shadow-lg">
       <DisabledSearchField />
       <Hr className="w-full border-separator-dark"></Hr>
-      <div className="ml-2 mr-2 mt-2 h-full overflow-y-scroll">{children}</div>
+      <div className="ml-2 mr-2 mt-2 h-full">{children}</div>
       {profile && <UserSection user={profile} />}
     </nav>
   );

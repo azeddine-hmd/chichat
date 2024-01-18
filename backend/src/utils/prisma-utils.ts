@@ -5,7 +5,7 @@ export async function checkUserExists(id: number | string) {
   if (typeof id === 'string') {
     const user = await prisma.user.findUnique({
       where: { username: id },
-      select: { id: true, username: true },
+      include: { avatar: true },
     });
     if (!user)
       throw new HttpError(400, 'No user with the provided Username exists');
@@ -13,7 +13,7 @@ export async function checkUserExists(id: number | string) {
   } else {
     const user = await prisma.user.findUnique({
       where: { id: id },
-      select: { id: true, username: true },
+      include: { avatar: true },
     });
     if (!user) throw new HttpError(400, 'No user with the provided ID exists');
     return user;

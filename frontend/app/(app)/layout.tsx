@@ -2,8 +2,6 @@
 
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import ServerSidebar from "@/components/organisms/server-sidebar";
-import QuickSearchPopup from "@/components/organisms/quick-search-popup";
-import ShortcutPopup from "@/components/organisms/shortcut-popup";
 import React, { useState } from "react";
 import { GlobalContext } from "@/app/global-context";
 import DefaultContentChannel from "@/components/molecules/default-content-channel";
@@ -64,11 +62,7 @@ export default function HomeLayout({
               <DefaultContentChannel />
           </ChannelSidebar>
           {children}
-          {/* <div className="h-full w-32 bg-gray-700" /> */}
-          {/* {isFloatingShortcutHelperOpen && <FloatingShortcutHelper />} */}
         </div>
-        {/* {isSearchPopupOpen && <QuickSearchPopup />} */}
-        {/* {isShortcutHelpPopupOpen && <ShortcutPopup />} */}
       </GlobalContext.Provider>
     </div>
   );

@@ -15,21 +15,27 @@ export default function PendingSentFRItem({ user }: { user: User }) {
       return await api.delete(`/api/users/friends/cancel/${user.username}`);
     },
     onSuccess: () => {
-      if (pendingFR) setPendingFR(pendingFR.filter((profile) => profile.username !== user.username));
+      if (pendingFR)
+        setPendingFR(
+          pendingFR.filter((profile) => profile.username !== user.username)
+        );
     },
   });
 
   return (
     <>
-      <Button className="bg-grey-800 group/reject group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5"
-        disabled={cancelFRMut.isPending}
-        onClick={(e) => cancelFRMut.mutate()}
-      >
-        <BsX className="text-lg group-hover/reject:fill-red-500" />
-        <Tooltip direction="top" margin={2}>
-          Cancel
-        </Tooltip>
-      </Button>
+      <Tooltip>
+        <Tooltip.Content content="Cancel" side="top" sideOffset={2} />
+        <Tooltip.Trigger asChild>
+          <Button
+            className="bg-grey-800 group/reject group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5"
+            disabled={cancelFRMut.isPending}
+            onClick={(e) => cancelFRMut.mutate()}
+          >
+            <BsX className="text-lg group-hover/reject:fill-red-500" />
+          </Button>
+        </Tooltip.Trigger>
+      </Tooltip>
     </>
   );
 }
