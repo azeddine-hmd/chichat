@@ -5,9 +5,11 @@ import IconButton from "./icon-button";
 import Tooltip from "./tooltip";
 import Popover from "./popover";
 import CreateDmPopoverContent from "./popover-content/create-dm-popover-content";
+import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
 
 export default function DefaultContentChannel() {
   const router = useRouter();
+  const { item } = useActiveChannelItemContext();
   const [selectedItem, setSelectedItem] = useState(0);
   const onClickFriends = (_: MouseEvent<HTMLButtonElement>) => {
     if (selectedItem != 0) {
@@ -21,7 +23,7 @@ export default function DefaultContentChannel() {
       <IconButton
         className="mb-2 h-[42px] w-full px-2"
         onClick={onClickFriends}
-        active={selectedItem == 0}
+        active={item.type === "friends"}
       >
         <div className="flex items-center justify-center space-x-2">
           <BsPersonFill size="22" />

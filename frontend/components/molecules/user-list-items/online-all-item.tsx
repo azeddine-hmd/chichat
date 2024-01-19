@@ -10,13 +10,15 @@ import { useUserStore } from "@/stores/user-store";
 import PopoverButton from "../popover-button";
 import Popover from "../popover";
 import MenuPopoverContainer from "../popover-content/menu-popover-container";
+import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
 
 export default function OnlineAllItem({ user }: { user: User }) {
   const { friends, setFriends } = useUserStore();
   const [openMorePopover, setOpenMorePopover] = useState(false);
   const [morePopoverPos, setMorePopoverPos] = useState({ x: 0, y: 0 });
+  const { setItem } = useActiveChannelItemContext();
   const onFriendItemClicked = (displayName: string) => {
-    console.log(`we're about to chat with ${displayName}`);
+    setItem({ type: "dm", target: user });
   };
   const removeFriendMut = useMutation({
     mutationFn: async () => {

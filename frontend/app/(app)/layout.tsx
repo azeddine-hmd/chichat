@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { GlobalContext } from "@/app/global-context";
 import DefaultContentChannel from "@/components/molecules/default-content-channel";
 import ChannelSidebar from "@/components/organisms/channel-sidebar";
+import ActiveChannelItemContextProvider from "@/context/active-channel-item-contex";
 
 export default function HomeLayout({
   children,
@@ -59,7 +60,9 @@ export default function HomeLayout({
         <div className="flex h-full w-full">
           <ServerSidebar />
           <ChannelSidebar >
+            <ActiveChannelItemContextProvider>
               <DefaultContentChannel />
+            </ActiveChannelItemContextProvider>
           </ChannelSidebar>
           {children}
         </div>
