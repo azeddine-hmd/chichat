@@ -8,7 +8,8 @@ import { delay } from "@/lib/delay";
 import { api } from "@/config";
 import { useUserStore } from "@/stores/user-store";
 import PopoverButton from "../popover-button";
-import ContextPopover from "../context-popover";
+import Popover from "../popover";
+import MenuPopoverContainer from "../popover-content/menu-popover-container";
 
 export default function OnlineAllItem({ user }: { user: User }) {
   const { friends, setFriends } = useUserStore();
@@ -43,7 +44,7 @@ export default function OnlineAllItem({ user }: { user: User }) {
         <Tooltip.Content content="Message" sideOffset={2} />
       </Tooltip>
 
-      <ContextPopover open={openMorePopover}>
+      <Popover open={openMorePopover}>
         <Tooltip>
           <Tooltip.Content content="More" sideOffset={4} />
           <Tooltip.Trigger asChild>
@@ -59,7 +60,7 @@ export default function OnlineAllItem({ user }: { user: User }) {
             </Button>
           </Tooltip.Trigger>
         </Tooltip>
-        <ContextPopover.Content
+        <Popover.Content
           position={morePopoverPos}
           clickOutside={() => {
             setOpenMorePopover(false);
@@ -68,18 +69,20 @@ export default function OnlineAllItem({ user }: { user: User }) {
           align="start"
           sideOffset={7}
         >
-          <PopoverButton
-            className="text-red-500 hover:bg-red-500 hover:font-[500] hover:text-white"
-            onClick={(_) => {
-              removeFriendMut.mutate();
-              setOpenMorePopover(false);
-            }}
-            disabled={removeFriendMut.isPending}
-          >
-            Remove Friend
-          </PopoverButton>
-        </ContextPopover.Content>
-      </ContextPopover>
+          <MenuPopoverContainer>
+            <PopoverButton
+              className="text-red-500 hover:bg-red-500 hover:font-[500] hover:text-white"
+              onClick={(_) => {
+                removeFriendMut.mutate();
+                setOpenMorePopover(false);
+              }}
+              disabled={removeFriendMut.isPending}
+            >
+              Remove Friend
+            </PopoverButton>
+          </MenuPopoverContainer>
+        </Popover.Content>
+      </Popover>
     </>
   );
 }

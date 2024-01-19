@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, MouseEvent, useRef } from "react";
+import React, { useState, MouseEvent } from "react";
 import SearchField from "../molecules/search-field";
 import { BsSearch, BsX } from "react-icons/bs";
 import SearchResults from "../molecules/search-result-new";
-import UserListItem from "../molecules/user-item";
+import UserItem from "../molecules/user-item";
 import { User } from "@/models/user";
 import OnlineAllItem from "../molecules/user-list-items/online-all-item";
 import PendingSentFRItem from "../molecules/user-list-items/pending-sent-fr-item";
@@ -14,8 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/config";
 import { useUserStore } from "@/stores/user-store";
 import { AxiosResponse } from "axios";
-// import Popover from "../molecules/popover";
-import ContextPopover from "../molecules/context-popover";
+import Popover from "../molecules/popover";
 
 export type FilterBy = "All" | "Online" | "Pending" | "Blocked";
 
@@ -59,7 +58,7 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
           <BsX
             className="text-white"
             size="24"
-            onClick={(e) => setSearchText("")}
+            onClick={(_) => setSearchText("")}
           ></BsX>
         )}
       </SearchField>
@@ -70,9 +69,8 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
         title={filterBy}
       >
         {(user) => (
-          <ContextPopover open={openCtxPopover}>
-            <UserListItem
-              id="rr"
+          <Popover open={openCtxPopover}>
+            <UserItem
               user={user}
               onClick={onItemCLicked}
               onContextMenu={(e) => {
@@ -91,14 +89,15 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
               {filterBy === "Pending" && user.isSentFR && (
                 <PendingSentFRItem user={user} />
               )}
-            </UserListItem>
-            <ContextPopover.Content
-              position={ctxPopoverPos}
-              clickOutside={() => setOpenCtxPopover(false)}
-              side="left"
-              align="start"
-            >
-              {(filterBy === "All" || filterBy === "Online") && (
+            </UserItem>
+            {(filterBy === "All" || filterBy === "Online") && (
+              <Popover.Content
+                className="flex flex-col items-center justify-between space-y-1 overflow-scroll bg-black p-2 text-xs font-semibold text-[#dbdfe2] shadow-md"
+                position={ctxPopoverPos}
+                clickOutside={() => setOpenCtxPopover(false)}
+                side="left"
+                align="start"
+              >
                 <PopoverButton
                   onClick={(_) => {
                     blockUserMut.mutate(user.id);
@@ -108,9 +107,9 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
                 >
                   Block
                 </PopoverButton>
-              )}
-            </ContextPopover.Content>
-          </ContextPopover>
+              </Popover.Content>
+            )}
+          </Popover>
         )}
       </SearchResults>
     </main>

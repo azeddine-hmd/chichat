@@ -1,16 +1,17 @@
 import { User } from "@/models/user";
 import React, { forwardRef } from "react";
 import Avatar from "../atoms/avatar";
+import { cn } from "@/lib/cn";
 
 export type UserListItemProps = {
   user: User;
 } & React.ComponentPropsWithRef<"div">;
 
 const UserItem = forwardRef<HTMLDivElement, UserListItemProps>(
-  function UserItem({ children, user, ...restProps }, forwardedRef) {
+  function UserItem({ children, className, user, ...restProps }, forwardedRef) {
     return (
       <div
-        className="group/item group- flex h-[62px] items-center justify-between rounded-lg border-t border-t-separator-xlight px-1 hover:bg-hover/20"
+        className={cn("group/item group- flex h-[62px] items-center justify-between rounded-lg border-t border-t-separator-xlight px-1 hover:bg-hover/20 pr-2", className)}
         ref={forwardedRef}
         {...restProps}
       >
