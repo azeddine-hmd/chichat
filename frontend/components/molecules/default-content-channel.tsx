@@ -1,5 +1,6 @@
+"use client";
+
 import { BsPersonFill, BsPlus } from "react-icons/bs";
-import { MouseEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import IconButton from "./icon-button";
 import Tooltip from "./tooltip";
@@ -9,20 +10,18 @@ import { useActiveChannelItemContext } from "@/context/active-channel-item-conte
 
 export default function DefaultContentChannel() {
   const router = useRouter();
-  const { item } = useActiveChannelItemContext();
-  const [selectedItem, setSelectedItem] = useState(0);
-  const onClickFriends = (_: MouseEvent<HTMLButtonElement>) => {
-    if (selectedItem != 0) {
-      router.push("/channels/friends");
-      setSelectedItem(0);
-    }
+  const { item, setItem } = useActiveChannelItemContext();
+
+  const onClickFriends = () => {
+    router.push("/channels/friends");
+    setItem({ type: "friends" });
   };
 
   return (
     <>
       <IconButton
         className="mb-2 h-[42px] w-full px-2"
-        onClick={onClickFriends}
+        onClick={() => onClickFriends()}
         active={item.type === "friends"}
       >
         <div className="flex items-center justify-center space-x-2">
@@ -51,3 +50,4 @@ export default function DefaultContentChannel() {
     </>
   );
 }
+

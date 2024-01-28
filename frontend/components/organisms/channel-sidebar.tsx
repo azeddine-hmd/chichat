@@ -1,10 +1,12 @@
+"use client";
+
 import DisabledSearchField from "@/components/molecules/disabled-search-field";
 import UserSection from "@/components/molecules/user-section";
 import React, { ReactNode, useEffect } from "react";
 import Hr from "../atoms/hr";
 import { User } from "@/models/user";
 import { useUserStore } from "@/stores/user-store";
-import { useOneTimeEvent } from "@/hooks/use-Event";
+import { useEvent } from "@/hooks/use-event";
 
 export default function ChannelSidebar({ children }: { children: ReactNode }) {
   const { profile, setProfile } = useUserStore();
@@ -15,7 +17,7 @@ export default function ChannelSidebar({ children }: { children: ReactNode }) {
     // eslint-disable-next-line
   }, [profile]);
 
-  useOneTimeEvent("profile", (...args) => {
+  useEvent("profile", (...args) => {
     const profile: User = args[0];
     setProfile(profile);
   });

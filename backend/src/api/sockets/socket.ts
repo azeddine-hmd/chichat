@@ -76,7 +76,8 @@ const onConnection = listenerWrapper(async (socket) => {
     }
   });
 
-  require('./users-handler')(io, socket);
+  require('./handlers/users-handler')(io, socket);
+  require('./handlers/dm-handler')(io, socket);
   const diffTime = new Date().getTime() - start.getTime();
   const seconds = (diffTime / 1000).toFixed(4);
   socket.emit('ready', seconds);

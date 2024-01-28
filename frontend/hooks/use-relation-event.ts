@@ -1,9 +1,9 @@
 import { User } from "@/models/user";
-import { useEvent, useOneTimeEvent } from "./use-Event";
+import { useEvent } from "./use-Event";
 import { useUserStore } from "@/stores/user-store";
 
 export function useRelationEvent() {
-  const { friends, pendingFR, setPendingFR, setFriends, setBlocked } =
+  const { setPendingFR, setFriends, setBlocked } =
     useUserStore();
 
   useEvent("relation", (...args) => {

@@ -16,6 +16,11 @@ enum UserStatus {
     OFFLINE
 }
 
+enum DMType {
+    SINGLE
+    GROUP
+}
+
 model User {
     id          Int           @id @default(autoincrement())
     displayName String
@@ -28,6 +33,7 @@ model User {
     avatar      File?
     Codes       Codes[]
     sockets     UserSockets[]
+    userDms     UserDm[]
 
     Friend1         Friendship[]        @relation("Friend1")
     Friend2         Friendship[]        @relation("Friend2")
@@ -109,4 +115,35 @@ model File {
     updatedAt    DateTime @updatedAt
 
     uploadedBy User @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+}
+
+model DM {
+    id        String    @id
+    createdAt DateTime  @default(now())
+    entersAt  DateTime
+    type      DMType
+    Message   Message[]
+    userDms   UserDm[]
+}
+
+model UserDm {
+    id     Int    @id @default(autoincrement())
+    userId Int
+    dmId   String
+
+    user User @relation(fields: [userId], references: [id])
+    dm   DM   @relation(fields: [dmId], references: [id])
+
+    @@unique([userId, dmId])
+}
+
+model Message {
+    id       Int      @id @default(autoincrement())
+    createAt DateTime @default(now())
+    dmId     String
+    replyId  Int?     @unique
+
+    dm        DM       @relation(fields: [dmId], references: [id])
+    reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
+    repliedTo Message? @relation("replyMessage")
 }

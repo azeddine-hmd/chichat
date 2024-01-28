@@ -11,10 +11,8 @@ else \
 	npm ci; \
 fi
 
-COPY prisma ./prisma
-RUN npx prisma generate
-
 COPY . ./
+RUN npm install -g prisma
 
 RUN chmod +x ./scripts/entrypoint.sh
 CMD ["./scripts/entrypoint.sh"]

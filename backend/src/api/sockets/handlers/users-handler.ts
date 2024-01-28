@@ -1,7 +1,10 @@
 import { Socket } from 'socket.io';
-import * as profileService from '../users/services/profile-service';
-import { listenerWrapper } from '../../utils/listener-wrapper';
-import { mapToPrivateProfile, mapToPublicProfile } from '../users/users-mapper';
+import * as profileService from '../../users/services/profile-service';
+import { listenerWrapper } from '../../../utils/listener-wrapper';
+import {
+  mapToPrivateProfile,
+  mapToPublicProfile,
+} from '../../users/users-mapper';
 
 module.exports = (io: Socket, socket: Socket) => {
   const profile = async () => {
@@ -41,6 +44,6 @@ module.exports = (io: Socket, socket: Socket) => {
     });
   };
 
-  socket.once('profile', listenerWrapper(profile));
+  socket.on('profile', listenerWrapper(profile));
   socket.on('relation', listenerWrapper(relation));
 };

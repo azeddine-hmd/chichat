@@ -10,16 +10,16 @@ import { useUserStore } from "@/stores/user-store";
 import PopoverButton from "../popover-button";
 import Popover from "../popover";
 import MenuPopoverContainer from "../popover-content/menu-popover-container";
-import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
 
 export default function OnlineAllItem({ user }: { user: User }) {
   const { friends, setFriends } = useUserStore();
   const [openMorePopover, setOpenMorePopover] = useState(false);
   const [morePopoverPos, setMorePopoverPos] = useState({ x: 0, y: 0 });
-  const { setItem } = useActiveChannelItemContext();
-  const onFriendItemClicked = (displayName: string) => {
-    setItem({ type: "dm", target: user });
+
+  const onFriendItemClicked = () => {
+    window.clientSocket.emit('dm:enter:single', user.id);
   };
+
   const removeFriendMut = useMutation({
     mutationFn: async () => {
       await delay(500);
@@ -37,7 +37,7 @@ export default function OnlineAllItem({ user }: { user: User }) {
             className="bg-grey-800 rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5"
             onClick={(e) => {
               e.stopPropagation();
-              onFriendItemClicked(user.displayName);
+              onFriendItemClicked();
             }}
           >
             <BsChatFill className="text-lg" />
@@ -88,3 +88,4 @@ export default function OnlineAllItem({ user }: { user: User }) {
     </>
   );
 }
+
