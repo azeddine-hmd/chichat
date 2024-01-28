@@ -78,6 +78,7 @@ export async function sendFriendRequest(
         sender: { include: { avatar: true } },
       },
     });
+    console.log('sending pending event');
     updateRecipient(recipient.id, pendingFR.sender);
     return pendingFR.recipient;
   } catch (err) {

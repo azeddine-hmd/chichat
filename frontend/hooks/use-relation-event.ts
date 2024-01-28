@@ -1,12 +1,12 @@
 import { User } from "@/models/user";
-import { useEvent } from "./use-Event";
+import { useEvent } from "./use-event";
 import { useUserStore } from "@/stores/user-store";
 
 export function useRelationEvent() {
-  const { setPendingFR, setFriends, setBlocked } =
+  const { friends, setPendingFR, setFriends, setBlocked } =
     useUserStore();
 
-  useEvent("relation", (...args) => {
+  useEvent("relation", (...args: any[]) => {
     console.log("socket:event:relation: received!");
     const relation: {
       sentFR: User[];
@@ -23,7 +23,7 @@ export function useRelationEvent() {
     setPendingFR(pendingFR);
   });
 
-  useEvent("relation:updates", (...args) => {
+  useEvent("relation:updates", (...args: any[]) => {
     const data: { operation: string; user: User } = args[0];
     console.log("socket:relation:updates:", data);
 
@@ -52,9 +52,9 @@ export function useRelationEvent() {
     window.clientSocket.emit("relation");
   });
 
-  useEvent("profile:updates", (...args) => {
-    // const updated: User = args[0];
-    console.log("emitting to: profile")
-    window.clientSocket.emit("profile");
+  useEvent("profile:updates", (...args: any[]) => {
+    const user: User = args[0];
+    console.log("socket:profile:updates:", user);
+    setFriends([...friends.filter((friend) => friend.id != user.id), user]);
   });
 }

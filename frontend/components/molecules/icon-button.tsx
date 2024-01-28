@@ -21,7 +21,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <Button
         className={cn(
-          "flex h-fit w-fit items-center justify-start rounded-s px-2 hover:bg-[#4E5058]/60 hover:text-foreground active:bg-[#4E5058]/60 active:text-white",
+          "flex h-fit w-fit items-center justify-start rounded px-2 hover:bg-[#4E5058]/60 hover:text-foreground active:bg-[#4E5058]/60 active:text-white",
           {
             "bg-[#4E5058]/60 text-white": active,
             "bg-[#4E5058]/60 text-foreground": hover,

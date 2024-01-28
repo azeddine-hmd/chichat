@@ -3,6 +3,7 @@
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import React, { useState } from "react";
 import { GlobalContext } from "@/app/global-context";
+import { useRelationEvent } from "@/hooks/use-relation-event";
 
 export default function HomeTemplate({
   children,
@@ -30,14 +31,14 @@ export default function HomeTemplate({
 
   useKeyboardShortcut({
     keys: ["ctrl", "alt", "p"],
-    callback(_) {
+    callback() {
       openSearchPopup(true);
     },
   });
 
   useKeyboardShortcut({
     keys: ["Escape"],
-    callback(_) {
+    callback() {
       if (isSearchPopupOpen) openSearchPopup(false);
       if (isShortcutHelpPopupOpen) openShortcutHelpPopup(false);
     },
@@ -45,10 +46,12 @@ export default function HomeTemplate({
 
   useKeyboardShortcut({
     keys: ["shift", "?"],
-    callback(event) {
+    callback() {
       openShortcutHelpPopup(true);
     },
   });
+
+  useRelationEvent();
 
   return (
     <GlobalContext.Provider value={globalContext}>

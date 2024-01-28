@@ -7,6 +7,7 @@ import Tooltip from "./tooltip";
 import Popover from "./popover";
 import CreateDmPopoverContent from "./popover-content/create-dm-popover-content";
 import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
+import { useRelationEvent } from "@/hooks/use-relation-event";
 
 export default function DefaultContentChannel() {
   const router = useRouter();
