@@ -4,11 +4,11 @@ import FriendsTopBar, {
   TopBarOptions,
 } from "@/components/organisms/friends-topbar";
 import React, { useMemo, useState } from "react";
-import AddFriends from "../organisms/add-friends";
-import UsersList from "../organisms/users-list";
 import { useUserStore } from "@/stores/user-store";
+import AddFriends from "@/components/organisms/add-friends";
+import UsersList from "@/components/organisms/users-list";
 
-export default function FriendsTemplate() {
+export default function FriendsPage() {
   const [activeOption, activateOption] = useState<TopBarOptions>(
     TopBarOptions.AddFriends
   );

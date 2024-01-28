@@ -1,7 +1,7 @@
 "use client";
 
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GlobalContext } from "@/app/global-context";
 import { useRelationEvent } from "@/hooks/use-relation-event";
 
@@ -13,6 +13,13 @@ export default function HomeTemplate({
   const [isSearchPopupOpen, openSearchPopup] = useState(false);
   const [isShortcutHelpPopupOpen, openShortcutHelpPopup] = useState(false);
   const [isFloatingShortcutHelperOpen, showFloatingShortcut] = useState(true);
+
+  useRelationEvent();
+
+  useEffect(() => {
+    console.log("emitting to event: relation");
+    window.clientSocket.emit("relation");
+  }, []);
 
   const globalContext: GlobalContext = {
     searchPopup: {
@@ -51,12 +58,9 @@ export default function HomeTemplate({
     },
   });
 
-  useRelationEvent();
-
   return (
     <GlobalContext.Provider value={globalContext}>
       {children}
     </GlobalContext.Provider>
   );
 }
-
