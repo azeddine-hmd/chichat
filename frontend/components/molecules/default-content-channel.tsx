@@ -14,7 +14,7 @@ export default function DefaultContentChannel() {
   const { item, setItem } = useActiveChannelItemContext();
 
   const onClickFriends = () => {
-    router.push("/channels/friends");
+    router.push("/channels/me");
     setItem({ type: "friends" });
   };
 

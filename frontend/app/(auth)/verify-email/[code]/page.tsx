@@ -20,7 +20,7 @@ export default function CodeAuthVerification({
     mutationFn: (code: string) => {
       return api.post("/api/auth/email-verify", { code: code });
     },
-    onSuccess: () => setTimeout(() => window.location.assign("/channels/friends"), 2_000),
+    onSuccess: () => setTimeout(() => window.location.assign("/channels/me"), 2_000),
     onError: () => setTimeout(() => window.location.assign("/login"), 2_000),
   });
 

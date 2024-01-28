@@ -46,7 +46,7 @@ export default function Login() {
       await delay(500);
       return await api.post("/api/auth/login", { ...form });
     },
-    onSuccess: () => window.location.assign("/channels/friends"),
+    onSuccess: () => window.location.assign("/channels/me"),
     onError: (error: AxiosError) => {
       setOnLoading(false);
       setError((error.response?.data as HttpError).message);

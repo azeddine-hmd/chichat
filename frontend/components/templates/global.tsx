@@ -22,7 +22,7 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
     mutationFn: () => api.get("/api/auth/pass"),
     onSuccess: async () => {
       if (isPublic) {
-        window.location.assign("/channels/friends");
+        window.location.assign("/channels/me");
       } else {
         await connectSocket({
           onReady: () => {
