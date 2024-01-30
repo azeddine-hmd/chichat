@@ -44,6 +44,7 @@ services:
       - FRONTEND_PROTOCOL=${FRONTEND_PROTOCOL}
       - FRONTEND_HOST=${FRONTEND_HOST}
       - FRONTEND_DOMAIN=${FRONTEND_DOMAIN}
+      - REDIS_URL=redis://cache:6379
     env_file:
       - ./backend/.env
 
@@ -71,3 +72,10 @@ services:
     container_name: adminer
     ports: 
       - 8080:8080
+
+  cache:
+    image: redis:7.2.4
+    container_name: chichat-cache
+    restart: always
+    volumes:
+      - .cache:/data

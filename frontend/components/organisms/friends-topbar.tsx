@@ -21,10 +21,12 @@ export default function FriendsTopBar({
 }) {
   return (
     <TopBar>
-      <div className="flex w-fit gap-2">
-        <BsPersonFill size="22" className="text-icon" />
-        <span className="select-none text-white">Friends</span>
-      </div>
+      <TopBar.LeftSide>
+        <div className="flex w-fit gap-2">
+          <BsPersonFill size="22" className="text-icon" />
+          <span className="select-none text-white">Friends</span>
+        </div>
+      </TopBar.LeftSide>
       <IconButton
         className={cn(
           "h-6 rounded-[4px] border-2 border-accent p-2 text-[16px] font-medium ",

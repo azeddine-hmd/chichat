@@ -1,11 +1,10 @@
 import { mapToPublicProfile } from '../users/users-mapper';
 import { SingleDm } from './types/single-dm';
-import { UnsavedSingleDm } from './types/unsaved-single-dm';
 
-export function mapToPublicDm(dm: UnsavedSingleDm | SingleDm) {
+export function mapToPublicDm(singleDm: SingleDm) {
   return {
-    id: dm.id,
-    type: dm.type,
-    other: mapToPublicProfile(dm.other),
+    id: singleDm.id,
+    type: singleDm.type,
+    other: mapToPublicProfile(singleDm.other),
   };
 }

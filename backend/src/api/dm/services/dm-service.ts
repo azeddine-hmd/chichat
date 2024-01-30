@@ -1,12 +1,12 @@
 import * as uuid from 'uuid';
-import { prisma } from '../../../config';
-import { DM, DMType } from '@prisma/client';
-import { UnsavedSingleDm } from '../types/unsaved-single-dm';
+import { prisma, redisClient } from '../../../config';
+import { DMType } from '@prisma/client';
+import { SingleDm } from '../types/single-dm';
 
-async function makeUnsavedSingleDm(otherId: number): Promise<UnsavedSingleDm> {
+async function makeUnsavedSingleDm(id: number): Promise<SingleDm> {
   const other = await prisma.user.findUnique({
     where: {
-      id: otherId,
+      id: id,
     },
     include: {
       avatar: true,
@@ -18,36 +18,90 @@ async function makeUnsavedSingleDm(otherId: number): Promise<UnsavedSingleDm> {
     type: 'SINGLE',
     entersAt: new Date(),
     other: other,
+    isUnsaved: true,
   };
 }
 
-export async function enterSingleDm(me: Express.User, otherId: number) {
-  const dm = await prisma.dM.findFirst({
-    where: {
-      type: DMType.SINGLE,
-      userDms: {
-        every: {
-          AND: [{ userId: me.id }, { userId: otherId }],
+async function getSingleDm(
+  me: Express.User,
+  id: number | string
+): Promise<SingleDm | null> {
+  let dm = null;
+  if (typeof id === 'number') {
+    dm = await prisma.dM.findFirst({
+      where: {
+        type: DMType.SINGLE,
+        userDms: {
+          every: {
+            AND: [{ userId: me.id }, { userId: id }],
+          },
         },
       },
-    },
-    include: {
-      userDms: { include: { user: { include: { avatar: true } } } },
-    },
-  });
+      include: {
+        userDms: { include: { user: { include: { avatar: true } } } },
+      },
+    });
+  } else {
+    dm = await prisma.dM.findFirst({
+      where: {
+        type: DMType.SINGLE,
+        id: id,
+      },
+      include: {
+        userDms: { include: { user: { include: { avatar: true } } } },
+      },
+    });
+  }
   if (!dm) {
-    return {
-      firstTime: true,
-      unsavedDm: await makeUnsavedSingleDm(otherId),
-    };
+    if (typeof id === 'number') {
+      const unsavedSingleDm = await makeUnsavedSingleDm(id);
+      await redisClient.lPush(
+        `dm:single:unsaved:${me.id}`,
+        JSON.stringify(unsavedSingleDm)
+      );
+      return unsavedSingleDm;
+    } else {
+      return null;
+    }
   }
   const other = dm.userDms.find((userDm) => userDm.userId != me.id).user;
   delete dm['userDms'];
-  return {
-    firstTime: false,
-    dm: {
-      ...(dm as DM),
-      other,
-    },
-  };
+  return { ...dm, other };
+}
+
+export async function getSingleDmInstanceByUserId(
+  user: Express.User,
+  otherId: number
+) {
+  const unsavedSingleDmsString = await redisClient.lRange(
+    `dm:single:unsaved:${user.id}`,
+    0,
+    -1
+  );
+  const unsavedSingleDms = unsavedSingleDmsString.map(
+    (unsavedSingleDmString) => {
+      return JSON.parse(unsavedSingleDmString) as SingleDm;
+    }
+  );
+  const unsavedSingleDm = unsavedSingleDms.find(
+    (udm) => udm.other.id === otherId
+  );
+  if (unsavedSingleDm) return unsavedSingleDm;
+  return await getSingleDm(user, otherId);
+}
+
+export async function getSingleDmInstanceById(user: Express.User, id: string) {
+  const unsavedSingleDmsString = await redisClient.lRange(
+    `dm:single:unsaved:${user.id}`,
+    0,
+    -1
+  );
+  const unsavedSingleDms = unsavedSingleDmsString.map(
+    (unsavedSingleDmString) => {
+      return JSON.parse(unsavedSingleDmString) as SingleDm;
+    }
+  );
+  const unsavedSingleDm = unsavedSingleDms.find((udm) => udm.id === id);
+  if (unsavedSingleDm) return unsavedSingleDm;
+  return await getSingleDm(user, id);
 }

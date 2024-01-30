@@ -10,17 +10,16 @@ export default function HomeLayout({
   children: React.ReactNode;
 }) {
   return (
-    <HomeTemplate>
-      <ActiveChannelItemContextProvider>
-        <div className="flex h-full w-full">
+    <ActiveChannelItemContextProvider>
+      <HomeTemplate>
+        <div className="flex h-screen max-h-screen w-full">
           <ServerSidebar />
           <ChannelSidebar>
             <DefaultContentChannel />
           </ChannelSidebar>
           {children}
         </div>
-      </ActiveChannelItemContextProvider>
-    </HomeTemplate>
+      </HomeTemplate>
+    </ActiveChannelItemContextProvider>
   );
 }
-

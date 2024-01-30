@@ -1,6 +1,6 @@
 import { ArrayMaxSize, ArrayMinSize, IsArray, IsNumber } from 'class-validator';
 
-export class SingleNumberArray {
+export class DmEnterSingleValidator {
   @IsArray()
   @IsNumber({}, { each: true })
   @ArrayMinSize(1)

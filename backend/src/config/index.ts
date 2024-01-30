@@ -5,3 +5,4 @@ export * from './cookie';
 export * from './multer';
 export * from './pg';
 export * from './swagger';
+export * from './redis';

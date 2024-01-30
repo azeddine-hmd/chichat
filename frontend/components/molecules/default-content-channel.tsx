@@ -7,7 +7,6 @@ import Tooltip from "./tooltip";
 import Popover from "./popover";
 import CreateDmPopoverContent from "./popover-content/create-dm-popover-content";
 import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
-import { useRelationEvent } from "@/hooks/use-relation-event";
 
 export default function DefaultContentChannel() {
   const router = useRouter();
@@ -15,7 +14,7 @@ export default function DefaultContentChannel() {
 
   const onClickFriends = () => {
     router.push("/channels/me");
-    setItem({ type: "friends" });
+    setItem("friends");
   };
 
   return (
@@ -23,7 +22,7 @@ export default function DefaultContentChannel() {
       <IconButton
         className="mb-2 h-[42px] w-full px-2"
         onClick={() => onClickFriends()}
-        active={item.type === "friends"}
+        active={item === "friends"}
       >
         <div className="flex items-center justify-center space-x-2">
           <BsPersonFill size="22" />

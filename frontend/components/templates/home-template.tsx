@@ -4,6 +4,7 @@ import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import React, { useEffect, useState } from "react";
 import { GlobalContext } from "@/app/global-context";
 import { useRelationEvent } from "@/hooks/use-relation-event";
+import { useDmEvent } from "@/hooks/use-dm-event";
 
 export default function HomeTemplate({
   children,
@@ -15,6 +16,7 @@ export default function HomeTemplate({
   const [isFloatingShortcutHelperOpen, showFloatingShortcut] = useState(true);
 
   useRelationEvent();
+  useDmEvent();
 
   useEffect(() => {
     console.log("emitting to event: relation");

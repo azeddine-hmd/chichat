@@ -10,8 +10,8 @@ export function useDmEvent() {
   useEvent("dm:enter:single", (...args) => {
     console.log("dm:enter:single: received!");
     const singleDm: SingleDm = args[0];
-    setItem({ type: "singleDm", target: singleDm.other, id: singleDm.id });
+    console.log("singleDm received:", singleDm);
+    setItem(singleDm);
     router.push(`/channels/me/${singleDm.id}`);
   });
 }
-

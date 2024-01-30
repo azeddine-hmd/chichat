@@ -1,6 +1,7 @@
 import { User } from "@/models/user";
 
 export interface SingleDm {
-  id: number;
+  type: "SINGLE";
+  id: string;
   other: User;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/models/user";
+import type { SingleDm } from "@/types/single-dm";
 import React, {
   Dispatch,
   SetStateAction,
@@ -17,18 +17,14 @@ export type ActiveChannelItemContextType = {
 const ActiveChannelItemContext =
   createContext<ActiveChannelItemContextType | null>(null);
 
-export type ChannelItem = {
-  type: "friends" | "singleDm" | "groupDm";
-  target?: User | User[];
-  id?: number;
-};
+export type ChannelItem = "friends" | SingleDm;
 
 export default function ActiveChannelItemContextProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [item, setItem] = useState<ChannelItem>({ type: "friends" });
+  const [item, setItem] = useState<ChannelItem>("friends");
 
   return (
     <ActiveChannelItemContext.Provider value={{ item, setItem }}>
