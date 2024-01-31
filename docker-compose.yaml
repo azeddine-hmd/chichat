@@ -55,7 +55,6 @@ services:
     user: root
     ports:
       - ${NEXT_PORT}:${NEXT_PORT}
-      - 9228:9229
     volumes:
       - ./frontend:/usr/src/app
     environment:

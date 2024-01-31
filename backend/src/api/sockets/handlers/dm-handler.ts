@@ -45,12 +45,12 @@ module.exports = (io: Socket, socket: Socket) => {
 
   const dmSendSingleMessage = async (...args: any[]) => {
     // TODO: validate arguments
-    if (args.length !== 2) return;
-    const { dmId, message }: { dmId: string; message: string } = args[0];
-    const callback: ({ status }: { status: string }) => void = args[1];
-
-    const singleDm = dmService.getSingleDmInstanceById(socket.user, dmId);
-    await dmService.saveMessageOfDm(socket.user, dmId, message);
+    // if (args.length !== 2) return;
+    // const { dmId, message }: { dmId: string; message: string } = args[0];
+    // const callback: ({ status }: { status: string }) => void = args[1];
+    //
+    // const singleDm = dmService.getSingleDmInstanceById(socket.user, dmId);
+    // await dmService.saveMessageOfDm(socket.user, dmId, message);
   };
 
   socket.on('dm:enter:single', listenerWrapper(dmEnterSingle));

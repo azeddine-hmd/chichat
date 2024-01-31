@@ -2,11 +2,15 @@
 
 import Avatar from "@/components/atoms/avatar";
 import FieldInput from "@/components/atoms/field-input";
+import Popover from "@/components/molecules/popover";
+import PopoverButton from "@/components/molecules/popover-button";
+import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
 import TopBar from "@/components/molecules/topbar";
 import { useEvent } from "@/hooks/use-event";
 import { SingleDm } from "@/types/single-dm";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BsPlusCircleFill, BsUpload } from "react-icons/bs";
 
 export default function DmPage({ id }: { id: string }) {
   const [singleDm, setSingleDm] = useState<SingleDm | null>(null);
@@ -15,16 +19,20 @@ export default function DmPage({ id }: { id: string }) {
   const [messages, setMessages] = useState<string[]>([]);
   const sendMessage = () => {
     console.log("sending message:", message);
-    window.clientSocket.emit("dm:send:single:message", {
-      dmId: singleDm?.id,
-      message: message,
-    }, ({ status }: { status: string }) => {
-      if (status === "success") {
-        setMessages((prev) => [...messages, message])
+    window.clientSocket.emit(
+      "dm:send:single:message",
+      {
+        dmId: singleDm?.id,
+        message: message,
+      },
+      ({ status }: { status: string }) => {
+        if (status === "success") {
+          setMessages((prev) => [...messages, message]);
+        }
       }
-    });
+    );
     setMessage("");
-  }
+  };
 
   useEffect(() => {
     console.log("emitting to: dm:enter:single:once");
@@ -38,7 +46,7 @@ export default function DmPage({ id }: { id: string }) {
     setSingleDm(dm);
   });
 
-  useEvent('error', (...args: any[]) => {
+  useEvent("error", (...args: any[]) => {
     console.log("socket error:", args);
     if (args[0] === "dm not found") {
       router.push("/channels/me");
@@ -66,15 +74,37 @@ export default function DmPage({ id }: { id: string }) {
       </TopBar>
       <main className="flex h-full flex-1 flex-col justify-between bg-gray-600 p-4">
         <div className="h-full bg-gray-600"></div>
-        <div className="h-12 rounded-md bg-gray-500 p-2 text-center !border-[12px] !border-black shadow-black">
+        <div className="flex h-12 items-center justify-center gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 text-center">
           {singleDm && (
-            <FieldInput
-              className="text-md p-2 text-white focus-visible:outline-none cursor-text"
-              placeholder={`Message @${singleDm.other.displayName}`}
-              onKeyDown={(e) => (e.key === "Enter") && sendMessage()}
-              onChange={(e) => setMessage(e.target.value)}
-              value={message}
-            />
+            <>
+              <Popover>
+                <Popover.Trigger asChild>
+                  <div className="group ml-2">
+                    <BsPlusCircleFill className="h-6 w-6 cursor-pointer text-gray-400 group-hover:text-white" />
+                  </div>
+                </Popover.Trigger>
+                <Popover.Content
+                  side="top"
+                  sideOffset={16}
+                  align="start"
+                  alignOffset={-8}
+                >
+                  <MenuPopoverContainer className="shadow-blackd shadow-md">
+                    <PopoverButton className="flex items-center justify-start py-4 gap-4 font-normal text-muted">
+                      <BsUpload className="h-4 w-4" />
+                      Upload a file
+                    </PopoverButton>
+                  </MenuPopoverContainer>
+                </Popover.Content>
+              </Popover>
+              <FieldInput
+                className="cursor-text p-2 text-sm text-white placeholder-gray-400/60 focus-visible:outline-none"
+                placeholder={`Message @${singleDm.other.displayName}`}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                onChange={(e) => setMessage(e.target.value)}
+                value={message}
+              />
+            </>
           )}
         </div>
       </main>
