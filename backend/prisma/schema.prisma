@@ -137,11 +137,18 @@ model UserDm {
     @@unique([userId, dmId])
 }
 
+enum MessageContentType {
+    TEXT
+    IMAGE
+}
+
 model Message {
     id       Int      @id @default(autoincrement())
     createAt DateTime @default(now())
     dmId     String
     replyId  Int?     @unique
+    contentType  MessageContentType
+    content  
 
     dm        DM       @relation(fields: [dmId], references: [id])
     reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
