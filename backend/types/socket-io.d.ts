@@ -5,5 +5,6 @@ declare module 'socket.io' {
   interface Socket extends Socket {
     user: Express.User;
     unsavedSingleDms: SingleDM[];
+    _cleanupFns: Function[];
   }
 }

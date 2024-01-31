@@ -79,3 +79,13 @@ services:
     restart: always
     volumes:
       - .cache:/data
+
+  rediscommander:
+    image: rediscommander/redis-commander:latest
+    container_name: chichat-rediscommander
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - PORT=8081
+      - REDIS_HOST=cache

@@ -50,6 +50,7 @@ module.exports = (io: Socket, socket: Socket) => {
     const callback: ({ status }: { status: string }) => void = args[1];
 
     const singleDm = dmService.getSingleDmInstanceById(socket.user, dmId);
+    await dmService.saveMessageOfDm(socket.user, dmId, message);
   };
 
   socket.on('dm:enter:single', listenerWrapper(dmEnterSingle));

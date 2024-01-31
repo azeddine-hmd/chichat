@@ -66,10 +66,10 @@ export default function DmPage({ id }: { id: string }) {
       </TopBar>
       <main className="flex h-full flex-1 flex-col justify-between bg-gray-600 p-4">
         <div className="h-full bg-gray-600"></div>
-        <div className="h-12 rounded-md bg-gray-500 p-2 text-center  shadow-black">
+        <div className="h-12 rounded-md bg-gray-500 p-2 text-center !border-[12px] !border-black shadow-black">
           {singleDm && (
             <FieldInput
-              className="text-md p-2 text-muted/40 focus-visible:outline-none"
+              className="text-md p-2 text-white focus-visible:outline-none cursor-text"
               placeholder={`Message @${singleDm.other.displayName}`}
               onKeyDown={(e) => (e.key === "Enter") && sendMessage()}
               onChange={(e) => setMessage(e.target.value)}

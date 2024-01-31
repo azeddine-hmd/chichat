@@ -1,4 +1,4 @@
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { server } from '../../app';
 import { COOKIE_MAX_AGE_MILIS } from '../../constants';
 import { corsOptions, pool, prisma } from '../../config';
@@ -6,6 +6,7 @@ import { createAdapter } from '@socket.io/postgres-adapter';
 import { listenerWrapper } from '../../utils/listener-wrapper';
 import { UserStatus } from '@prisma/client';
 import { mapToPublicProfile } from '../users/users-mapper';
+import * as dmService from '../dm/services/dm-service';
 
 export const io = new Server(server, {
   cookie: {
@@ -34,6 +35,10 @@ io.adapter(createAdapter(pool));
 })();
 require('./middlewares');
 
+async function socketCleanup(socket: Socket) {
+  await dmService.removeUnsavedSingleDms(socket.user);
+}
+
 const onConnection = listenerWrapper(async (socket) => {
   const start = new Date();
 
@@ -58,6 +63,7 @@ const onConnection = listenerWrapper(async (socket) => {
 
   socket.on('disconnect', async () => {
     console.log(`client(id=${socket.user.id}, sid=${socket.id}) disconnected!`);
+    await socketCleanup(socket);
     const [_, userSocketsCount] = await prisma.$transaction([
       prisma.userSockets.delete({
         where: { socketId: socket.id },

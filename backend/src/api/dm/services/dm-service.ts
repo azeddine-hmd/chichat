@@ -70,11 +70,11 @@ async function getSingleDm(
 }
 
 export async function getSingleDmInstanceByUserId(
-  user: Express.User,
+  me: Express.User,
   otherId: number
 ) {
   const unsavedSingleDmsString = await redisClient.lRange(
-    `dm:single:unsaved:${user.id}`,
+    `dm:single:unsaved:${me.id}`,
     0,
     -1
   );
@@ -87,12 +87,12 @@ export async function getSingleDmInstanceByUserId(
     (udm) => udm.other.id === otherId
   );
   if (unsavedSingleDm) return unsavedSingleDm;
-  return await getSingleDm(user, otherId);
+  return await getSingleDm(me, otherId);
 }
 
-export async function getSingleDmInstanceById(user: Express.User, id: string) {
+export async function getSingleDmInstanceById(me: Express.User, id: string) {
   const unsavedSingleDmsString = await redisClient.lRange(
-    `dm:single:unsaved:${user.id}`,
+    `dm:single:unsaved:${me.id}`,
     0,
     -1
   );
@@ -103,5 +103,9 @@ export async function getSingleDmInstanceById(user: Express.User, id: string) {
   );
   const unsavedSingleDm = unsavedSingleDms.find((udm) => udm.id === id);
   if (unsavedSingleDm) return unsavedSingleDm;
-  return await getSingleDm(user, id);
+  return await getSingleDm(me, id);
+}
+
+export async function removeUnsavedSingleDms(me: Express.User) {
+  await redisClient.del(`dm:single:unsaved:${me.id}`);
 }

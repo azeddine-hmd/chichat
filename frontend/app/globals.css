@@ -24,6 +24,11 @@
   }
 }
 
+/* scrollbar */
+body {
+  scrollbar-width: 1em;
+}
+
 body::-webkit-scrollbar {
   width: 1em;
 }
