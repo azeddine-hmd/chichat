@@ -37,17 +37,31 @@ export default function DmPage({ id }: { id: string }) {
   });
 
   const onMessageSent = (message: string) => {
-    window.clientSocket.emit("dm:single:sendMessage", singleDm?.id, message);
+    window.clientSocket.emit("dm:single:saveMessage", singleDm?.id, message);
   };
 
-  useEvent("dm:single:sendMessage", (...args: any[]) => {
+  useEvent("dm:single:saveMessage", (...args: any[]) => {
     if (args[0] == "success") {
       const message = args[1];
-      setMessages([...messages, message]);
+      console.log("messaged saved:", message);
+      setMessages((prev) => [...prev, message]);
     } else {
       console.error("message field to save");
     }
   });
+
+  useEffect(() => {
+    if (!singleDm) return;
+    window.clientSocket.emit("dm:single:getMessages", singleDm.id);
+  }, [singleDm]);
+
+  useEffect(() => { console.log("messages:", JSON.stringify(messages)) }, [messages]);
+
+  useEvent("dm:single:getMessages", (...args: any[]) => {
+    console.log("got messages:", JSON.stringify(args[0]));
+    setMessages(args[0]);
+  });
+
 
   return (
     <div className="flex h-screen w-full flex-col">

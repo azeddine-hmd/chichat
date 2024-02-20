@@ -78,7 +78,6 @@ export async function removeUnsavedSingleDms(me: Express.User) {
     0,
     -1
   );
-  console.log('unsavedSingleDmIds:', unsavedSingleDmIds);
   await prisma.dM.deleteMany({
     where: {
       id: { in: unsavedSingleDmIds },

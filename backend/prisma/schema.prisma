@@ -160,7 +160,7 @@ model MessageContent {
     type        MessageContentType
     contentText String?
     contentFile File?              @relation(fields: [fileId], references: [id], onDelete: Cascade)
-    message     Message            @relation(fields: [messageId], references: [id])
+    message     Message            @relation(fields: [messageId], references: [id], onDelete: Cascade)
     messageId   Int                @unique
     fileId      Int?
 }

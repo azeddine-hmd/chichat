@@ -35,3 +35,13 @@ export async function saveSingleTextMessage(
     messageContent: messageContent,
   };
 }
+
+export async function getMessages(_: Express.User, dmId: string) {
+  const result = await prisma.message.findMany({
+    where: {
+      dmId: dmId,
+    },
+    include: { messageContent: true },
+  });
+  return result;
+}
