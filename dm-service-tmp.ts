@@ -2,13 +2,14 @@ import * as uuid from 'uuid';
 import { prisma, redisClient } from '../../../config';
 import { DMType } from '@prisma/client';
 import { SingleDm } from '../types/single-dm';
+import { assert } from 'console';
 
 async function makeSingleDm(
   me: Express.User,
   otherId: number
 ): Promise<SingleDm> {
   const dmId = uuid.v4();
-  const [dm, _, otherUserDm] = await prisma.$transaction([
+  await prisma.$transaction([
     prisma.dM.create({
       data: {
         id: dmId,
@@ -16,26 +17,32 @@ async function makeSingleDm(
         entersAt: new Date(),
       },
     }),
-    prisma.userDm.create({
-      data: {
-        dm: { connect: { id: dmId } },
-        user: { connect: { id: me.id } },
-      },
-    }),
-    prisma.userDm.create({
-      data: {
-        dm: { connect: { id: dmId } },
-        user: { connect: { id: otherId } },
-      },
-      include: { user: { include: { avatar: true } } },
+    prisma.userDm.createMany({
+      data: [
+        {
+          dmId: dmId,
+          userId: me.id,
+        },
+        {
+          dmId: dmId,
+          userId: otherId,
+        },
+      ],
     }),
   ]);
 
+  assert(
+    dm.userDms.length > 0 || dm.userDms.length <= 0,
+    'single dm must associate with single user'
+  );
+  const other = dm.userDms[0].user;
   await redisClient.lPush(`dm:single:unsaved:${me.id}`, dm.id);
 
   return {
-    ...dm,
-    other: otherUserDm.user,
+    id: uuid.v4(),
+    type: 'SINGLE',
+    entersAt: new Date(),
+    other: other,
     isUnsaved: true,
   };
 }
@@ -67,9 +74,7 @@ export async function getSingleDm(
   if (!dm) return null;
   const other = dm.userDms.find((userDm) => userDm.userId != me.id).user;
   delete dm['userDms'];
-  // check if dm in cache
-  const pos = await redisClient.lPos(`dm:single:unsaved:${me.id}`, dm.id);
-  return { ...dm, other, isUnsaved: pos != null };
+  return { ...dm, other };
 }
 
 export async function removeUnsavedSingleDms(me: Express.User) {
@@ -78,7 +83,6 @@ export async function removeUnsavedSingleDms(me: Express.User) {
     0,
     -1
   );
-  console.log('unsavedSingleDmIds:', unsavedSingleDmIds);
   await prisma.dM.deleteMany({
     where: {
       id: { in: unsavedSingleDmIds },

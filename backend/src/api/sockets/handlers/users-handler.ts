@@ -44,6 +44,6 @@ module.exports = (io: Socket, socket: Socket) => {
     });
   };
 
-  socket.on('profile', listenerWrapper(profile));
-  socket.on('relation', listenerWrapper(relation));
+  socket.on('profile', listenerWrapper(socket, profile));
+  socket.on('relation', listenerWrapper(socket, relation));
 };

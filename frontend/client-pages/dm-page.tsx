@@ -1,61 +1,53 @@
 "use client";
 
 import Avatar from "@/components/atoms/avatar";
-import FieldInput from "@/components/atoms/field-input";
-import Popover from "@/components/molecules/popover";
-import PopoverButton from "@/components/molecules/popover-button";
-import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
 import TopBar from "@/components/molecules/topbar";
+import ChatInputField from "@/components/organisms/chat/chat-input-field";
+import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
+import useErrorEvent from "@/hooks/use-error-event";
 import { useEvent } from "@/hooks/use-event";
 import { SingleDm } from "@/types/single-dm";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { BsPlusCircleFill, BsUpload } from "react-icons/bs";
+import { useEffect, useRef, useState } from "react";
 
 export default function DmPage({ id }: { id: string }) {
-  const [singleDm, setSingleDm] = useState<SingleDm | null>(null);
   const router = useRouter();
-  const [message, setMessage] = useState("");
+  const containerRef = useRef<HTMLElement | null>(null);
+
+  const { setItem } = useActiveChannelItemContext();
+  const [singleDm, setSingleDm] = useState<SingleDm | null>(null);
   const [messages, setMessages] = useState<string[]>([]);
-  const sendMessage = () => {
-    console.log("sending message:", message);
-    window.clientSocket.emit(
-      "dm:send:single:message",
-      {
-        dmId: singleDm?.id,
-        message: message,
-      },
-      ({ status }: { status: string }) => {
-        if (status === "success") {
-          setMessages((prev) => [...messages, message]);
-        }
-      }
-    );
-    setMessage("");
-  };
 
   useEffect(() => {
-    console.log("emitting to: dm:enter:single:once");
-    window.clientSocket.emit("dm:enter:single:once", id);
+    console.log("emitting to: dm:single:getDm");
+    window.clientSocket.emit("dm:single:getDm", id);
     // eslint-disable-next-line
   }, []);
 
-  useEvent("dm:enter:single:once", (...args: any[]) => {
-    const dm: SingleDm = args[0];
-    console.log("socket:dm:enter:single:once:", dm);
-    setSingleDm(dm);
+  useErrorEvent((error) => {
+    if (typeof error === "string" && error === "dm not found")
+      router.push("/channels/me");
   });
 
-  useEvent("error", (...args: any[]) => {
-    console.log("socket error:", args);
-    if (args[0] === "dm not found") {
-      router.push("/channels/me");
+  useEvent("dm:single:getDm", (...args: any[]) => {
+    const dm: SingleDm = args[0];
+    console.log("socket:dm:single:getDm", dm);
+    setSingleDm(dm);
+    setItem(dm);
+  });
+
+  const onMessageSent = (message: string) => {
+    window.clientSocket.emit("dm:single:sendMessage", singleDm?.id, message);
+  };
+
+  useEvent("dm:single:sendMessage", (...args: any[]) => {
+    if (args[0] == "success") {
+      const message = args[1];
+      setMessages([...messages, message]);
+    } else {
+      console.error("message field to save");
     }
   });
-
-  useEffect(() => {
-    console.log("useEffect[singleDm]:", singleDm);
-  }, [singleDm]);
 
   return (
     <div className="flex h-screen w-full flex-col">
@@ -72,41 +64,16 @@ export default function DmPage({ id }: { id: string }) {
           </>
         )}
       </TopBar>
-      <main className="flex h-full flex-1 flex-col justify-between bg-gray-600 p-4">
+      <main
+        ref={containerRef}
+        className="flex h-full flex-1 flex-col justify-between bg-gray-600 p-4"
+      >
         <div className="h-full bg-gray-600"></div>
-        <div className="flex h-12 items-center justify-center gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 text-center">
-          {singleDm && (
-            <>
-              <Popover>
-                <Popover.Trigger asChild>
-                  <div className="group ml-2">
-                    <BsPlusCircleFill className="h-6 w-6 cursor-pointer text-gray-400 group-hover:text-white" />
-                  </div>
-                </Popover.Trigger>
-                <Popover.Content
-                  side="top"
-                  sideOffset={16}
-                  align="start"
-                  alignOffset={-8}
-                >
-                  <MenuPopoverContainer className="shadow-blackd shadow-md">
-                    <PopoverButton className="flex items-center justify-start py-4 gap-4 font-normal text-muted">
-                      <BsUpload className="h-4 w-4" />
-                      Upload a file
-                    </PopoverButton>
-                  </MenuPopoverContainer>
-                </Popover.Content>
-              </Popover>
-              <FieldInput
-                className="cursor-text p-2 text-sm text-white placeholder-gray-400/60 focus-visible:outline-none"
-                placeholder={`Message @${singleDm.other.displayName}`}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-              />
-            </>
-          )}
-        </div>
+        <ChatInputField
+          placeholder={`Message @${singleDm?.other.displayName}`}
+          onMessageSent={onMessageSent}
+          containerRef={containerRef}
+        />
       </main>
     </div>
   );

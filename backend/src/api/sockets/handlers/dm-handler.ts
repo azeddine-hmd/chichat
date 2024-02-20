@@ -1,59 +1,60 @@
 import { Socket } from 'socket.io';
-import { listenerWrapper } from '../../../utils/listener-wrapper';
-import { validate } from 'class-validator';
 import * as dmService from '../../dm/services/dm-service';
-import { DmEnterSingleValidator } from '../validators/dm-enter-single-validator';
-import { DmEnterSingleOnceValidator } from '../validators/dm-enter-single-once-validator';
+import * as messageService from '../../dm/services/message-service';
+import { EnterSingleDmValidator } from '../validators/enter-single-dm-validator';
+import { GetSingleDmValidator } from '../validators/get-single-dm-validator';
 import { mapToPublicDm } from '../../dm/dm-mapper';
+import { validateEventArgument } from '../../../utils/validate-event-argument';
+import { SendMessageSingleDmValidator } from '../validators/send-message-single-dm-validator';
+import { listenerWrapper } from '../../../utils/listener-wrapper';
 
 module.exports = (io: Socket, socket: Socket) => {
-  const dmEnterSingle = async (...args: any[]) => {
-    console.log(
-      `receiving emit from client(${socket.user.username}) of event: dm:enter:single`
-    );
-    const data = new DmEnterSingleValidator();
-    data.args = args;
-    const errors = await validate(data);
-    if (errors.length > 0) throw new Error(`validation error: ${errors}`);
-
-    const singleDm = await dmService.getSingleDmInstanceByUserId(
-      socket.user,
-      args[0]
-    );
-    socket.emit('dm:enter:single', mapToPublicDm(singleDm));
+  const enterSingleDm = async (...args: any[]) => {
+    console.info('event triggered: dm:single:enter from', socket.user.username);
+    const data = await validateEventArgument(new EnterSingleDmValidator(args));
+    const singleDm = await dmService.getSingleDm(socket.user, data.otherId);
+    socket.join('dm:single:' + singleDm.id);
+    socket.emit('dm:single:enter', singleDm.id);
   };
 
-  const dmEnterSingleOnce = async (...args: any[]) => {
-    console.log(
-      `receiving emit from client(${socket.user.username}) of event: dm:enter:single:once`
-    );
-    const data = new DmEnterSingleOnceValidator();
-    data.args = args;
-    const errors = await validate(data);
-    if (errors.length > 0) throw new Error(`validation error: ${errors}`);
-
-    const singleDm = await dmService.getSingleDmInstanceById(
-      socket.user,
-      args[0]
-    );
+  const getSingleDm = async (...args: any[]) => {
+    console.info('event triggered: dm:single:getDm from', socket.user.username);
+    const data = await validateEventArgument(new GetSingleDmValidator(args));
+    const singleDm = await dmService.getSingleDm(socket.user, data.dmId);
     if (!singleDm) {
       socket.emit('error', 'dm not found');
       return;
     }
-    socket.emit('dm:enter:single:once', mapToPublicDm(singleDm));
+    socket.emit('dm:single:getDm', mapToPublicDm(singleDm));
   };
 
-  const dmSendSingleMessage = async (...args: any[]) => {
-    // TODO: validate arguments
-    // if (args.length !== 2) return;
-    // const { dmId, message }: { dmId: string; message: string } = args[0];
-    // const callback: ({ status }: { status: string }) => void = args[1];
-    //
-    // const singleDm = dmService.getSingleDmInstanceById(socket.user, dmId);
-    // await dmService.saveMessageOfDm(socket.user, dmId, message);
+  const sendMessageSingleDm = async (...args: any[]) => {
+    console.info(
+      'event triggered: dm:single:sendMessage from',
+      socket.user.username
+    );
+    const data = await validateEventArgument(
+      new SendMessageSingleDmValidator(args)
+    );
+    const singleDm = await dmService.getSingleDm(socket.user, data.dmId);
+    const message = await messageService.saveSingleTextMessage(
+      socket.user,
+      singleDm,
+      data.message
+    );
+    console.log(Array.from(socket.rooms));
+    io.in('dm:single:' + singleDm.id).emit(
+      'dm:single:sendMessage',
+      'success',
+      // message
+      'weofijweofiwjeofi'
+    );
   };
 
-  socket.on('dm:enter:single', listenerWrapper(dmEnterSingle));
-  socket.on('dm:enter:single:once', listenerWrapper(dmEnterSingleOnce));
-  socket.on('dm:send:single:message', listenerWrapper(dmSendSingleMessage));
+  socket.on('dm:single:enter', listenerWrapper(socket, enterSingleDm));
+  socket.on('dm:single:getDm', listenerWrapper(socket, getSingleDm));
+  socket.on(
+    'dm:single:sendMessage',
+    listenerWrapper(socket, listenerWrapper(socket, sendMessageSingleDm))
+  );
 };

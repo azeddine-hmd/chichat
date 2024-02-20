@@ -114,7 +114,8 @@ model File {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    uploadedBy User @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+    uploadedBy     User             @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+    MessageContent MessageContent[]
 }
 
 model DM {
@@ -131,10 +132,22 @@ model UserDm {
     userId Int
     dmId   String
 
-    user User @relation(fields: [userId], references: [id])
-    dm   DM   @relation(fields: [dmId], references: [id])
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    dm   DM   @relation(fields: [dmId], references: [id], onDelete: Cascade)
 
     @@unique([userId, dmId])
+}
+
+model Message {
+    id             Int             @id @default(autoincrement())
+    createAt       DateTime        @default(now())
+    dmId           String?
+    replyId        Int?            @unique
+    messageContent MessageContent?
+
+    dm        DM?       @relation(fields: [dmId], references: [id])
+    reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
+    repliedTo Message? @relation("replyMessage")
 }
 
 enum MessageContentType {
@@ -142,15 +155,12 @@ enum MessageContentType {
     IMAGE
 }
 
-model Message {
-    id       Int      @id @default(autoincrement())
-    createAt DateTime @default(now())
-    dmId     String
-    replyId  Int?     @unique
-    contentType  MessageContentType
-    content  
-
-    dm        DM       @relation(fields: [dmId], references: [id])
-    reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
-    repliedTo Message? @relation("replyMessage")
+model MessageContent {
+    id          Int                @id @default(autoincrement())
+    type        MessageContentType
+    contentText String?
+    contentFile File?              @relation(fields: [fileId], references: [id], onDelete: Cascade)
+    message     Message            @relation(fields: [messageId], references: [id])
+    messageId   Int                @unique
+    fileId      Int?
 }

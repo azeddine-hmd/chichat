@@ -1,9 +1,12 @@
 import { Socket } from 'socket.io';
 
-export const listenerWrapper = (handler: (socket: Socket) => Promise<void>) => {
-  return async (socket: Socket) => {
+export const listenerWrapper = (
+  socket: Socket,
+  handler: (...args: any[]) => Promise<void>
+) => {
+  return async (...args: any[]) => {
     try {
-      await handler(socket);
+      await handler(...args);
     } catch (error) {
       console.error('Error in socket: ', error);
       if (socket && socket.connected) {
