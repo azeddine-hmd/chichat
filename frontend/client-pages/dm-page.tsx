@@ -82,7 +82,7 @@ export default function DmPage({ id }: { id: string }) {
         ref={containerRef}
         className="flex h-full flex-1 flex-col justify-between bg-gray-600 p-4"
       >
-        <div className="h-full bg-gray-600"></div>
+        <div className="h-full bg-gray-600 border border-red-500"></div>
         <ChatInputField
           placeholder={`Message @${singleDm?.other.displayName}`}
           onMessageSent={onMessageSent}

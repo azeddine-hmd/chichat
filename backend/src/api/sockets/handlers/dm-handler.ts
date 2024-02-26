@@ -65,8 +65,11 @@ module.exports = (io: Socket, socket: Socket) => {
     const messages = await messageService.getMessages(socket.user, dmId);
     socket.emit(
       'dm:single:getMessages',
+      // messages.map((message) => {
+      //   return mapToMessage(message)
+      // })
       messages.map((message) => {
-        return mapToMessage(message)
+        return message.messageContent.contentText;
       })
     );
   };
