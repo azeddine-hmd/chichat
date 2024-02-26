@@ -54,8 +54,10 @@ export async function blockUser(req: Request, res: Response) {
   if (!req.params.id) throw new HttpError(400, 'Invalid Id');
   const id = parseInt(req.params.id);
   if (!id) throw new HttpError(400, 'Invalid id');
-  await relationshipService.blockUser(req.user, id);
-  res.status(204).send();
+  const blockedUser = await relationshipService.blockUser(req.user, id);
+  res.status(201).send({
+    ...mapToPublicProfile(blockedUser),
+  });
 }
 
 export async function unblockUser(req: Request, res: Response) {

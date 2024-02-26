@@ -22,7 +22,7 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
     mutationFn: () => api.get("/api/auth/pass"),
     onSuccess: async () => {
       if (isPublic) {
-        window.location.assign("/channels/friends");
+        window.location.assign("/channels/me");
       } else {
         await connectSocket({
           onReady: () => {
@@ -49,7 +49,14 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
   return (
     <>
       {showPage && (
-        <div className="h-full w-full overflow-hidden">{children}</div>
+        <div
+          className="h-full w-full overflow-hidden"
+          onContextMenu={(e) => {
+            e.preventDefault();
+          }}
+        >
+          {children}
+        </div>
       )}
       {!showPage && !isPublic && <SplashScreen />}
     </>

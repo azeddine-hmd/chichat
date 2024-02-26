@@ -1,4 +1,4 @@
-import FriendsTemplate from "@/components/templates/friends";
+import FriendsPage from "@/client-pages/friends-page";
 
 export const metadata = {
   title: "ChiChat | Friends",
@@ -6,6 +6,6 @@ export const metadata = {
 
 export default function Friends() {
   return (
-    <FriendsTemplate/>
+    <FriendsPage/>
   );
 }

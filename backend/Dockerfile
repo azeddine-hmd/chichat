@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20.11.0
 
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
@@ -11,10 +11,8 @@ else \
 	npm ci; \
 fi
 
-COPY prisma ./prisma
-RUN npx prisma generate
-
 COPY . ./
+RUN npm install -g prisma
 
 RUN chmod +x ./scripts/entrypoint.sh
 CMD ["./scripts/entrypoint.sh"]

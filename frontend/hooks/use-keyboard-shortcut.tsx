@@ -32,20 +32,16 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disa
       ) {
         callback(event);
       } else {
-        // console.log(`unknown key: ${event.key}`);
       }
       if (disableScrollEvent)
         event.stopPropagation();
     };
 
-  // console.log("adding event: useKeyboardShortcut");
-	// window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keypress", handleKeyDown)
     return () => {
-      // console.log("removing event: useKeyboardShortcut");
-      // window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keypress", handleKeyDown);
     };
 
+    // eslint-disable-next-line
   }, [keyboardInputEvent]);
 }

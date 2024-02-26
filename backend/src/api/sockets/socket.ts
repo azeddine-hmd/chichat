@@ -1,11 +1,11 @@
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { server } from '../../app';
 import { COOKIE_MAX_AGE_MILIS } from '../../constants';
 import { corsOptions, pool, prisma } from '../../config';
 import { createAdapter } from '@socket.io/postgres-adapter';
-import { listenerWrapper } from '../../utils/listener-wrapper';
 import { UserStatus } from '@prisma/client';
 import { mapToPublicProfile } from '../users/users-mapper';
+import * as dmService from '../dm/services/dm-service';
 
 export const io = new Server(server, {
   cookie: {
@@ -22,15 +22,23 @@ export const io = new Server(server, {
 io.adapter(createAdapter(pool));
 
 (async () => {
-  await prisma.userSockets.deleteMany({});
-  await prisma.user.updateMany({
-    where: {},
-    data: { status: UserStatus.OFFLINE },
-  });
+  try {
+    await prisma.userSockets.deleteMany({});
+    await prisma.user.updateMany({
+      where: {},
+      data: { status: UserStatus.OFFLINE },
+    });
+  } catch (error) {
+    console.error('delete all volatile data');
+  }
 })();
 require('./middlewares');
 
-const onConnection = listenerWrapper(async (socket) => {
+async function onUserOffline(socket: Socket) {
+  await dmService.removeUnsavedSingleDms(socket.user);
+}
+
+const onConnection = async (socket: Socket) => {
   const start = new Date();
 
   // handling user status
@@ -70,12 +78,14 @@ const onConnection = listenerWrapper(async (socket) => {
         ...mapToPublicProfile(user),
       });
     }
+    await onUserOffline(socket);
   });
 
-  require('./users-handler')(io, socket);
+  require('./handlers/users-handler')(io, socket);
+  require('./handlers/dm-handler')(io, socket);
   const diffTime = new Date().getTime() - start.getTime();
   const seconds = (diffTime / 1000).toFixed(4);
   socket.emit('ready', seconds);
-});
+};
 
 io.on('connection', onConnection);

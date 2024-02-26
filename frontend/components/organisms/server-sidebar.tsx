@@ -17,11 +17,22 @@ export default function ServerSidebar() {
 
   return (
     <nav className="flex h-full w-[4.5rem] shrink-0 grow-0 flex-col items-center bg-gray-900 pt-3 text-white shadow-lg ">
-      <ServerButton icon={<Image priority  src={ChiChatIcon} alt="Main Server" />} text="Direct Messages" selected={selectedServer == -1 ? true : false} onClick={e => setSelectedServer(-1)} />
+      <ServerButton
+        icon={<Image priority src={ChiChatIcon} alt="Main Server" />}
+        name="Direct Messages"
+        selected={selectedServer == -1 ? true : false}
+        onClick={(e) => setSelectedServer(-1)}
+      />
       <Divider />
       {servers.map((server, index) => {
         return (
-          <ServerButton key={server.id} icon={server.icon} text={server.name} selected={selectedServer == index ? true : false} onClick={e => setSelectedServer(index)} />
+          <ServerButton
+            key={server.id}
+            icon={server.icon}
+            name={server.name}
+            selected={selectedServer == index ? true : false}
+            onClick={(e) => setSelectedServer(index)}
+          />
         );
       })}
     </nav>

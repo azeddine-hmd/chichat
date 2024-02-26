@@ -6,12 +6,22 @@ export async function uploadAvatar(
   file: Express.Multer.File
 ) {
   try {
+    let backendDomain = '';
+    if (process.env.NODE_ENV === 'development') {
+      backendDomain = process.env.BACKEND_DOMAIN.replace(
+        'localhost',
+        'backend'
+      );
+    } else {
+      backendDomain = process.env.BACKEND_DOMAIN;
+    }
+
     const avatar = await prisma.file.create({
       data: {
         filename: file.originalname,
         fieldname: file.fieldname,
         filePath: file.path,
-        url: `${process.env.BACKEND_DOMAIN}/static/${file.originalname}`,
+        url: `${backendDomain}/static/${file.originalname}`,
         mimeType: file.mimetype,
         fileSize: file.size,
         uploadedBy: { connect: { id: me.id } },

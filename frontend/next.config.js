@@ -15,9 +15,13 @@ const nextConfig = {
         hostname: "localhost",
         protocol: "http",
       },
+      {
+        hostname: "backend",
+        protocol: "http",
+      }
     ],
   },
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: process.env.NODE_ENV === "development",
 }
 
 module.exports = nextConfig

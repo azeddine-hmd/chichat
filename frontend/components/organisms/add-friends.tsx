@@ -73,7 +73,7 @@ export default function AddFriends() {
             className="absolute right-4 top-1/2 h-8 w-40 -translate-y-1/2 rounded-sm bg-primary text-xs font-medium text-white"
             onClick={() => sendFriendRequest()}
             onLoading={sendFriendReqMut.isPending}
-            innerRef={buttonRef}
+            ref={buttonRef}
           >
             Send Friend Request
           </PrimaryLoadingButton>

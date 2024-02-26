@@ -3,30 +3,21 @@
 import FriendsTopBar, {
   TopBarOptions,
 } from "@/components/organisms/friends-topbar";
-import React, { useEffect, useState } from "react";
-import AddFriends from "../organisms/add-friends";
-import UsersList from "../organisms/users-list";
+import React, { useMemo, useState } from "react";
 import { useUserStore } from "@/stores/user-store";
-import { User } from "@/models/user";
-import { useRelationEvent } from "@/hooks/use-relation-event";
+import AddFriends from "@/components/organisms/add-friends";
+import UsersList from "@/components/organisms/users-list";
 
-export default function FriendsTemplate() {
+export default function FriendsPage() {
   const [activeOption, activateOption] = useState<TopBarOptions>(
     TopBarOptions.AddFriends
   );
   const { friends, blocked, pendingFR } = useUserStore();
-  const [onlineFriends, setOnlineFriends] = useState<User[] | null>(null);
 
-  useRelationEvent();
-
-  useEffect(() => {
-    window.clientSocket.emit("relation");
-  }, []);
-
-  useEffect(() => {
-    if (!friends) return;
-    setOnlineFriends(friends.filter((friend) => friend.status === "online"));
-  }, [friends]);
+  const onlineFriends = useMemo(
+    () => friends.filter((friend) => friend.status === "online"),
+    [friends]
+  );
 
   return (
     <div className="h-full w-full bg-gray-600">

@@ -1,8 +1,6 @@
-import { Server, Socket } from 'socket.io';
 import { prisma } from '../../../config';
 import { HttpError } from '../../../utils/error';
 import { checkUserExists } from '../../../utils/prisma-utils';
-import { User, UserStatus } from '@prisma/client';
 import { UserIncludeRelations } from '../types/user-include-avatar';
 import { forEachSocket } from '../../../utils/for-each-socket';
 import { mapToPublicProfile } from '../users-mapper';
@@ -19,19 +17,31 @@ export async function sendFriendRequest(
 ) {
   if (me.username == recipientUsername)
     throw new HttpError(400, 'You cannot perform this action on yourself');
-  const { id: recipientId } = await checkUserExists(recipientUsername);
+  const recipient = await checkUserExists(recipientUsername);
 
-  const { user1Id, user2Id } = normalizeId(me.id, recipientId);
+  const { user1Id, user2Id } = normalizeId(me.id, recipient.id);
   const friendship = await prisma.friendship.findUnique({
     where: { unique_user_combination: { user1Id: user1Id, user2Id: user2Id } },
   });
   if (friendship) throw new HttpError(409, 'Friendship already exist.');
 
+  const blockRecord = await prisma.block.findFirst({
+    where: {
+      blockedById: recipient.id,
+      blockedId: me.id,
+    },
+  });
+  if (blockRecord)
+    throw new HttpError(
+      400,
+      'you have been blocked cannot send friend request'
+    );
+
   const pendingFriendship = await prisma.pendingFriendship.findFirst({
     where: {
       OR: [
-        { senderId: me.id, recipientId: recipientId },
-        { senderId: recipientId, recipientId: me.id },
+        { senderId: me.id, recipientId: recipient.id },
+        { senderId: recipient.id, recipientId: me.id },
       ],
     },
     include: {
@@ -53,7 +63,7 @@ export async function sendFriendRequest(
   };
 
   if (pendingFriendship) {
-    updateRecipient(recipientId, pendingFriendship.sender);
+    updateRecipient(recipient.id, pendingFriendship.sender);
     return pendingFriendship.recipient;
   }
 
@@ -61,14 +71,15 @@ export async function sendFriendRequest(
     const pendingFR = await prisma.pendingFriendship.create({
       data: {
         sender: { connect: { id: me.id } },
-        recipient: { connect: { id: recipientId } },
+        recipient: { connect: { id: recipient.id } },
       },
       include: {
         recipient: { include: { avatar: true } },
         sender: { include: { avatar: true } },
       },
     });
-    updateRecipient(recipientId, pendingFR.sender);
+    console.log('sending pending event');
+    updateRecipient(recipient.id, pendingFR.sender);
     return pendingFR.recipient;
   } catch (err) {
     throw new HttpError(409, 'Friend request already exists');
@@ -89,15 +100,15 @@ export async function cancelFriendRequest(
   });
   if (!pendingFR) throw new HttpError(400, 'Friend request does not exist');
 
+  await prisma.pendingFriendship.delete({
+    where: { id: pendingFR.id },
+  });
+
   forEachSocket(pendingFR.recipientId, (socket) => {
     socket.emit('relation:updates', {
       operation: 'cancelFR',
       user: { ...mapToPublicProfile(pendingFR.recipient) },
     });
-  });
-
-  await prisma.pendingFriendship.delete({
-    where: { id: pendingFR.id },
   });
 }
 
@@ -115,17 +126,17 @@ export async function rejectFriendRequest(me: Express.User, senderId: number) {
   });
   if (!pendingFR) throw new HttpError(400, 'Friend request does not exist');
 
+  await prisma.pendingFriendship.delete({
+    where: {
+      unique_user_combination: { senderId: senderId, recipientId: me.id },
+    },
+  });
+
   forEachSocket(pendingFR.senderId, (socket) => {
     socket.emit('relation:updates', {
       operation: 'rejectFR',
       user: { ...mapToPublicProfile(pendingFR.recipient) },
     });
-  });
-
-  await prisma.pendingFriendship.delete({
-    where: {
-      unique_user_combination: { senderId: senderId, recipientId: me.id },
-    },
   });
 }
 
@@ -146,19 +157,19 @@ export async function acceptFriendRequest(me: Express.User, senderId: number) {
     },
   });
 
-  forEachSocket(pendingFR.senderId, (socket) => {
-    socket.emit('relation:updates', {
-      operation: 'acceptFR',
-      user: { ...mapToPublicProfile(pendingFR.recipient) },
-    });
-  });
-
   const { user1Id, user2Id } = normalizeId(me.id, senderId);
   await prisma.friendship.create({
     data: {
       user1: { connect: { id: user1Id } },
       user2: { connect: { id: user2Id } },
     },
+  });
+
+  forEachSocket(pendingFR.senderId, (socket) => {
+    socket.emit('relation:updates', {
+      operation: 'acceptFR',
+      user: { ...mapToPublicProfile(pendingFR.recipient) },
+    });
   });
 }
 
@@ -179,15 +190,16 @@ export async function removeFriend(me: Express.User, friendId: number) {
 
   let from = friendship.user1.id == me.id ? friendship.user2 : friendship.user1;
   let to = friendship.user1.id == me.id ? friendship.user1 : friendship.user2;
+
+  await prisma.friendship.delete({
+    where: { unique_user_combination: { user1Id: user1Id, user2Id: user2Id } },
+  });
+
   forEachSocket(from.id, (socket) => {
     socket.emit('relation:updates', {
       operation: 'removeFriend',
       user: { ...mapToPublicProfile(to) },
     });
-  });
-
-  await prisma.friendship.delete({
-    where: { unique_user_combination: { user1Id: user1Id, user2Id: user2Id } },
   });
 }
 
@@ -204,12 +216,37 @@ export async function blockUser(me: Express.User, targetId: number) {
   });
   if (blockRecord) throw new HttpError(409, 'User already blocked');
 
-  await prisma.block.create({
+  const { user1Id, user2Id } = normalizeId(me.id, targetId);
+  const friendship = await prisma.friendship.findUnique({
+    where: {
+      unique_user_combination: { user1Id: user1Id, user2Id: user2Id },
+    },
+  });
+  if (friendship) {
+    await prisma.friendship.delete({
+      where: { id: friendship.id },
+    });
+  }
+
+  const newBlockRecord = await prisma.block.create({
     data: {
       blockedBy: { connect: { id: me.id } },
       blocked: { connect: { id: targetId } },
     },
+    include: {
+      blocked: { include: { avatar: true } },
+      blockedBy: { include: { avatar: true } },
+    },
   });
+
+  forEachSocket(newBlockRecord.blocked.id, (socket) => {
+    socket.emit('relation:updates', {
+      operation: 'blockUser',
+      user: { ...mapToPublicProfile(newBlockRecord.blockedBy) },
+    });
+  });
+
+  return newBlockRecord.blocked;
 }
 
 export async function unblockUser(me: Express.User, targetId: number) {

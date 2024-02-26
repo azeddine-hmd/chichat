@@ -5,9 +5,9 @@ export class Server {
   name: string;
   icon: React.ReactNode;
   
-  constructor(opts: {id: number, name: string, icon: React.ReactNode}) {
-    this.id = opts.id;
-    this.name = opts.name;
-    this.icon = opts.icon;
+  constructor({ id, name, icon }: { id: number, name: string, icon: React.ReactNode }) {
+    this.id = id;
+    this.name = name;
+    this.icon = icon;
   }
 }

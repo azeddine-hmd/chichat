@@ -1,10 +1,18 @@
 import { Socket } from 'socket.io';
 
-export const listenerWrapper = (handler: (socket: Socket) => Promise<void>) => {
-  return (socket: Socket) => {
-    handler(socket).catch((error) => {
+export const listenerWrapper = (
+  socket: Socket,
+  handler: (...args: any[]) => Promise<void>
+) => {
+  return async (...args: any[]) => {
+    try {
+      await handler(...args);
+    } catch (error) {
       console.error('Error in socket: ', error);
-      socket.disconnect();
-    });
+      if (socket && socket.connected) {
+        if (error instanceof Error) socket.emit('error', error.message);
+        else socket.emit('error', 'something wrong happen');
+      }
+    }
   };
 };

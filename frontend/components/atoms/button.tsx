@@ -1,27 +1,25 @@
-"use client";
-
+import { cn } from "@/lib/cn";
 import React from "react";
-import { twMerge } from "tailwind-merge";
 
-export type ButtonProps = {
-  children?: React.ReactNode;
-  innerRef?: React.LegacyRef<HTMLButtonElement> | undefined
-} & React.ComponentProps<"button">;
+export type ButtonProps = React.ComponentPropsWithRef<"button">;
 
-export default function Button({
-  children,
-  className,
-  innerRef,
-  ...restProps
-}: ButtonProps) {
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { children, className, ...restProps },
+  forwardedRef
+) {
   return (
     <button
-      className={twMerge("outline-none rounded-lg bg-transparent text-muted", className)}
-      ref={innerRef}
+      className={cn(
+        "rounded-lg bg-transparent text-muted outline-none",
+        className
+      )}
+      ref={forwardedRef}
       type="button"
       {...restProps}
     >
       {children}
     </button>
   );
-}
+});
+
+export default Button;

@@ -2,6 +2,7 @@ import React, { ChangeEvent } from "react";
 import Field from "../atoms/field";
 import FieldInput, { FieldInputProps } from "../atoms/field-input";
 import { twJoin, twMerge } from "tailwind-merge";
+import { cn } from "@/lib/cn";
 
 type SearchFieldType = {
   children?: React.ReactNode;
@@ -21,8 +22,7 @@ export default function SearchField({
 }: SearchFieldType) {
   return (
     <Field
-      className={twMerge("p-3", className)}
-      onClick={(e) => e.stopPropagation()}
+      className={cn("p-3", className)}
       {...restProps}
     >
       <FieldInput

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../src/app';
-import { RegisterDto } from '../src/api/auth/dto/register-dto';
 import { prisma } from '../src/config';
+import { RegisterDto } from '../src/api/auth/types/dto/register-dto';
 
 describe('test register', () => {
 

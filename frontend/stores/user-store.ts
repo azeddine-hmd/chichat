@@ -1,5 +1,6 @@
 import { User } from "@/models/user";
 import { create } from "zustand";
+import zukeeper from 'zukeeper';
 
 type UserStore = {
   profile: User | null;
@@ -12,7 +13,7 @@ type UserStore = {
   setPendingFR: (pendingFR: User[]) => void;
 };
 
-export const useUserStore = create<UserStore>((set) => ({
+export const useUserStore = create<UserStore>(zukeeper((set) => ({
   profile: null,
   friends: [],
   blocked: [],
@@ -21,4 +22,4 @@ export const useUserStore = create<UserStore>((set) => ({
   setFriends: (friends) => set({ friends: friends }),
   setBlocked: (blocked) => set({ blocked: blocked }),
   setPendingFR: (pendingFR) => set({ pendingFR: pendingFR }),
-}));
+})));

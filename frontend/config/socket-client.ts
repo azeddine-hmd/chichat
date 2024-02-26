@@ -14,7 +14,7 @@ export function connectSocket({ onReady, onDisconnect }: ConnectSocket) {
     window.clientSocket.on("connect", () => {
       window.clientSocket.once("ready", (...args) => {
         resolve(window.clientSocket);
-        setTimeout(() => onReady(), 1_500);
+        setTimeout(() => onReady(), 3_000);
       });
     });
     window.clientSocket.on("disconnect", () => {

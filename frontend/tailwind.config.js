@@ -1,7 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  // safelist: ['border', 'border-black', 'border-opacity-10'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './client-pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
