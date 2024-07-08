@@ -3,19 +3,22 @@ import Popover from "@/components/molecules/popover";
 import PopoverButton from "@/components/molecules/popover-button";
 import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
 import { BsPlusCircleFill, BsUpload } from "react-icons/bs";
-import { useState, useLayoutEffect, useRef, RefObject, useEffect } from "react";
+import React, { useState, useLayoutEffect, useRef, RefObject, useEffect } from "react";
 import useResizeObserver from "use-resize-observer";
+import { cn } from "@/lib/cn";
 
 type ChatInputFieldProps = {
   placeholder: string;
   onMessageSent: (message: string) => void;
-  containerRef: RefObject<HTMLElement | undefined>;
-};
+  containerRef?: RefObject<HTMLElement | undefined>;
+} & React.ComponentProps<"div">;
 
 export default function ChatInputField({
   placeholder,
   onMessageSent,
   containerRef,
+  className,
+  ...restProps
 }: ChatInputFieldProps) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -23,13 +26,13 @@ export default function ChatInputField({
   const lastHeightRef = useRef<number | null>(null);
 
   useLayoutEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef?.current) return;
     ref(containerRef.current);
     console.log("ref observer have been set!", containerRef);
   }, [containerRef, ref]);
 
   useEffect(() => {
-    if (!textareaRef.current || !containerRef.current || !height) return;
+    if (!textareaRef.current || !containerRef?.current || !height) return;
     // console.log("container height changed to:", height);
 
 
@@ -53,7 +56,7 @@ export default function ChatInputField({
   }, [height]);
 
   useLayoutEffect(() => {
-    if (!textareaRef.current || !containerRef.current) return;
+    if (!textareaRef.current || !containerRef?.current) return;
     const textarea = textareaRef.current;
     if (
       containerRef.current &&
@@ -70,7 +73,7 @@ export default function ChatInputField({
 
 
   return (
-    <div className="items-center justify-center gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 text-center">
+    <div className={cn("items-center justify-center gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 text-center", className)} {...restProps}>
       <div className="flex">
         <Popover>
           <Popover.Trigger asChild>

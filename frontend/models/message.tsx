@@ -1,9 +1,6 @@
-export interface ChatDateSeparator {
-  time: Date;
-}
-
 export interface Message {
-  content: string | URL;
+  id: string;
+  content: string;
+  isImage: boolean;
   createdAt: Date;
-  randerType: 'normal' | 'profile',
 }

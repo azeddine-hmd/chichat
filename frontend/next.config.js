@@ -18,7 +18,11 @@ const nextConfig = {
       {
         hostname: "backend",
         protocol: "http",
-      }
+      },
+      {
+        hostname: "media.discordapp.net",
+        protocol: "https",
+      },
     ],
   },
   productionBrowserSourceMaps: process.env.NODE_ENV === "development",

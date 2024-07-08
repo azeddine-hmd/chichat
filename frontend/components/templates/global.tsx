@@ -50,7 +50,7 @@ export default function GlobalTemplate({ children }: GlobalTemplateProps) {
     <>
       {showPage && (
         <div
-          className="h-full w-full overflow-hidden"
+          className="h-full w-full"
           onContextMenu={(e) => {
             e.preventDefault();
           }}

@@ -1,6 +1,5 @@
 import React from "react";
 import * as RadixPopover from "@radix-ui/react-popover";
-import { cn } from "@/lib/cn";
 
 export type ContextPopoverProps = {
   children?: React.ReactNode;
@@ -16,7 +15,7 @@ export default function Popover({ children, open }: ContextPopoverProps) {
 export type ContextPopoverNewContent = {
   position?: { x: number; y: number };
   clickOutside?: () => void;
-} & RadixPopover.PopperContentProps;
+} & RadixPopover.PopoverContentProps;
 
 function PopoverContent({
   children,

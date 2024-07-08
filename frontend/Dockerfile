@@ -8,7 +8,7 @@ COPY ./package*.json ./
 RUN if [ "$NODE_ENV" = "production" ]; then \
 	npm ci --omit=dev; \
 else \
-	npm i; \
+	npm ci; \
 fi
 
 COPY . ./
