@@ -10,8 +10,8 @@ import ChiChatIcon from "@/public/svg/chichat-logo.svg";
 
 export default function ServerSidebar() {
   const [servers, setServers] = useState<Array<Server>>([
-    new Server({ id: 1, name: "Runic Games", icon: <BsRobot /> }),
-    new Server({ id: 2, name: "GuildWars2", icon: <BsTv /> }),
+    // new Server({ id: 1, name: "Runic Games", icon: <BsRobot /> }),
+    // new Server({ id: 2, name: "GuildWars2", icon: <BsTv /> }),
   ]);
   const [selectedServer, setSelectedServer] = useState(-1);
 

@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import * as dmService from '../../dm/services/dm-service';
 import * as messageService from '../../dm/services/message-service';
 import { EnterSingleDmValidator } from '../validators/enter-single-dm-validator';
@@ -8,8 +8,9 @@ import { validateEventArgument } from '../../../utils/validate-event-argument';
 import { SendMessageSingleDmValidator } from '../validators/send-message-single-dm-validator';
 import { listenerWrapper } from '../../../utils/listener-wrapper';
 import { GetMessagesSingleDmValidator } from '../validators/get-messages-single-dm-validator';
+import { mapToMessage } from '../../dm/message-mapper';
 
-module.exports = (io: Socket, socket: Socket) => {
+module.exports = (io: Server, socket: Socket) => {
   const enterSingleDm = async (...args: any[]) => {
     console.info('event triggered: dm:single:enter from', socket.user.username);
     const { otherId } = await validateEventArgument(
@@ -17,6 +18,10 @@ module.exports = (io: Socket, socket: Socket) => {
     );
     const singleDm = await dmService.getSingleDm(socket.user, otherId);
     socket.join('dm:single:' + singleDm.id);
+    console.log(
+      'dm:single:' + singleDm.id + ' socket exists are:',
+      io.sockets.adapter.rooms.get('dm:single:' + singleDm.id)
+    );
     socket.emit('dm:single:enter', singleDm.id);
   };
 
@@ -30,6 +35,11 @@ module.exports = (io: Socket, socket: Socket) => {
       socket.emit('error', 'dm not found');
       return;
     }
+    socket.join('dm:single:' + singleDm.id);
+    console.log(
+      'dm:single:' + singleDm.id + ' socket exists are:',
+      io.sockets.adapter.rooms.get('dm:single:' + singleDm.id)
+    );
     socket.emit('dm:single:getDm', mapToPublicDm(singleDm));
   };
 
@@ -42,15 +52,18 @@ module.exports = (io: Socket, socket: Socket) => {
       new SendMessageSingleDmValidator(args)
     );
     const singleDm = await dmService.getSingleDm(socket.user, dmId);
-    const messageRecord = await messageService.saveSingleTextMessage(
+    const msg = await messageService.saveSingleMessage(
       socket.user,
       singleDm,
       message
     );
+    console.log(
+      'dm:single:' + singleDm.id + ' socket exists are:',
+      io.sockets.adapter.rooms.get('dm:single:' + singleDm.id)
+    );
     io.in('dm:single:' + singleDm.id).emit(
-      'dm:single:saveMessage',
-      'success',
-      messageRecord.messageContent.contentText // TODO: this is extermly dangerous
+      'dm:single:receivedMessage',
+      mapToMessage(msg)
     );
   };
 
@@ -59,19 +72,11 @@ module.exports = (io: Socket, socket: Socket) => {
       'event triggered: dm:single:getMessages from',
       socket.user.username
     );
-    const { dmId } = await validateEventArgument(
+    const { dmId, ackFn } = await validateEventArgument(
       new GetMessagesSingleDmValidator(args)
     );
     const messages = await messageService.getMessages(socket.user, dmId);
-    socket.emit(
-      'dm:single:getMessages',
-      // messages.map((message) => {
-      //   return mapToMessage(message)
-      // })
-      messages.map((message) => {
-        return message.messageContent.contentText;
-      })
-    );
+    ackFn(messages.map((message) => mapToMessage(message)));
   };
 
   socket.on('dm:single:enter', listenerWrapper(socket, enterSingleDm));

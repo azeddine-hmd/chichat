@@ -41,6 +41,7 @@ model User {
     friendRecipient PendingFriendship[] @relation("friendRecipient")
     blocked         Block[]             @relation("blocked")
     blockedBy       Block[]             @relation("blockedBy")
+    Message         Message[]
 }
 
 model UserSockets {
@@ -144,8 +145,10 @@ model Message {
     dmId           String?
     replyId        Int?            @unique
     messageContent MessageContent?
+    byId           Int
 
-    dm        DM?       @relation(fields: [dmId], references: [id])
+    by        User     @relation(fields: [byId], references: [id], onDelete: Cascade)
+    dm        DM?      @relation(fields: [dmId], references: [id])
     reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
     repliedTo Message? @relation("replyMessage")
 }

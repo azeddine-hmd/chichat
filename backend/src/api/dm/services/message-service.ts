@@ -1,12 +1,13 @@
 import { MessageContentType } from '@prisma/client';
 import { prisma, redisClient } from '../../../config';
 import { SingleDm } from '../types/single-dm';
+import { MessageFull } from '../types/message-relationship';
 
-export async function saveSingleTextMessage(
+export async function saveSingleMessage(
   me: Express.User,
   dm: SingleDm,
   message: string
-) {
+): Promise<MessageFull> {
   // remove dm from unsaved dms list
   if (dm.isUnsaved) {
     console.log('saving into unsaved single dm');
@@ -21,6 +22,7 @@ export async function saveSingleTextMessage(
   const messageRecord = await prisma.message.create({
     data: {
       dm: { connect: { id: dm.id } },
+      by: { connect: { id: me.id } },
     },
   });
   const messageContent = await prisma.messageContent.create({
@@ -29,19 +31,20 @@ export async function saveSingleTextMessage(
       type: MessageContentType.TEXT,
       contentText: message,
     },
+    include: { contentFile: true },
   });
   return {
-    message: messageRecord,
+    ...messageRecord,
     messageContent: messageContent,
-  };
+  } as MessageFull;
 }
 
 export async function getMessages(_: Express.User, dmId: string) {
-  const result = await prisma.message.findMany({
+  const messagesRecords = await prisma.message.findMany({
     where: {
       dmId: dmId,
     },
-    include: { messageContent: true },
+    include: { messageContent: { include: { contentFile: true } } },
   });
-  return result;
+  return messagesRecords;
 }

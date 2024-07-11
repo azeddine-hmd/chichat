@@ -1,7 +1,7 @@
-export interface Message {
-  id: string;
+export type MessagePublic = {
+  id: number;
   content: string;
   isImage: boolean;
   createdAt: string;
   byId: number;
-}
+};

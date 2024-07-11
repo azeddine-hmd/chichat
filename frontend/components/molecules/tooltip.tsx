@@ -1,12 +1,15 @@
 import React, { ReactNode } from "react";
 import * as RadixTooltip from "@radix-ui/react-tooltip";
-import clsx from "clsx";
 import { cn } from "@/lib/cn";
 
-export default function Tooltip({ children }: { children: ReactNode }) {
+export type TooltipProps = {
+  children: ReactNode;
+} & RadixTooltip.TooltipProps;
+
+export default function Tooltip({ children, ...restProps}: TooltipProps) {
   return (
     <RadixTooltip.Provider>
-      <RadixTooltip.Root delayDuration={0}>
+      <RadixTooltip.Root {...restProps}>
         {children}
       </RadixTooltip.Root>
     </RadixTooltip.Provider>

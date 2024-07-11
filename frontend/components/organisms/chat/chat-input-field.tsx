@@ -73,7 +73,7 @@ export default function ChatInputField({
 
 
   return (
-    <div className={cn("items-center justify-center gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 text-center", className)} {...restProps}>
+    <div className={cn("gap-2 rounded-md border border-black border-opacity-10 bg-gray-500 p-2 mr-4 text-center", className)} {...restProps}>
       <div className="flex">
         <Popover>
           <Popover.Trigger asChild>
