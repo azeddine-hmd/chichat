@@ -5,7 +5,7 @@ import { useUserStore } from "@/stores/user-store";
 import { SingleDm } from "@/types/single-dm";
 import { differenceInMinutes, parseISO } from "date-fns";
 import ChatBox from "@/components/organisms/chat/chat-box";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export type ChatBoxListProps = {
@@ -25,12 +25,47 @@ export default function ChatBoxList({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const createMessageChatBox = (
+    message: Message,
+    index: number
+  ): JSX.Element => {
+    let messageUser: User | null = null;
+    if (singleDm?.other.id == message.byId) messageUser = singleDm.other;
+    else if (profile?.id == message.byId) messageUser = profile;
+    let shape: "FULL" | "SHORT" = "FULL";
+    if (index > 0) {
+      if (messages[index - 1].byId != message.byId) {
+        shape = "FULL";
+      } else {
+        const diffMinutes = differenceInMinutes(
+          parseISO(message.createdAt),
+          parseISO(messages[index - 1].createdAt)
+        );
+        if (diffMinutes > 10) {
+          shape = "FULL";
+        } else {
+          shape = "SHORT";
+        }
+      }
+    }
+    return (
+      <ChatBox
+        key={message.id}
+        time={Date.now()}
+        content={message.content}
+        shape={shape}
+        isImage={message.isImage}
+        profile={messageUser!}
+      />
+    );
+  };
+
   useLayoutEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   return (
-    <ul className={cn("block overflow-y-scroll p-4 mt-2 mb-2", className)}>
+    <ul className={cn("mb-2 mt-2 block overflow-y-scroll p-4", className)}>
       <div className="block overflow-y-scroll">
         {messages.length <= 50 && (
           <div className="mb-2 flex flex-col gap-y-2">
@@ -58,39 +93,7 @@ export default function ChatBoxList({
             )}
           </div>
         )}
-        {messages.map((message, index) => {
-          let messageUser: User | null = null;
-          if (singleDm?.other.id == message.byId) messageUser = singleDm.other;
-          else if (profile?.id == message.byId) messageUser = profile;
-          let shape: "FULL" | "SHORT" = "FULL";
-          if (index > 0) {
-            if (messages[index - 1].byId != message.byId) {
-              shape = "FULL";
-            } else {
-              const diffMinutes = differenceInMinutes(
-                parseISO(message.createdAt),
-                parseISO(messages[index - 1].createdAt)
-              );
-              if (diffMinutes > 10) {
-                shape = "FULL";
-              } else {
-                shape = "SHORT";
-              }
-            }
-          }
-          message.createdAt;
-          return (
-            <li key={message.id} className="list-none">
-              <ChatBox
-                time={Date.now()}
-                content={message.content}
-                shape={shape}
-                isImage={message.isImage}
-                profile={messageUser!}
-              />
-            </li>
-          );
-        })}
+        {messages.map((message, index) => createMessageChatBox(message, index))}
         <div ref={messagesEndRef} />
       </div>
     </ul>

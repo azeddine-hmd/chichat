@@ -8,7 +8,7 @@ import {
 import Popover from "@/components/molecules/popover";
 import Tooltip from "@/components/molecules/tooltip";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { BsPencilFill, BsThreeDots } from "react-icons/bs";
 import ChatInputField from "@/components/organisms/chat/chat-input-field";
 import Image from "next/image";
@@ -20,7 +20,7 @@ export type ChatBoxProps = {
   isImage?: boolean;
   shape?: "FULL" | "SHORT";
   profile: User;
-} & React.ComponentProps<"div">;
+} & React.ComponentProps<"li">;
 
 export default function ChatBox({
   className,
@@ -38,18 +38,39 @@ export default function ChatBox({
   const [onEdit, setOnEdit] = useState(false);
   const [openEditTooltip, setOpenEditTooltip] = useState(false);
   const [openMoreTooltip, setOpenMoreTooltip] = useState(false);
+  const itemRef = useRef<HTMLLIElement | null>(null);
+  const [disableToolbox, setDisableToolbox] = useState(false);
 
   const onEditComplete = (newContent: string) => {
     // TODO: emit new content
     setOnEdit(false);
   };
 
+  useEffect(() => {
+    if (!onHover) return;
+    if (itemRef.current) {
+      const childTop = itemRef.current.getBoundingClientRect().top;
+      if (childTop < 81) {
+        setDisableToolbox(true);
+      } else if (disableToolbox) {
+        setDisableToolbox(false);
+      }
+    }
+
+    // eslint-disable-next-line
+  }, [onHover]);
+
   return (
-    <div
-      className={cn("relative mr-[42px] flex h-fit w-full  mt-2 mb-1", className, { "mt-3 mb-3": shape == "FULL" })}
+    <li
+      ref={itemRef}
+      className={cn(
+        "relative mb-1 mr-[42px] mt-2 flex h-fit  w-full list-none",
+        className,
+        { "mb-3 mt-3": shape == "FULL" }
+      )}
       onMouseEnter={(e) => {
         setOnHover(true);
-        setOpenToolbox(true);
+        if (!disableToolbox) setOpenToolbox(true);
         onMouseEnter?.(e);
       }}
       onMouseLeave={(e) => {
@@ -144,10 +165,11 @@ export default function ChatBox({
               </Tooltip.Trigger>
             </Tooltip>
 
-            <Tooltip open={openMoreTooltip} >
+            <Tooltip open={openMoreTooltip}>
               <Tooltip.Content content="More" sideOffset={4} />
               <Tooltip.Trigger asChild>
-                <Button className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
+                <Button
+                  className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
                   onMouseEnter={() => setOpenMoreTooltip(true)}
                   onMouseLeave={() => setOpenMoreTooltip(false)}
                 >
@@ -158,6 +180,6 @@ export default function ChatBox({
           </Popover.Content>
         </Popover>
       )}
-    </div>
+    </li>
   );
 }
