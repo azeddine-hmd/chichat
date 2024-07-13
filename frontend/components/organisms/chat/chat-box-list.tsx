@@ -3,7 +3,7 @@ import { Message } from "@/models/message";
 import { User } from "@/models/user";
 import { useUserStore } from "@/stores/user-store";
 import { SingleDm } from "@/types/single-dm";
-import { differenceInMinutes, parseISO } from "date-fns";
+import { differenceInMinutes, format, parseISO } from "date-fns";
 import ChatBox from "@/components/organisms/chat/chat-box";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -25,15 +25,26 @@ export default function ChatBoxList({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  useLayoutEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const createMessageChatBox = (
     message: Message,
     index: number
   ): JSX.Element => {
     let messageUser: User | null = null;
-    if (singleDm?.other.id == message.byId) messageUser = singleDm.other;
-    else if (profile?.id == message.byId) messageUser = profile;
+    let haveDateSeparator = false;
     let shape: "FULL" | "SHORT" = "FULL";
+
+    if (singleDm?.other.id == message.byId) {
+      messageUser = singleDm.other;
+    } else if (profile?.id == message.byId) {
+      messageUser = profile;
+    }
+
     if (index > 0) {
+      // shape
       if (messages[index - 1].byId != message.byId) {
         shape = "FULL";
       } else {
@@ -47,22 +58,30 @@ export default function ChatBoxList({
           shape = "SHORT";
         }
       }
+      // date separator
+      const day1 = format(parseISO(message.createdAt), "yyyy-MM-dd")
+      const day2 = format(parseISO(messages[index - 1].createdAt), "yyyy-MM-dd");
+      if (day1 !== day2) {
+        haveDateSeparator = true;
+      }
     }
+
+    if (index == 0) {
+      haveDateSeparator = true;
+    }
+
     return (
       <ChatBox
         key={message.id}
-        time={Date.now()}
+        time={message.createdAt}
         content={message.content}
         shape={shape}
         isImage={message.isImage}
         profile={messageUser!}
+        haveDateSeparator={haveDateSeparator}
       />
     );
   };
-
-  useLayoutEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   return (
     <ul className={cn("mb-2 mt-2 block overflow-y-scroll p-4", className)}>

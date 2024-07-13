@@ -1,0 +1,11 @@
+export type TimeComponentProps  = {
+	time: string;
+	className?: string;
+};
+
+export default function Time({ className, time }: TimeComponentProps) {
+	return (
+		<div>
+		</div>
+	)
+}
