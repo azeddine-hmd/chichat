@@ -9,6 +9,7 @@ import { SendMessageSingleDmValidator } from '../validators/send-message-single-
 import { listenerWrapper } from '../../../utils/listener-wrapper';
 import { GetMessagesSingleDmValidator } from '../validators/get-messages-single-dm-validator';
 import { mapToMessage } from '../../dm/message-mapper';
+import { DeleteMessageSingleDmValidator } from '../validators/delete-messsage-single-dm-validator';
 
 module.exports = (io: Server, socket: Socket) => {
   const enterSingleDm = async (...args: any[]) => {
@@ -79,6 +80,27 @@ module.exports = (io: Server, socket: Socket) => {
     ackFn(messages.map((message) => mapToMessage(message)));
   };
 
+  const deleteMessageSingleDm = async (...args: any[]) => {
+    console.info(
+      'event triggered: dm:single:deleteMessage from',
+      socket.user.username
+    );
+    console.log('deleteMessageSingleDm args:', JSON.stringify(args));
+    const { dmId, messageId } = await validateEventArgument(
+      new DeleteMessageSingleDmValidator(args)
+    );
+    const { success } = await messageService.deleteMessage(
+      socket.user,
+      dmId,
+      messageId
+    );
+    io.in('dm:single:' + dmId).emit(
+      'dm:single:deleteMessage',
+      messageId,
+      success
+    );
+  };
+
   socket.on('dm:single:enter', listenerWrapper(socket, enterSingleDm));
   socket.on('dm:single:getDm', listenerWrapper(socket, getSingleDm));
   socket.on(
@@ -88,5 +110,9 @@ module.exports = (io: Server, socket: Socket) => {
   socket.on(
     'dm:single:getMessages',
     listenerWrapper(socket, getMessagesSingleDm)
+  );
+  socket.on(
+    'dm:single:deleteMessage',
+    listenerWrapper(socket, deleteMessageSingleDm)
   );
 };

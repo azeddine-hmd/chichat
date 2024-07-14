@@ -9,33 +9,39 @@ import Popover from "@/components/molecules/popover";
 import Tooltip from "@/components/molecules/tooltip";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
-import { BsPencilFill, BsThreeDots } from "react-icons/bs";
+import { BsPencilFill, BsThreeDots, BsTrash } from "react-icons/bs";
 import ChatInputField from "@/components/organisms/chat/chat-input-field";
 import Image from "next/image";
 import { User } from "@/models/user";
 import { formatDayTimeString } from "@/lib/format-date";
 import Divider from "@/components/molecules/divider";
 import TimeComponent from "@/components/molecules/time-component";
+import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
+import PopoverButton from "@/components/molecules/popover-button";
 
 export type ChatBoxProps = {
+  messageId: number;
   time: string;
   content: string;
   isImage?: boolean;
   shape?: "FULL" | "SHORT";
   profile: User;
   haveDateSeparator?: boolean;
+  onDelete?: (messageId: number) => void;
 } & React.ComponentProps<"li">;
 
 export default function ChatBox({
   className,
   content,
   shape = "SHORT",
+  messageId,
   time,
   isImage = false,
   profile,
   onMouseEnter,
   onMouseLeave,
   haveDateSeparator = false,
+  onDelete,
   ...restProps
 }: ChatBoxProps) {
   const [onHover, setOnHover] = useState(false);
@@ -45,6 +51,7 @@ export default function ChatBox({
   const [openMoreTooltip, setOpenMoreTooltip] = useState(false);
   const itemRef = useRef<HTMLLIElement | null>(null);
   const [disableToolbox, setDisableToolbox] = useState(false);
+  const [openMorePopover, setOpenMorePopover] = useState(false);
 
   const onEditComplete = (newContent: string) => {
     // TODO: emit new content
@@ -88,10 +95,15 @@ export default function ChatBox({
       {...restProps}
     >
       {haveDateSeparator && (
-        <div className="flex mb-2 text-[12px] justify-center items-center text-muted/80 font-medium">
-          <Divider className="h-full m-0 w-full flex-0" />
-          <TimeComponent className="w-[100px] flex-1" time={time} opts={{ short: true }} disableHoverInfo />
-          <Divider className="h-full m-0 w-full flex-0" />
+        <div className="mb-2 flex items-center justify-center text-[12px] font-medium text-muted/80">
+          <Divider className="flex-0 m-0 h-full w-full" />
+          <TimeComponent
+            className="w-[100px] flex-1"
+            time={time}
+            opts={{ short: true }}
+            disableHoverInfo
+          />
+          <Divider className="flex-0 m-0 h-full w-full" />
         </div>
       )}
       <div className="relative flex w-full">
@@ -182,18 +194,43 @@ export default function ChatBox({
                 </Tooltip.Trigger>
               </Tooltip>
 
-              <Tooltip open={openMoreTooltip}>
-                <Tooltip.Content content="More" sideOffset={4} />
-                <Tooltip.Trigger asChild>
-                  <Button
-                    className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
-                    onMouseEnter={() => setOpenMoreTooltip(true)}
-                    onMouseLeave={() => setOpenMoreTooltip(false)}
+              <Popover open={openMorePopover}>
+                <Tooltip open={openMoreTooltip}>
+                  <Tooltip.Content content="More" sideOffset={4} />
+                  <Popover.Trigger asChild>
+                    <Tooltip.Trigger asChild>
+                      <Button
+                        className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
+                        onMouseEnter={() => setOpenMoreTooltip(true)}
+                        onMouseLeave={() => setOpenMoreTooltip(false)}
+                        onClick={() => setOpenMorePopover(true)}
+                      >
+                        <BsThreeDots size="22" />
+                      </Button>
+                    </Tooltip.Trigger>
+                  </Popover.Trigger>
+                  <Popover.Content
+                    side="left"
+                    sideOffset={8}
+                    align="start"
+                    alignOffset={0}
+                    clickOutside={() => setOpenMorePopover(false)}
                   >
-                    <BsThreeDots size="22" />
-                  </Button>
-                </Tooltip.Trigger>
-              </Tooltip>
+                    <MenuPopoverContainer>
+                      <PopoverButton 
+                      className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white" 
+                      onClick={() => {
+                        setOpenMorePopover(false);
+                        onDelete?.(messageId);
+                      }}
+                      >
+                        Delete Message
+                        <BsTrash className="inline" />
+                      </PopoverButton>
+                    </MenuPopoverContainer>
+                  </Popover.Content>
+                </Tooltip>
+              </Popover>
             </Popover.Content>
           </Popover>
         )}

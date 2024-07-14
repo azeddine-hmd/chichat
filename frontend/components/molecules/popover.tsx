@@ -1,14 +1,11 @@
 import React from "react";
 import * as RadixPopover from "@radix-ui/react-popover";
 
-export type ContextPopoverProps = {
-  children?: React.ReactNode;
-  open?: boolean;
-};
+export type ContextPopoverProps = RadixPopover.PopoverProps;
 
-export default function Popover({ children, open }: ContextPopoverProps) {
+export default function Popover({ children, ...restProps }: ContextPopoverProps) {
   return (
-    <RadixPopover.Root open={open ?? undefined}>{children}</RadixPopover.Root>
+    <RadixPopover.Root {...restProps}>{children}</RadixPopover.Root>
   );
 }
 

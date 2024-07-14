@@ -48,3 +48,18 @@ export async function getMessages(_: Express.User, dmId: string) {
   });
   return messagesRecords;
 }
+
+export async function deleteMessage(
+  me: Express.User,
+  dmId: string,
+  messageId: number
+) {
+  try {
+    await prisma.message.delete({
+      where: { id: messageId, dmId: dmId, byId: me.id },
+    });
+  } catch (error) {
+    return { success: false };
+  }
+  return { success: true };
+}

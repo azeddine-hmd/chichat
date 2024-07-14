@@ -148,7 +148,7 @@ model Message {
     byId           Int
 
     by        User     @relation(fields: [byId], references: [id], onDelete: Cascade)
-    dm        DM?      @relation(fields: [dmId], references: [id])
+    dm        DM?      @relation(fields: [dmId], references: [id], onDelete: Cascade)
     reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
     repliedTo Message? @relation("replyMessage")
 }

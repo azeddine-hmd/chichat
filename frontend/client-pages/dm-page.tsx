@@ -57,7 +57,7 @@ export default function DmPage({ id }: { id: string }) {
       }
     }
 
-  // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [friends]);
 
   useEvent("dm:single:receivedMessage", (...args: any[]) => {
@@ -78,6 +78,17 @@ export default function DmPage({ id }: { id: string }) {
       });
   }, [singleDm]);
 
+  useEvent("dm:single:deleteMessage", (...args: any[]) => {
+    const messageId: number = args[0];
+    const success: boolean = args[1];
+    console.log("socket:dm:single:deleteMessage", messageId, success);
+    if (success) {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.id != messageId)
+      );
+    }
+  });
+
   return (
     <div className="flex h-full w-full flex-col">
       <TopBar>
@@ -96,6 +107,9 @@ export default function DmPage({ id }: { id: string }) {
           className="block h-full overflow-y-scroll"
           messages={messages}
           singleDm={singleDm!}
+          onDelete={(messageId) => {
+            window.clientSocket.emitWithAck("dm:single:deleteMessage", singleDm?.id, messageId);
+          }}
         />
         <ChatInputField
           placeholder={`Message @${other?.displayName}`}

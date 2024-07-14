@@ -5,17 +5,19 @@ import { useUserStore } from "@/stores/user-store";
 import { SingleDm } from "@/types/single-dm";
 import { differenceInMinutes, format, parseISO } from "date-fns";
 import ChatBox from "@/components/organisms/chat/chat-box";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 export type ChatBoxListProps = {
   messages: Message[];
   singleDm?: SingleDm;
+  onDelete?: (messageId: number) => void;
 } & React.ComponentProps<"ul">;
 
 export default function ChatBoxList({
   messages,
   singleDm,
+  onDelete,
   className,
 }: ChatBoxListProps) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -59,8 +61,11 @@ export default function ChatBoxList({
         }
       }
       // date separator
-      const day1 = format(parseISO(message.createdAt), "yyyy-MM-dd")
-      const day2 = format(parseISO(messages[index - 1].createdAt), "yyyy-MM-dd");
+      const day1 = format(parseISO(message.createdAt), "yyyy-MM-dd");
+      const day2 = format(
+        parseISO(messages[index - 1].createdAt),
+        "yyyy-MM-dd"
+      );
       if (day1 !== day2) {
         haveDateSeparator = true;
       }
@@ -73,21 +78,23 @@ export default function ChatBoxList({
     return (
       <ChatBox
         key={message.id}
+        messageId={message.id}
         time={message.createdAt}
         content={message.content}
         shape={shape}
         isImage={message.isImage}
         profile={messageUser!}
         haveDateSeparator={haveDateSeparator}
+        onDelete={onDelete}
       />
     );
   };
 
   return (
-    <ul className={cn("mb-2 mt-2 block overflow-y-scroll p-4", className)}>
-      <div className="block overflow-y-scroll">
+    <ul className={cn("block pb-4 pl-4", className)}>
+      <div className="h-full overflow-x-hidden overflow-y-scroll pr-4">
         {messages.length <= 50 && (
-          <div className="mb-2 flex flex-col gap-y-2">
+          <div className="mb-2 mt-2 flex flex-col gap-y-2">
             {singleDm?.other && (
               <>
                 <Avatar
