@@ -96,9 +96,10 @@ export default function DmPage({ id }: { id: string }) {
     setMessages((prevMessages) => {
       const indx = prevMessages.findIndex((message) => message.id == updatedMessage.id);
       if (indx != -1) {
-        console.error("message updated");
-        prevMessages[indx] = updatedMessage;
-        return prevMessages;
+        console.log("message updated");
+        const newMessages = [...prevMessages];
+        newMessages[indx] = updatedMessage;
+        return newMessages;
       } else {
         console.error("updated message of unknown message");
         return prevMessages;

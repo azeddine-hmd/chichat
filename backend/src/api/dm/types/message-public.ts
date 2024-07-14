@@ -1,7 +1,7 @@
 export type MessagePublic = {
   id: number;
   content: string;
-  createdAt: string;
+  createAt: string;
   byId: number;
   isEdited: boolean;
 };

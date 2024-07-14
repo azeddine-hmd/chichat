@@ -2,7 +2,7 @@ export interface Message {
   id: number;
   content: string;
   isImage: boolean;
-  createdAt: string;
+  createAt: string;
   byId: number;
   isEdited: boolean;
 }

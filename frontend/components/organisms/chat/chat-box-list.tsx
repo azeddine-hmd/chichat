@@ -50,9 +50,12 @@ export default function ChatBoxList({
       if (messages[index - 1].byId != message.byId) {
         shape = "FULL";
       } else {
+        if (message.createAt == undefined) {
+          console.log("message:", message);
+        }
         const diffMinutes = differenceInMinutes(
-          parseISO(message.createdAt),
-          parseISO(messages[index - 1].createdAt)
+          parseISO(message.createAt),
+          parseISO(messages[index - 1].createAt)
         );
         if (diffMinutes > 10) {
           shape = "FULL";
@@ -61,9 +64,9 @@ export default function ChatBoxList({
         }
       }
       // date separator
-      const day1 = format(parseISO(message.createdAt), "yyyy-MM-dd");
+      const day1 = format(parseISO(message.createAt), "yyyy-MM-dd");
       const day2 = format(
-        parseISO(messages[index - 1].createdAt),
+        parseISO(messages[index - 1].createAt),
         "yyyy-MM-dd"
       );
       if (day1 !== day2) {
@@ -79,7 +82,7 @@ export default function ChatBoxList({
       <ChatBox
         key={message.id}
         messageId={message.id}
-        time={message.createdAt}
+        time={message.createAt}
         content={message.content}
         shape={shape}
         isImage={message.isImage}

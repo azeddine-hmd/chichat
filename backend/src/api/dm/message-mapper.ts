@@ -5,7 +5,7 @@ export function mapToMessage(message: Message): MessagePublic {
   return {
     id: message.id,
     content: message.content,
-    createdAt: message.createAt.toISOString(),
+    createAt: message.createAt.toISOString(),
     byId: message.byId,
     isEdited: message.isEdited,
   };
