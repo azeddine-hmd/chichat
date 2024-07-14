@@ -1,20 +1,31 @@
-import { IsDefined, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import {
+  IsDefined,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { IsPrintableString } from '../../../utils/printable-ascii-validator';
 
-export class SendMessageSingleDmValidator {
+export class UpdateMessageSingleDmValidator {
   @IsDefined()
   @IsString()
   @IsUUID()
   dmId: string;
 
   @IsDefined()
+  @IsNumber()
+  messageId: number;
+
+  @IsDefined()
   @IsString()
   @IsNotEmpty()
   @IsPrintableString({ message: 'validation error' })
-  message: string;
+  newContent: string;
 
   constructor(args: any[]) {
     this.dmId = args[0];
-    this.message = args[1];
+    this.messageId = args[1];
+    this.newContent = args[2];
   }
 }

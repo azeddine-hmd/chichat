@@ -10,6 +10,7 @@ import { listenerWrapper } from '../../../utils/listener-wrapper';
 import { GetMessagesSingleDmValidator } from '../validators/get-messages-single-dm-validator';
 import { mapToMessage } from '../../dm/message-mapper';
 import { DeleteMessageSingleDmValidator } from '../validators/delete-messsage-single-dm-validator';
+import { UpdateMessageSingleDmValidator } from '../validators/update-message-single-dm-validator';
 
 module.exports = (io: Server, socket: Socket) => {
   const enterSingleDm = async (...args: any[]) => {
@@ -104,6 +105,20 @@ module.exports = (io: Server, socket: Socket) => {
     console.info(
       'event triggered: dm:single:updateMessage from',
       socket.user.username
+    );
+    const { dmId, messageId, newContent } = await validateEventArgument(
+      new UpdateMessageSingleDmValidator(args)
+    );
+    const { success, newMessage } = await messageService.updateMessage(
+      socket.user,
+      dmId,
+      messageId,
+      newContent
+    );
+    io.in('dm:single:' + dmId).emit(
+      'dm:single:updateMessage',
+      success,
+      newMessage
     );
   };
 

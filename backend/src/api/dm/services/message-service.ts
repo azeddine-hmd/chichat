@@ -1,13 +1,12 @@
-import { MessageContentType } from '@prisma/client';
+import { Message } from '@prisma/client';
 import { prisma, redisClient } from '../../../config';
 import { SingleDm } from '../types/single-dm';
-import { MessageFull } from '../types/message-relationship';
 
 export async function saveSingleMessage(
   me: Express.User,
   dm: SingleDm,
   message: string
-): Promise<MessageFull> {
+) {
   // remove dm from unsaved dms list
   if (dm.isUnsaved) {
     console.log('saving into unsaved single dm');
@@ -23,20 +22,10 @@ export async function saveSingleMessage(
     data: {
       dm: { connect: { id: dm.id } },
       by: { connect: { id: me.id } },
+      content: message,
     },
   });
-  const messageContent = await prisma.messageContent.create({
-    data: {
-      message: { connect: { id: messageRecord.id } },
-      type: MessageContentType.TEXT,
-      contentText: message,
-    },
-    include: { contentFile: true },
-  });
-  return {
-    ...messageRecord,
-    messageContent: messageContent,
-  } as MessageFull;
+  return messageRecord;
 }
 
 export async function getMessages(_: Express.User, dmId: string) {
@@ -44,9 +33,7 @@ export async function getMessages(_: Express.User, dmId: string) {
     where: {
       dmId: dmId,
     },
-    include: { messageContent: { include: { contentFile: true } } },
   });
-  messagesRecords[0].messageContent.type
   return messagesRecords;
 }
 
@@ -60,7 +47,27 @@ export async function deleteMessage(
       where: { id: messageId, dmId: dmId, byId: me.id },
     });
   } catch (error) {
+    console.error('delete message had an error: ', error);
     return { success: false };
   }
   return { success: true };
+}
+
+export async function updateMessage(
+  _: Express.User,
+  dmId: string,
+  messageId: number,
+  newContent: string
+) {
+  let newMessage: Message = null;
+  try {
+    newMessage = await prisma.message.update({
+      where: { dmId: dmId, id: messageId },
+      data: { content: newContent, isEdited: true },
+    });
+  } catch (error) {
+    console.error('update message had an error: ', error);
+    return { success: false };
+  }
+  return { success: true, newMessage };
 }

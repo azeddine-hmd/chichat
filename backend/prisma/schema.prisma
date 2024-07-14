@@ -116,7 +116,6 @@ model File {
     updatedAt    DateTime @updatedAt
 
     uploadedBy     User             @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
-    MessageContent MessageContent[]
 }
 
 model DM {
@@ -144,26 +143,12 @@ model Message {
     createAt       DateTime        @default(now())
     dmId           String?
     replyId        Int?            @unique
-    messageContent MessageContent?
+    content        String
     byId           Int
+    isEdited       Boolean         @default(false)
 
     by        User     @relation(fields: [byId], references: [id], onDelete: Cascade)
     dm        DM?      @relation(fields: [dmId], references: [id], onDelete: Cascade)
     reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
     repliedTo Message? @relation("replyMessage")
-}
-
-enum MessageContentType {
-    TEXT
-    IMAGE
-}
-
-model MessageContent {
-    id          Int                @id @default(autoincrement())
-    type        MessageContentType
-    contentText String?
-    contentFile File?              @relation(fields: [fileId], references: [id], onDelete: Cascade)
-    message     Message            @relation(fields: [messageId], references: [id], onDelete: Cascade)
-    messageId   Int                @unique
-    fileId      Int?
 }
