@@ -16,15 +16,12 @@ import Divider from "@/components/molecules/divider";
 import TimeComponent from "@/components/molecules/time-component";
 import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
 import PopoverButton from "@/components/molecules/popover-button";
-import FieldInputArea from "@/components/atoms/field-input-area";
 import ChatInputField from "./chat-input-field";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
+import { Message } from "@/models/message";
 
 export type ChatBoxProps = {
-  messageId: number;
-  time: string;
-  content: string;
-  isImage?: boolean;
+  message: Message;
   shape?: "FULL" | "SHORT";
   profile: User;
   haveDateSeparator?: boolean;
@@ -34,11 +31,8 @@ export type ChatBoxProps = {
 
 export default function ChatBox({
   className,
-  content,
+  message,
   shape = "SHORT",
-  messageId,
-  time,
-  isImage = false,
   profile,
   onMouseEnter,
   onMouseLeave,
@@ -78,6 +72,8 @@ export default function ChatBox({
     },
   });
 
+  const isImage = false;
+
   return (
     <li
       ref={itemRef}
@@ -101,7 +97,7 @@ export default function ChatBox({
           <Divider className="flex-0 m-0 h-full w-full" />
           <TimeComponent
             className="w-[100px] flex-1"
-            time={time}
+            time={message.createAt}
             opts={{ short: true }}
             disableHoverInfo
           />
@@ -115,7 +111,7 @@ export default function ChatBox({
       >
         <div className="left-2 flex h-fit w-[72px] flex-shrink-0 items-start justify-center text-[10px] text-muted/80">
           {shape === "SHORT" && onHover && (
-            <TimeComponent time={time} opts={{ onlyDayTime: true }} />
+            <TimeComponent time={message.createAt} opts={{ onlyDayTime: true }} />
           )}
           {shape === "FULL" && profile && (
             <Avatar
@@ -130,7 +126,7 @@ export default function ChatBox({
             <div className="flex flex-wrap gap-4 overflow-hidden">
               <h3 className="text-sm text-white">{profile.displayName}</h3>
               <div className="items-center justify-center text-center text-[10px] text-muted/80">
-                <TimeComponent time={time} />
+                <TimeComponent time={message.createAt} />
               </div>
             </div>
           )}
@@ -140,10 +136,10 @@ export default function ChatBox({
                 <div className="mx-0 my-4 flex-grow">
                   <ChatInputField
                     className="m-0"
-                    content={content}
-                    onMessageSent={(message) => {
-                      if (message !== content) {
-                        onEditComplete?.(message);
+                    content={message.content}
+                    onMessageSent={(newMessage) => {
+                      if (newMessage !== message.content) {
+                        onEditComplete?.(newMessage);
                       }
                       setOnEdit(false);
                     }}
@@ -173,7 +169,7 @@ export default function ChatBox({
                 </div>
               ) : (
                 <p className="flex-grow !break-words text-sm text-white/70">
-                  {content}
+                  {message.content}{message.isEdited && <span className="inline-flex justify-center ml-1 items-center text-[9px] text-muted/70">(edited)</span>}
                 </p>
               )}
             </>
@@ -182,7 +178,7 @@ export default function ChatBox({
               <DialogTrigger asChild>
                 <Image
                   className="h-fit max-w-[40%]"
-                  src={content}
+                  src={message.content}
                   alt="image"
                   width={140}
                   height={140}
@@ -191,14 +187,14 @@ export default function ChatBox({
               <DialogContent>
                 <Image
                   className="h-fit w-fit"
-                  src={content}
+                  src={message.content}
                   alt="image"
                   width={140}
                   height={140}
                 />
                 <a
                   className="text-sm text-white/60 hover:cursor-pointer hover:text-white hover:underline"
-                  href={content}
+                  href={message.content}
                   target="_blank"
                 >
                   Open in browser
@@ -256,7 +252,7 @@ export default function ChatBox({
                         className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white"
                         onClick={() => {
                           setOpenMorePopover(false);
-                          onDelete?.(messageId);
+                          onDelete?.(message.id);
                         }}
                       >
                         Delete Message

@@ -81,11 +81,9 @@ export default function ChatBoxList({
     return (
       <ChatBox
         key={message.id}
-        messageId={message.id}
-        time={message.createAt}
+        message={message}
         content={message.content}
         shape={shape}
-        isImage={message.isImage}
         profile={messageUser!}
         haveDateSeparator={haveDateSeparator}
         onDelete={onDelete}
@@ -98,7 +96,7 @@ export default function ChatBoxList({
 
   return (
     <ul className={cn("block pb-4", className)}>
-      <div className="h-full overflow-x-hidden overflow-y-scroll">
+      <div className="h-full w-full overflow-y-scroll">
         {messages.length <= 50 && (
           <div className="pl-4 mb-2 mt-2 flex flex-col gap-y-2">
             {singleDm?.other && (
