@@ -86,15 +86,18 @@ export default function ChatBoxList({
         profile={messageUser!}
         haveDateSeparator={haveDateSeparator}
         onDelete={onDelete}
+        onEditComplete={(newContent) => {
+          window.clientSocket.emit("dm:single:updateMessage", singleDm?.id, message.id, newContent);
+        }}
       />
     );
   };
 
   return (
-    <ul className={cn("block pb-4 pl-4", className)}>
-      <div className="h-full overflow-x-hidden overflow-y-scroll pr-4">
+    <ul className={cn("block pb-4", className)}>
+      <div className="h-full overflow-x-hidden overflow-y-scroll">
         {messages.length <= 50 && (
-          <div className="mb-2 mt-2 flex flex-col gap-y-2">
+          <div className="pl-4 mb-2 mt-2 flex flex-col gap-y-2">
             {singleDm?.other && (
               <>
                 <Avatar

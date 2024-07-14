@@ -85,7 +85,6 @@ module.exports = (io: Server, socket: Socket) => {
       'event triggered: dm:single:deleteMessage from',
       socket.user.username
     );
-    console.log('deleteMessageSingleDm args:', JSON.stringify(args));
     const { dmId, messageId } = await validateEventArgument(
       new DeleteMessageSingleDmValidator(args)
     );
@@ -98,6 +97,13 @@ module.exports = (io: Server, socket: Socket) => {
       'dm:single:deleteMessage',
       messageId,
       success
+    );
+  };
+
+  const updateMessageSingleDm = async (...args: any[]) => {
+    console.info(
+      'event triggered: dm:single:updateMessage from',
+      socket.user.username
     );
   };
 
@@ -115,4 +121,5 @@ module.exports = (io: Server, socket: Socket) => {
     'dm:single:deleteMessage',
     listenerWrapper(socket, deleteMessageSingleDm)
   );
+  socket.on('dm:single:updateMessage', updateMessageSingleDm);
 };

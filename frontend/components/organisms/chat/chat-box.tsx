@@ -10,14 +10,15 @@ import Tooltip from "@/components/molecules/tooltip";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { BsPencilFill, BsThreeDots, BsTrash } from "react-icons/bs";
-import ChatInputField from "@/components/organisms/chat/chat-input-field";
 import Image from "next/image";
 import { User } from "@/models/user";
-import { formatDayTimeString } from "@/lib/format-date";
 import Divider from "@/components/molecules/divider";
 import TimeComponent from "@/components/molecules/time-component";
 import MenuPopoverContainer from "@/components/molecules/popover-content/menu-popover-container";
 import PopoverButton from "@/components/molecules/popover-button";
+import FieldInputArea from "@/components/atoms/field-input-area";
+import ChatInputField from "./chat-input-field";
+import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 
 export type ChatBoxProps = {
   messageId: number;
@@ -28,6 +29,7 @@ export type ChatBoxProps = {
   profile: User;
   haveDateSeparator?: boolean;
   onDelete?: (messageId: number) => void;
+  onEditComplete?: (newContent: string) => void;
 } & React.ComponentProps<"li">;
 
 export default function ChatBox({
@@ -42,6 +44,7 @@ export default function ChatBox({
   onMouseLeave,
   haveDateSeparator = false,
   onDelete,
+  onEditComplete,
   ...restProps
 }: ChatBoxProps) {
   const [onHover, setOnHover] = useState(false);
@@ -52,11 +55,7 @@ export default function ChatBox({
   const itemRef = useRef<HTMLLIElement | null>(null);
   const [disableToolbox, setDisableToolbox] = useState(false);
   const [openMorePopover, setOpenMorePopover] = useState(false);
-
-  const onEditComplete = (newContent: string) => {
-    // TODO: emit new content
-    setOnEdit(false);
-  };
+  const [triggerSaveMessage, setTriggerSaveMessage] = useState(false);
 
   useEffect(() => {
     if (!onHover) return;
@@ -72,19 +71,22 @@ export default function ChatBox({
     // eslint-disable-next-line
   }, [onHover]);
 
+  useKeyboardShortcut({
+    keys: ["Escape"],
+    callback: () => {
+      if (onEdit) setOnEdit(false);
+    },
+  });
+
   return (
     <li
       ref={itemRef}
-      className={cn(
-        "mb-1 mr-[42px] flex h-fit w-full  list-none flex-col",
-        className,
-        {
-          "mt-3": shape == "FULL",
-        }
-      )}
+      className={cn("mb-1 flex h-fit w-full list-none flex-col  ", className, {
+        "mt-3": shape == "FULL",
+      })}
       onMouseEnter={(e) => {
         setOnHover(true);
-        if (!disableToolbox) setOpenToolbox(true);
+        if (!disableToolbox && !onEdit) setOpenToolbox(true);
         onMouseEnter?.(e);
       }}
       onMouseLeave={(e) => {
@@ -95,7 +97,7 @@ export default function ChatBox({
       {...restProps}
     >
       {haveDateSeparator && (
-        <div className="mb-2 flex items-center justify-center text-[12px] font-medium text-muted/80">
+        <div className="flex items-center justify-center bg-gray-600 pb-1 text-[12px] font-medium text-muted/80">
           <Divider className="flex-0 m-0 h-full w-full" />
           <TimeComponent
             className="w-[100px] flex-1"
@@ -106,8 +108,12 @@ export default function ChatBox({
           <Divider className="flex-0 m-0 h-full w-full" />
         </div>
       )}
-      <div className="relative flex w-full">
-        <div className="left-2 flex w-[72px] flex-shrink-0 items-start justify-center text-[10px] text-muted/80">
+      <div
+        className={cn("relative flex w-full pl-4 pr-[42px] pt-1", {
+          "bg-gray-700": onEdit,
+        })}
+      >
+        <div className="left-2 flex h-fit w-[72px] flex-shrink-0 items-start justify-center text-[10px] text-muted/80">
           {shape === "SHORT" && onHover && (
             <TimeComponent time={time} opts={{ onlyDayTime: true }} />
           )}
@@ -119,7 +125,7 @@ export default function ChatBox({
             />
           )}
         </div>
-        <div className="flex w-full flex-col flex-wrap  justify-center overflow-hidden">
+        <div className="flex h-full w-full flex-col flex-wrap  justify-center overflow-hidden">
           {shape === "FULL" && profile && (
             <div className="flex flex-wrap gap-4 overflow-hidden">
               <h3 className="text-sm text-white">{profile.displayName}</h3>
@@ -131,12 +137,40 @@ export default function ChatBox({
           {!isImage ? (
             <>
               {onEdit ? (
-                <ChatInputField
-                  placeholder=""
-                  content={content}
-                  className="flex-grow !break-words text-sm text-white/70"
-                  onMessageSent={(newContent) => onEditComplete(newContent)}
-                />
+                <div className="mx-0 my-4 flex-grow">
+                  <ChatInputField
+                    className="m-0"
+                    content={content}
+                    onMessageSent={(message) => {
+                      if (message !== content) {
+                        onEditComplete?.(message);
+                      }
+                      setOnEdit(false);
+                    }}
+                    trigger={{ triggerSaveMessage, setTriggerSaveMessage }}
+                  />
+                  <div className="mt-1 text-xs">
+                    escape to{" "}
+                    <span
+                      onClick={() => setOnEdit(false)}
+                      className="cursor-pointer text-link hover:underline"
+                    >
+                      cancel
+                    </span>
+                    {" "}<span className="inline-flex h-5 w-2 items-center justify-center rounded-full text-center align-middle">
+                      *
+                    </span>{" "}
+                    enter to{" "}
+                    <span 
+                      onClick={() => {
+                        setTriggerSaveMessage(true);
+                      }}
+                      className="cursor-pointer text-link hover:underline"
+                    >
+                      save
+                    </span>
+                  </div>
+                </div>
               ) : (
                 <p className="flex-grow !break-words text-sm text-white/70">
                   {content}
@@ -188,6 +222,7 @@ export default function ChatBox({
                     className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
                     onMouseEnter={() => setOpenEditTooltip(true)}
                     onMouseLeave={() => setOpenEditTooltip(false)}
+                    onClick={() => setOnEdit(true)}
                   >
                     <BsPencilFill size="22" />
                   </Button>
@@ -217,12 +252,12 @@ export default function ChatBox({
                     clickOutside={() => setOpenMorePopover(false)}
                   >
                     <MenuPopoverContainer>
-                      <PopoverButton 
-                      className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white" 
-                      onClick={() => {
-                        setOpenMorePopover(false);
-                        onDelete?.(messageId);
-                      }}
+                      <PopoverButton
+                        className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white"
+                        onClick={() => {
+                          setOpenMorePopover(false);
+                          onDelete?.(messageId);
+                        }}
                       >
                         Delete Message
                         <BsTrash className="inline" />

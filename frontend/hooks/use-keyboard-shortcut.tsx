@@ -37,9 +37,9 @@ export function useKeyboardShortcut(keyboardInputEvent: KeyboardInputEvent, disa
         event.stopPropagation();
     };
 
-    window.addEventListener("keypress", handleKeyDown)
+    window.addEventListener("keydown", handleKeyDown)
     return () => {
-      window.removeEventListener("keypress", handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
 
     // eslint-disable-next-line

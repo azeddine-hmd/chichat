@@ -46,6 +46,7 @@ export async function getMessages(_: Express.User, dmId: string) {
     },
     include: { messageContent: { include: { contentFile: true } } },
   });
+  messagesRecords[0].messageContent.type
   return messagesRecords;
 }
 

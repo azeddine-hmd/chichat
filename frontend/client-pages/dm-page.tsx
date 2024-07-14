@@ -89,6 +89,23 @@ export default function DmPage({ id }: { id: string }) {
     }
   });
 
+  useEvent("dm:single:updateMessage", (...args: any[]) => {
+    const messageId = args[0];
+    const updatedMessage: Message = args[1];
+    console.log("socket:dm:single:updateMessage", messageId, updatedMessage);
+    setMessages((prevMessages) => {
+      const indx = prevMessages.findIndex((message) => message.id == updatedMessage.id);
+      if (indx != -1) {
+        console.error("message updated");
+        prevMessages[indx] = updatedMessage;
+        return prevMessages;
+      } else {
+        console.error("updated message of unknown message");
+        return prevMessages;
+      }
+    })
+  });
+
   return (
     <div className="flex h-full w-full flex-col">
       <TopBar>
@@ -101,7 +118,7 @@ export default function DmPage({ id }: { id: string }) {
       </TopBar>
       <main
         ref={containerRef}
-        className="flex h-full flex-col justify-end overflow-y-scroll bg-gray-600 pb-4 pl-4"
+        className="flex h-full flex-col justify-end overflow-y-scroll bg-gray-600 pb-4"
       >
         <ChatBoxList
           className="block h-full overflow-y-scroll"
@@ -115,6 +132,7 @@ export default function DmPage({ id }: { id: string }) {
           placeholder={`Message @${other?.displayName}`}
           onMessageSent={onMessageSent}
           containerRef={containerRef}
+          enableUploadButton
         />
       </main>
     </div>
