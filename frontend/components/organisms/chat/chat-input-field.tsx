@@ -72,18 +72,26 @@ export default function ChatInputField({
   }, [height]);
 
   useLayoutEffect(() => {
-    if (!textareaRef.current || !containerRef?.current) return;
-    const textarea = textareaRef.current;
-    if (
-      containerRef.current &&
-      textarea.scrollHeight < containerRef.current.scrollHeight / 2
-    ) {
+    if (!containerRef) {
+      if (!textareaRef.current) return;
+      const textarea = textareaRef.current;
       textarea.style.height = "0";
       textarea.style.height = textarea.scrollHeight + "px";
+    } else {
+      if (!textareaRef.current || !containerRef?.current) return;
+      const textarea = textareaRef.current;
+      if (
+        containerRef.current &&
+        textarea.scrollHeight < containerRef.current.scrollHeight / 2
+      ) {
+        textarea.style.height = "0";
+        textarea.style.height = textarea.scrollHeight + "px";
+      }
+      // console.log("input height:", textareaRef.current.style.height);
+      // console.log("main height:", containerRef.current?.scrollHeight);
     }
-    // console.log("input height:", textareaRef.current.style.height);
-    // console.log("main height:", containerRef.current?.scrollHeight);
-    // eslint-disable-next-line
+
+  // eslint-disable-next-line
   }, [message]);
 
   useEffect(() => {
@@ -123,7 +131,7 @@ export default function ChatInputField({
         }
 
         <FieldInputArea
-          className="h-[36px] cursor-text flex-wrap p-2 text-sm text-white placeholder-gray-400/60 focus-visible:outline-none"
+          className="h-[36px] cursor-text flex-wrap p-2 text-sm text-white placeholder-gray-400/60 focus-visible:outline-none resize-y"
           placeholder={placeholder}
           style={{ resize: "none", scrollbarWidth: "none" }}
           onKeyDown={(e) => {

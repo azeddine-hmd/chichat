@@ -135,7 +135,7 @@ export default function ChatBox({
               {onEdit ? (
                 <div className="mx-0 my-4 flex-grow">
                   <ChatInputField
-                    className="m-0"
+                    className="m-0 break-all"
                     content={message.content}
                     onMessageSent={(newMessage) => {
                       if (newMessage !== message.content) {
@@ -168,7 +168,7 @@ export default function ChatBox({
                   </div>
                 </div>
               ) : (
-                <p className="flex-grow !break-words text-sm text-white/70">
+                <p className="flex-grow flex-shrink  overflow-auto break-all text-sm text-white/70 overflow-">
                   {message.content}{message.isEdited && <span className="inline-flex justify-center ml-1 items-center text-[9px] text-muted/70">(edited)</span>}
                 </p>
               )}

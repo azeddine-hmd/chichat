@@ -7,8 +7,15 @@ import Hr from "../atoms/hr";
 import { User } from "@/models/user";
 import { useUserStore } from "@/stores/user-store";
 import { useEvent } from "@/hooks/use-event";
+import { cn } from "@/lib/cn";
 
-export default function ChannelSidebar({ children }: { children: ReactNode }) {
+export default function ChannelSidebar({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   const { profile, setProfile } = useUserStore();
 
   useEffect(() => {
@@ -23,7 +30,12 @@ export default function ChannelSidebar({ children }: { children: ReactNode }) {
   });
 
   return (
-    <nav className="flex h-full w-[240px] shrink-0 grow-0 flex-col bg-gray-700 shadow-lg">
+    <nav
+      className={cn(
+        "flex h-full min-w-[240px] flex-col bg-gray-700 shadow-lg",
+        className
+      )}
+    >
       <DisabledSearchField />
       <Hr className="w-full border-separator-dark"></Hr>
       <div className="ml-2 mr-2 mt-2 h-full">{children}</div>

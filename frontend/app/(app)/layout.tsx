@@ -12,12 +12,14 @@ export default function HomeLayout({
   return (
     <ActiveChannelItemContextProvider>
       <HomeTemplate>
-        <div className="flex h-screen max-h-screen w-full">
-          <ServerSidebar />
-          <ChannelSidebar>
+        <div className="flex h-full max-w-screen overflow-hidden">
+          <ServerSidebar className="flex-none flex-0" />
+          <ChannelSidebar className="felx-none flex-0">
             <DefaultContentChannel />
           </ChannelSidebar>
-          {children}
+          <div className="flex-grow flex-shrink overflow-hidden">
+            {children}
+          </div>
         </div>
       </HomeTemplate>
     </ActiveChannelItemContextProvider>

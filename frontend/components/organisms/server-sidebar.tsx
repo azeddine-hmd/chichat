@@ -7,8 +7,9 @@ import { useState } from "react";
 import { Server } from "@/models/server";
 import Image from "next/image";
 import ChiChatIcon from "@/public/svg/chichat-logo.svg";
+import { cn } from "@/lib/cn";
 
-export default function ServerSidebar() {
+export default function ServerSidebar({ className }: { className?: string }) {
   const [servers, setServers] = useState<Array<Server>>([
     // new Server({ id: 1, name: "Runic Games", icon: <BsRobot /> }),
     // new Server({ id: 2, name: "GuildWars2", icon: <BsTv /> }),
@@ -16,7 +17,12 @@ export default function ServerSidebar() {
   const [selectedServer, setSelectedServer] = useState(-1);
 
   return (
-    <nav className="flex h-full w-[4.5rem] shrink-0 grow-0 flex-col items-center bg-gray-900 pt-3 text-white shadow-lg ">
+    <nav
+      className={cn(
+        "flex h-full w-[4.5rem]  flex-col items-center bg-gray-900 pt-3 text-white shadow-lg",
+        className
+      )}
+    >
       <ServerButton
         icon={<Image priority src={ChiChatIcon} alt="Main Server" />}
         name="Direct Messages"
