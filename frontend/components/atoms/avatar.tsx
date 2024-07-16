@@ -23,7 +23,7 @@ export default function Avatar({
   resolution,
 }: AvatarType) {
   return (
-    <div className={cn("overflow-hidden pr-2", className)}>
+    <div className={cn("overflow-hidden pr-2 flex justify-center items-center", className)}>
       <div className="relative inline-block">
         {resolution ? (
         <Image
