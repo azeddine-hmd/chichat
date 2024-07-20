@@ -1,6 +1,6 @@
 import { IsDefined, IsNumber } from 'class-validator';
 
-export class EnterSingleDmValidator {
+export class EnterDirectChatRoomValidator {
   @IsDefined()
   @IsNumber()
   otherId: number;

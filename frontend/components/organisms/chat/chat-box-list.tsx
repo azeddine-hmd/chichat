@@ -1,8 +1,6 @@
 import Avatar from "@/components/atoms/avatar";
 import { Message } from "@/models/message";
-import { User } from "@/models/user";
-import { useUserStore } from "@/stores/user-store";
-import { SingleDm } from "@/types/single-dm";
+import { ChatRoom } from "@/types/chat-room";
 import { differenceInMinutes, format, parseISO } from "date-fns";
 import ChatBox from "@/components/organisms/chat/chat-box";
 import { useLayoutEffect, useRef } from "react";
@@ -10,18 +8,17 @@ import { cn } from "@/lib/utils";
 
 export type ChatBoxListProps = {
   messages: Message[];
-  singleDm?: SingleDm;
+  chatRoom?: ChatRoom;
   onDelete?: (messageId: number) => void;
 } & React.ComponentProps<"ul">;
 
 export default function ChatBoxList({
   messages,
-  singleDm,
+  chatRoom,
   onDelete,
   className,
 }: ChatBoxListProps) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const { profile } = useUserStore();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,15 +31,14 @@ export default function ChatBoxList({
   const createMessageChatBox = (
     message: Message,
     index: number
-  ): JSX.Element => {
-    let messageUser: User | null = null;
+  ): JSX.Element | null => {
     let haveDateSeparator = false;
     let shape: "FULL" | "SHORT" = "FULL";
 
-    if (singleDm?.other.id == message.byId) {
-      messageUser = singleDm.other;
-    } else if (profile?.id == message.byId) {
-      messageUser = profile;
+    const user = chatRoom?.users.find((user) => user.id == message.byId);
+    if (!user) {
+      console.error("message user not found!");
+      return null;
     }
 
     if (index > 0) {
@@ -84,11 +80,11 @@ export default function ChatBoxList({
         message={message}
         content={message.content}
         shape={shape}
-        profile={messageUser!}
+        profile={user}
         haveDateSeparator={haveDateSeparator}
         onDelete={onDelete}
         onEditComplete={(newContent) => {
-          window.clientSocket.emit("dm:single:updateMessage", singleDm?.id, message.id, newContent);
+          window.clientSocket.emit("chatroom:updateMessage", chatRoom?.id, message.id, newContent);
         }}
       />
     );
@@ -98,25 +94,25 @@ export default function ChatBoxList({
     <ul className={cn("block pb-4", className)}>
       <div className="h-full w-full overflow-y-scroll">
         {messages.length <= 50 && (
-          <div className="pl-4 mb-2 mt-2 flex flex-col gap-y-2">
-            {singleDm?.other && (
+          <div className="pl-4 mb-2 mt-2 flex flex-col items-start gap-y-2">
+            {chatRoom?.type === "DIRECT" && (
               <>
                 <Avatar
                   resolution={{ height: 96, width: 96 }}
                   displayStatus={false}
-                  status={singleDm.other.status}
-                  imageSrc={singleDm.other.avatar}
+                  status={chatRoom.users[1].status}
+                  imageSrc={chatRoom.users[1].avatar}
                 />
                 <h3 className="text-2xl font-bold">
-                  {singleDm.other.displayName}
+                  {chatRoom.users[1].displayName}
                 </h3>
                 <h6 className="text-lg font-normal">
-                  {singleDm.other.username}
+                  {chatRoom.users[1].username}
                 </h6>
                 <p className="mb-4 mt-4 text-sm text-muted">
                   This is the beginning of your direct message history with{" "}
                   <span className="font-bold">
-                    {singleDm.other.displayName}
+                    {chatRoom.users[1].displayName}
                   </span>
                 </p>
               </>

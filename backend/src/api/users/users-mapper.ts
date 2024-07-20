@@ -1,6 +1,6 @@
-import { UserIncludeRelations } from './types/user-include-avatar';
+import { UserWithAvatar } from './types/user';
 
-export function mapToPrivateProfile(user: UserIncludeRelations) {
+export function mapToPrivateProfile(user: UserWithAvatar) {
   return {
     id: user.id,
     email: user.email,
@@ -12,7 +12,7 @@ export function mapToPrivateProfile(user: UserIncludeRelations) {
   };
 }
 
-export function mapToPublicProfile(user: UserIncludeRelations) {
+export function mapToPublicProfile(user: UserWithAvatar) {
   return {
     id: user.id,
     username: user.username,

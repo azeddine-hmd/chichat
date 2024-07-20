@@ -8,61 +8,45 @@ import { useActiveChannelItemContext } from "@/context/active-channel-item-conte
 import useErrorEvent from "@/hooks/use-error-event";
 import { useEvent } from "@/hooks/use-event";
 import { Message } from "@/models/message";
-import { User } from "@/models/user";
 import { useUserStore } from "@/stores/user-store";
-import { SingleDm } from "@/types/single-dm";
+import { ChatRoom } from "@/types/chat-room";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function DmPage({ id }: { id: string }) {
+export default function DirectChatRoomPage({ id }: { id: string }) {
   const router = useRouter();
   const containerRef = useRef<HTMLElement | null>(null);
 
   const { setItem } = useActiveChannelItemContext();
-  const [singleDm, setSingleDm] = useState<SingleDm | null>(null);
+  const [chatRoom, setChatRoom] = useState<ChatRoom | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [other, setOther] = useState<User | null>(null);
   const { friends } = useUserStore();
 
   const onMessageSent = (message: string) => {
-    window.clientSocket.emit("dm:single:saveMessage", singleDm?.id, message);
+    window.clientSocket.emit("chatroom:saveMessage", chatRoom?.id, message);
   };
 
   useEffect(() => {
-    console.log("emitting to: dm:single:getDm");
-    window.clientSocket.emit("dm:single:getDm", id);
+    console.log("emitting to: chatroom:getChatRoom");
+    window.clientSocket.emit("chatroom:getChatRoom", id);
     // eslint-disable-next-line
   }, []);
 
   useErrorEvent((error) => {
-    if (typeof error === "string" && error === "dm not found")
+    if (typeof error === "string" && error === "chatroom not found")
       router.push("/channels/me");
   });
 
-  useEvent("dm:single:getDm", (...args: any[]) => {
-    const dm: SingleDm = args[0];
-    console.log("socket:dm:single:getDm", dm);
-    const found = friends.find((friend) => friend.id == dm.other.id)!;
-    setOther(found);
-    setSingleDm(dm);
-    setItem(dm);
+  useEvent("chatroom:getChatRoom", (...args: any[]) => {
+    const chatRoom: ChatRoom = args[0];
+    console.log("chatroom:getChatRoom", chatRoom);
+    setChatRoom(chatRoom);
+    setItem(chatRoom);
   });
 
-  // Update `other` when `friends` changes
-  useEffect(() => {
-    if (other && friends) {
-      const found = friends.find((friend) => friend.id === other.id);
-      if (found) {
-        setOther(found);
-      }
-    }
-
-    // eslint-disable-next-line
-  }, [friends]);
-
-  useEvent("dm:single:receivedMessage", (...args: any[]) => {
+  useEvent("chatroom:receivedMessage", (...args: any[]) => {
     const newMessage: Message = args[0];
-    console.log("socket:dm:single:receivedMessage", newMessage);
+    console.log("chatroom:receivedMessage", newMessage);
     console.log("before messages:", messages);
     setMessages((prevMessages: Message[]) => {
       return [...prevMessages, newMessage];
@@ -70,18 +54,18 @@ export default function DmPage({ id }: { id: string }) {
   });
 
   useEffect(() => {
-    if (!singleDm) return;
+    if (!chatRoom) return;
     window.clientSocket
-      .emitWithAck("dm:single:getMessages", singleDm.id)
+      .emitWithAck("chatroom:getMessages", chatRoom.id)
       .then((messages: Message[]) => {
         setMessages(messages);
       });
-  }, [singleDm]);
+  }, [chatRoom]);
 
-  useEvent("dm:single:deleteMessage", (...args: any[]) => {
+  useEvent("chatroom:deleteMessage", (...args: any[]) => {
     const messageId: number = args[0];
     const success: boolean = args[1];
-    console.log("socket:dm:single:deleteMessage", messageId, success);
+    console.log("chatroom:deleteMessage", messageId, success);
     if (success) {
       setMessages((prevMessages) =>
         prevMessages.filter((msg) => msg.id != messageId)
@@ -89,12 +73,14 @@ export default function DmPage({ id }: { id: string }) {
     }
   });
 
-  useEvent("dm:single:updateMessage", (...args: any[]) => {
+  useEvent("chatroom:updateMessage", (...args: any[]) => {
     const messageId = args[0];
     const updatedMessage: Message = args[1];
-    console.log("socket:dm:single:updateMessage", messageId, updatedMessage);
+    console.log("chatroom:updateMessage", messageId, updatedMessage);
     setMessages((prevMessages) => {
-      const indx = prevMessages.findIndex((message) => message.id == updatedMessage.id);
+      const indx = prevMessages.findIndex(
+        (message) => message.id == updatedMessage.id
+      );
       if (indx != -1) {
         console.log("message updated");
         const newMessages = [...prevMessages];
@@ -104,16 +90,21 @@ export default function DmPage({ id }: { id: string }) {
         console.error("updated message of unknown message");
         return prevMessages;
       }
-    })
+    });
   });
 
   return (
     <div className="flex h-full w-full flex-col">
       <TopBar>
-        {singleDm && other && (
+        {chatRoom && (
           <>
-            <Avatar status={other.status} imageSrc={other.avatar} />
-            <h3 className="text-sm font-medium">{other.displayName}</h3>
+            <Avatar
+              status={chatRoom.users[1].status}
+              imageSrc={chatRoom.users[1].avatar}
+            />
+            <h3 className="text-sm font-medium">
+              {chatRoom.users[1].displayName}
+            </h3>
           </>
         )}
       </TopBar>
@@ -121,20 +112,28 @@ export default function DmPage({ id }: { id: string }) {
         ref={containerRef}
         className="flex h-full flex-col justify-end overflow-y-scroll bg-gray-600 pb-4"
       >
-        <ChatBoxList
-          className="block h-full overflow-y-scroll"
-          messages={messages}
-          singleDm={singleDm!}
-          onDelete={(messageId) => {
-            window.clientSocket.emitWithAck("dm:single:deleteMessage", singleDm?.id, messageId);
-          }}
-        />
-        <ChatInputField
-          placeholder={`Message @${other?.displayName}`}
-          onMessageSent={onMessageSent}
-          containerRef={containerRef}
-          enableUploadButton
-        />
+        {chatRoom && (
+          <>
+            <ChatBoxList
+              className="block h-full overflow-y-scroll"
+              messages={messages}
+              chatRoom={chatRoom}
+              onDelete={(messageId) => {
+                window.clientSocket.emitWithAck(
+                  "chatroom:deleteMessage",
+                  chatRoom?.id,
+                  messageId
+                );
+              }}
+            />
+            <ChatInputField
+              placeholder={`Message @${chatRoom.users[1].displayName}`}
+              onMessageSent={onMessageSent}
+              containerRef={containerRef}
+              enableUploadButton
+            />
+          </>
+        )}
       </main>
     </div>
   );

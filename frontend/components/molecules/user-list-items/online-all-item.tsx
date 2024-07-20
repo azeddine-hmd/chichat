@@ -17,7 +17,7 @@ export default function OnlineAllItem({ user }: { user: User }) {
   const [morePopoverPos, setMorePopoverPos] = useState({ x: 0, y: 0 });
 
   const onFriendItemClicked = () => {
-    window.clientSocket.emit('dm:single:enter', user.id);
+    window.clientSocket.emit('chatroom:direct:enter', user.id);
   };
 
   const removeFriendMut = useMutation({

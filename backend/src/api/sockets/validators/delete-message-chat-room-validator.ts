@@ -6,19 +6,19 @@ import {
   IsUUID,
 } from 'class-validator';
 
-export class DeleteMessageSingleDmValidator {
+export class DeleteMessageChatRoomValidator {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  dmId: string;
+  chatRoomId: string;
 
   @IsDefined()
   @IsNumber()
   messageId: number;
 
   constructor(args: any[]) {
-    this.dmId = args[0];
+    this.chatRoomId = args[0];
     this.messageId = args[1];
   }
 }

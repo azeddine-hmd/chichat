@@ -1,6 +1,6 @@
 import { File, User, UserSockets } from '@prisma/client';
 
-export type UserIncludeRelations = User & {
+export type UserWithAvatar = User & {
   avatar?: File;
   sockets?: UserSockets[];
 };

@@ -1,26 +1,29 @@
 import { Message } from '@prisma/client';
 import { prisma, redisClient } from '../../../config';
-import { SingleDm } from '../types/single-dm';
+import {
+  ChatRoomWithUsers,
+  UnsavedChatRoomWithUsers,
+} from '../types/chat-room';
 
-export async function saveSingleMessage(
+export async function saveMessage(
   me: Express.User,
-  dm: SingleDm,
+  chatRoom: ChatRoomWithUsers | UnsavedChatRoomWithUsers,
   message: string
 ) {
-  // remove dm from unsaved dms list
-  if (dm.isUnsaved) {
-    console.log('saving into unsaved single dm');
+  // remove chat room from unsaved chat rooms list
+  if ('isUnsaved' in chatRoom && chatRoom.isUnsaved) {
+    console.log('saving into unsaved chat room');
     const result = await redisClient.lRem(
-      `dm:single:unsaved:${me.id}`,
+      `chatroom:unsaved:${me.id}`,
       0,
-      dm.id
+      chatRoom.id
     );
-    console.log(`removed unsaved DM of id: ${result}`);
+    console.log(`removed unsaved chat room of id: ${result}`);
   }
 
   const messageRecord = await prisma.message.create({
     data: {
-      dm: { connect: { id: dm.id } },
+      chatRoom: { connect: { id: chatRoom.id } },
       by: { connect: { id: me.id } },
       content: message,
     },
@@ -28,10 +31,10 @@ export async function saveSingleMessage(
   return messageRecord;
 }
 
-export async function getMessages(_: Express.User, dmId: string) {
+export async function getMessages(_: Express.User, chatRoomId: string) {
   const messagesRecords = await prisma.message.findMany({
     where: {
-      dmId: dmId,
+      chatRoomId: chatRoomId,
     },
   });
   return messagesRecords;
@@ -39,12 +42,12 @@ export async function getMessages(_: Express.User, dmId: string) {
 
 export async function deleteMessage(
   me: Express.User,
-  dmId: string,
+  chatRoomId: string,
   messageId: number
 ) {
   try {
     await prisma.message.delete({
-      where: { id: messageId, dmId: dmId, byId: me.id },
+      where: { id: messageId, chatRoomId: chatRoomId, byId: me.id },
     });
   } catch (error) {
     console.error('delete message had an error: ', error);
@@ -55,14 +58,14 @@ export async function deleteMessage(
 
 export async function updateMessage(
   _: Express.User,
-  dmId: string,
+  chatRoomId: string,
   messageId: number,
   newContent: string
 ) {
   let newMessage: Message = null;
   try {
     newMessage = await prisma.message.update({
-      where: { dmId: dmId, id: messageId },
+      where: { chatRoomId: chatRoomId, id: messageId },
       data: { content: newContent, isEdited: true },
     });
   } catch (error) {

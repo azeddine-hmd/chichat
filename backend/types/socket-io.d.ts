@@ -1,10 +1,10 @@
 import { Socket } from 'socket.io';
-import { SingleDM } from '../src/api/dm/types/single-dm';
+import { UnsavedChatRoomWithUsers } from '../src/api/chat-room/types/chat-room';
 
 declare module 'socket.io' {
   interface Socket extends Socket {
     user: Express.User;
-    unsavedSingleDms: SingleDM[];
+    unsavedSingleDms: UnsavedChatRoomWithUsers[];
     _cleanupFns: Function[];
   }
 }

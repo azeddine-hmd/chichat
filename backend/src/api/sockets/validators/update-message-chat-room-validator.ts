@@ -7,11 +7,11 @@ import {
 } from 'class-validator';
 import { IsPrintableString } from '../../../utils/printable-ascii-validator';
 
-export class UpdateMessageSingleDmValidator {
+export class UpdateMessagechatRoomValidator {
   @IsDefined()
   @IsString()
   @IsUUID()
-  dmId: string;
+  chatRoomId: string;
 
   @IsDefined()
   @IsNumber()
@@ -24,7 +24,7 @@ export class UpdateMessageSingleDmValidator {
   newContent: string;
 
   constructor(args: any[]) {
-    this.dmId = args[0];
+    this.chatRoomId = args[0];
     this.messageId = args[1];
     this.newContent = args[2];
   }

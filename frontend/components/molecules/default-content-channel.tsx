@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import IconButton from "./icon-button";
 import Tooltip from "./tooltip";
 import Popover from "./popover";
-import CreateDmPopoverContent from "./popover-content/create-dm-popover-content";
+import CreateGroupChatRoomPopoverContent from "./popover-content/create-group-chat-room-popover-content";
 import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
 import Avatar from "../atoms/avatar";
 import { useUserStore } from "@/stores/user-store";
@@ -73,7 +73,7 @@ export default function DefaultContentChannel() {
             </Popover.Trigger>
             <Tooltip.Content content="Create DM" side="top" sideOffset={4} />
             <Popover.Content side="bottom" sideOffset={4} align="start">
-              <CreateDmPopoverContent />
+              <CreateGroupChatRoomPopoverContent />
             </Popover.Content>
           </Tooltip>
         </Popover>

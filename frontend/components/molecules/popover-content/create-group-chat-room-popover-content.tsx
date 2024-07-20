@@ -7,7 +7,7 @@ import Checkbox from "../checkbox";
 import { BsCheck, BsSearch } from "react-icons/bs";
 import PrimaryButton from "../primary-button";
 
-export default function CreateDmPopoverContent() {
+export default function CreateGroupChatRoomPopoverContent() {
   const [usernameInput, setUsernameInput] = useState("");
   const { friends } = useUserStore();
 

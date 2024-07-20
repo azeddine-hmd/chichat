@@ -1,11 +1,11 @@
 import { IsDefined, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { IsPrintableString } from '../../../utils/printable-ascii-validator';
 
-export class SendMessageSingleDmValidator {
+export class SendMessageChatRoomValidator {
   @IsDefined()
   @IsString()
   @IsUUID()
-  dmId: string;
+  chatRoomId: string;
 
   @IsDefined()
   @IsString()
@@ -14,7 +14,7 @@ export class SendMessageSingleDmValidator {
   message: string;
 
   constructor(args: any[]) {
-    this.dmId = args[0];
+    this.chatRoomId = args[0];
     this.message = args[1];
   }
 }

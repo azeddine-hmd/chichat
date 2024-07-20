@@ -1,7 +1,7 @@
-import DmPage from "@/client-pages/dm-page";
+import DirectChatRoomPage from "@/client-pages/direct-chat-room-page";
 
-export default function Dm({ params }: { params: any }) {
+export default function DirectChatRoom({ params }: { params: any }) {
   return (
-    <DmPage id={params.id} />
+    <DirectChatRoomPage id={params.id} />
   )
 }

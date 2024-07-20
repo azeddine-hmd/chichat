@@ -16,24 +16,24 @@ enum UserStatus {
     OFFLINE
 }
 
-enum DMType {
-    SINGLE
+enum ChatRoomType {
+    DIRECT
     GROUP
 }
 
 model User {
-    id          Int           @id @default(autoincrement())
-    displayName String
-    username    String        @unique
-    email       String        @unique
-    password    String
-    dateOfBirth DateTime
-    active      Boolean       @default(false)
-    status      UserStatus    @default(OFFLINE)
-    avatar      File?
-    Codes       Codes[]
-    sockets     UserSockets[]
-    userDms     UserDm[]
+    id             Int            @id @default(autoincrement())
+    displayName    String
+    username       String         @unique
+    email          String         @unique
+    password       String
+    dateOfBirth    DateTime
+    active         Boolean        @default(false)
+    status         UserStatus     @default(OFFLINE)
+    avatar         File?
+    Codes          Codes[]
+    sockets        UserSockets[]
+    usersChatRooms UserChatRoom[]
 
     Friend1         Friendship[]        @relation("Friend1")
     Friend2         Friendship[]        @relation("Friend2")
@@ -115,40 +115,40 @@ model File {
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
 
-    uploadedBy     User             @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+    uploadedBy User @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
 }
 
-model DM {
-    id        String    @id
-    createdAt DateTime  @default(now())
-    entersAt  DateTime
-    type      DMType
-    Message   Message[]
-    userDms   UserDm[]
+model ChatRoom {
+    id             String         @id
+    createdAt      DateTime       @default(now())
+    entersAt       DateTime
+    type           ChatRoomType
+    Message        Message[]
+    usersChatRooms UserChatRoom[]
 }
 
-model UserDm {
-    id     Int    @id @default(autoincrement())
-    userId Int
-    dmId   String
+model UserChatRoom {
+    id         Int    @id @default(autoincrement())
+    userId     Int
+    chatRoomId String
 
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    dm   DM   @relation(fields: [dmId], references: [id], onDelete: Cascade)
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    chatRoom ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
 
-    @@unique([userId, dmId])
+    @@unique([userId, chatRoomId])
 }
 
 model Message {
-    id             Int             @id @default(autoincrement())
-    createAt       DateTime        @default(now())
-    dmId           String?
-    replyId        Int?            @unique
-    content        String
-    byId           Int
-    isEdited       Boolean         @default(false)
+    id         Int      @id @default(autoincrement())
+    createAt   DateTime @default(now())
+    chatRoomId String?
+    replyId    Int?     @unique
+    content    String
+    byId       Int
+    isEdited   Boolean  @default(false)
 
-    by        User     @relation(fields: [byId], references: [id], onDelete: Cascade)
-    dm        DM?      @relation(fields: [dmId], references: [id], onDelete: Cascade)
-    reply     Message? @relation("replyMessage", fields: [replyId], references: [id])
-    repliedTo Message? @relation("replyMessage")
+    by        User      @relation(fields: [byId], references: [id], onDelete: Cascade)
+    chatRoom  ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+    reply     Message?  @relation("replyMessage", fields: [replyId], references: [id])
+    repliedTo Message?  @relation("replyMessage")
 }

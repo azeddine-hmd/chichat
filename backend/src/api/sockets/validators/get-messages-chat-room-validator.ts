@@ -1,19 +1,19 @@
 import { IsDefined, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { IsFunction } from '../../../utils/is-function';
-import { MessagePublic } from '../../dm/types/message-public';
+import { MessagePublic } from '../../chat-room/types/message-public';
 
-export class GetMessagesSingleDmValidator {
+export class GetMessagesChatRoomValidator {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  dmId: string;
+  chatRoomId: string;
 
   @IsFunction()
   ackFn: (messages: MessagePublic[]) => void;
 
   constructor(args: any[]) {
-    this.dmId = args[0];
+    this.chatRoomId = args[0];
     this.ackFn = args[1];
   }
 }

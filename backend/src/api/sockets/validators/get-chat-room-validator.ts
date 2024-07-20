@@ -1,13 +1,13 @@
 import { IsDefined, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-export class GetSingleDmValidator {
+export class GetChatRoomValidator {
   @IsDefined()
   @IsString()
   @IsNotEmpty()
   @IsUUID()
-  dmId: string;
+  chatRoomId: string;
 
   constructor(args: any[]) {
-    this.dmId = args[0];
+    this.chatRoomId = args[0];
   }
 }

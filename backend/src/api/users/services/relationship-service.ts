@@ -1,7 +1,7 @@
 import { prisma } from '../../../config';
 import { HttpError } from '../../../utils/error';
 import { checkUserExists } from '../../../utils/prisma-utils';
-import { UserIncludeRelations } from '../types/user-include-avatar';
+import { UserWithAvatar } from '../types/user';
 import { forEachSocket } from '../../../utils/for-each-socket';
 import { mapToPublicProfile } from '../users-mapper';
 
@@ -50,10 +50,7 @@ export async function sendFriendRequest(
     },
   });
 
-  const updateRecipient = (
-    recipientId: number,
-    sender: UserIncludeRelations
-  ) => {
+  const updateRecipient = (recipientId: number, sender: UserWithAvatar) => {
     forEachSocket(recipientId, (socket) => {
       socket.emit('relation:updates', {
         operation: 'sentFR',

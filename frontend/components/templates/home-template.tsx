@@ -4,7 +4,8 @@ import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import React, { useEffect, useState } from "react";
 import { GlobalContext } from "@/app/global-context";
 import { useRelationEvent } from "@/hooks/use-relation-event";
-import { useDmEvent } from "@/hooks/use-dm-event";
+import { useRouter } from "next/navigation";
+import { useEvent } from "@/hooks/use-event";
 
 export default function HomeTemplate({
   children,
@@ -14,9 +15,15 @@ export default function HomeTemplate({
   const [isSearchPopupOpen, openSearchPopup] = useState(false);
   const [isShortcutHelpPopupOpen, openShortcutHelpPopup] = useState(false);
   const [isFloatingShortcutHelperOpen, showFloatingShortcut] = useState(true);
+  const router = useRouter();
 
   useRelationEvent();
-  useDmEvent();
+
+  useEvent("chatroom:direct:enter", (...args) => {
+    console.log("chatroom:enter:", args[0]);
+    const chatRoomId: string = args[0];
+    router.push("/channels/me/" + chatRoomId);
+  });
 
   useEffect(() => {
     console.log("emitting to event: relation");

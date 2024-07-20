@@ -5,7 +5,7 @@ import { corsOptions, pool, prisma } from '../../config';
 import { createAdapter } from '@socket.io/postgres-adapter';
 import { UserStatus } from '@prisma/client';
 import { mapToPublicProfile } from '../users/users-mapper';
-import * as dmService from '../dm/services/dm-service';
+import * as chatRoomService from '../chat-room/services/chat-room-service';
 
 export const io = new Server(server, {
   cookie: {
@@ -35,7 +35,7 @@ io.adapter(createAdapter(pool));
 require('./middlewares');
 
 async function onUserOffline(socket: Socket) {
-  await dmService.removeUnsavedSingleDms(socket.user);
+  await chatRoomService.removeUnsavedChatRoom(socket.user);
 }
 
 const onConnection = async (socket: Socket) => {
@@ -82,7 +82,7 @@ const onConnection = async (socket: Socket) => {
   });
 
   require('./handlers/users-handler')(io, socket);
-  require('./handlers/dm-handler')(io, socket);
+  require('./handlers/chat-room-handler')(io, socket);
   const diffTime = new Date().getTime() - start.getTime();
   const seconds = (diffTime / 1000).toFixed(4);
   socket.emit('ready', seconds);

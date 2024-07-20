@@ -1,6 +1,6 @@
 "use client";
 
-import type { SingleDm } from "@/types/single-dm";
+import type { ChatRoom } from "@/types/chat-room";
 import React, {
   Dispatch,
   SetStateAction,
@@ -17,7 +17,7 @@ export type ActiveChannelItemContextType = {
 const ActiveChannelItemContext =
   createContext<ActiveChannelItemContextType | null>(null);
 
-export type ChannelItem = "friends" | SingleDm;
+export type ChannelItem = "friends" | ChatRoom;
 
 export default function ActiveChannelItemContextProvider({
   children,
