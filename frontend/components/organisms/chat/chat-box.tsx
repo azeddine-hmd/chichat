@@ -19,11 +19,12 @@ import PopoverButton from "@/components/molecules/popover-button";
 import ChatInputField from "./chat-input-field";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
 import { Message } from "@/models/message";
+import { useUserStore } from "@/stores/user-store";
 
 export type ChatBoxProps = {
   message: Message;
   shape?: "FULL" | "SHORT";
-  profile: User;
+  user: User;
   haveDateSeparator?: boolean;
   onDelete?: (messageId: number) => void;
   onEditComplete?: (newContent: string) => void;
@@ -33,7 +34,7 @@ export default function ChatBox({
   className,
   message,
   shape = "SHORT",
-  profile,
+  user,
   onMouseEnter,
   onMouseLeave,
   haveDateSeparator = false,
@@ -50,6 +51,7 @@ export default function ChatBox({
   const [disableToolbox, setDisableToolbox] = useState(false);
   const [openMorePopover, setOpenMorePopover] = useState(false);
   const [triggerSaveMessage, setTriggerSaveMessage] = useState(false);
+  const { profile } = useUserStore();
 
   useEffect(() => {
     if (!onHover) return;
@@ -111,20 +113,23 @@ export default function ChatBox({
       >
         <div className="left-2 flex h-fit w-[72px] flex-shrink-0 items-start justify-center text-[10px] text-muted/80">
           {shape === "SHORT" && onHover && (
-            <TimeComponent time={message.createAt} opts={{ onlyDayTime: true }} />
+            <TimeComponent
+              time={message.createAt}
+              opts={{ onlyDayTime: true }}
+            />
           )}
-          {shape === "FULL" && profile && (
+          {shape === "FULL" && (
             <Avatar
               displayStatus={false}
-              status={profile.status}
-              imageSrc={profile.avatar}
+              status={user.status}
+              imageSrc={user.avatar}
             />
           )}
         </div>
         <div className="flex h-full w-full flex-col flex-wrap  justify-center overflow-hidden">
-          {shape === "FULL" && profile && (
+          {shape === "FULL" && (
             <div className="flex flex-wrap gap-4 overflow-hidden">
-              <h3 className="text-sm text-white">{profile.displayName}</h3>
+              <h3 className="text-sm text-white">{user.displayName}</h3>
               <div className="items-center justify-center text-center text-[10px] text-muted/80">
                 <TimeComponent time={message.createAt} />
               </div>
@@ -152,12 +157,12 @@ export default function ChatBox({
                       className="cursor-pointer text-link hover:underline"
                     >
                       cancel
-                    </span>
-                    {" "}<span className="inline-flex h-5 w-2 items-center justify-center rounded-full text-center align-middle">
+                    </span>{" "}
+                    <span className="inline-flex h-5 w-2 items-center justify-center rounded-full text-center align-middle">
                       *
                     </span>{" "}
                     enter to{" "}
-                    <span 
+                    <span
                       onClick={() => {
                         setTriggerSaveMessage(true);
                       }}
@@ -168,8 +173,13 @@ export default function ChatBox({
                   </div>
                 </div>
               ) : (
-                <p className="flex-grow flex-shrink  overflow-auto break-all text-sm text-white/70 overflow-">
-                  {message.content}{message.isEdited && <span className="inline-flex justify-center ml-1 items-center text-[9px] text-muted/70">(edited)</span>}
+                <p className="overflow- flex-shrink  flex-grow overflow-auto break-all text-sm text-white/70">
+                  {message.content}
+                  {message.isEdited && (
+                    <span className="ml-1 inline-flex items-center justify-center text-[9px] text-muted/70">
+                      (edited)
+                    </span>
+                  )}
                 </p>
               )}
             </>
@@ -204,66 +214,72 @@ export default function ChatBox({
           )}
         </div>
         {onHover && (
-          <Popover open={openToolbox}>
-            <Popover.Trigger className="absolute right-0 outline-none"></Popover.Trigger>
-            <Popover.Content
-              className="mr-4 flex gap-1 rounded-[4px] border border-black/10 bg-gray-500 p-0 text-white shadow-lg"
-              side="top"
-              align="start"
-            >
-              <Tooltip open={openEditTooltip}>
-                <Tooltip.Content content="Edit" sideOffset={4} />
-                <Tooltip.Trigger asChild>
-                  <Button
-                    className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
-                    onMouseEnter={() => setOpenEditTooltip(true)}
-                    onMouseLeave={() => setOpenEditTooltip(false)}
-                    onClick={() => setOnEdit(true)}
-                  >
-                    <BsPencilFill size="22" />
-                  </Button>
-                </Tooltip.Trigger>
-              </Tooltip>
-
-              <Popover open={openMorePopover}>
-                <Tooltip open={openMoreTooltip}>
-                  <Tooltip.Content content="More" sideOffset={4} />
-                  <Popover.Trigger asChild>
+          <>
+            {profile?.id == user.id && (
+              <Popover open={openToolbox}>
+                <Popover.Trigger className="absolute right-0 outline-none"></Popover.Trigger>
+                <Popover.Content
+                  className="mr-4 flex gap-1 rounded-[4px] border border-black/10 bg-gray-500 p-0 text-white shadow-lg"
+                  side="top"
+                  align="start"
+                >
+                  <Tooltip open={openEditTooltip}>
+                    <Tooltip.Content content="Edit" sideOffset={4} />
                     <Tooltip.Trigger asChild>
-                      <Button
-                        className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
-                        onMouseEnter={() => setOpenMoreTooltip(true)}
-                        onMouseLeave={() => setOpenMoreTooltip(false)}
-                        onClick={() => setOpenMorePopover(true)}
-                      >
-                        <BsThreeDots size="22" />
-                      </Button>
+                      {profile?.id == user.id && (
+                        <Button
+                          className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
+                          onMouseEnter={() => setOpenEditTooltip(true)}
+                          onMouseLeave={() => setOpenEditTooltip(false)}
+                          onClick={() => setOnEdit(true)}
+                        >
+                          <BsPencilFill size="22" />
+                        </Button>
+                      )}
                     </Tooltip.Trigger>
-                  </Popover.Trigger>
-                  <Popover.Content
-                    side="left"
-                    sideOffset={8}
-                    align="start"
-                    alignOffset={0}
-                    clickOutside={() => setOpenMorePopover(false)}
-                  >
-                    <MenuPopoverContainer>
-                      <PopoverButton
-                        className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white"
-                        onClick={() => {
-                          setOpenMorePopover(false);
-                          onDelete?.(message.id);
-                        }}
+                  </Tooltip>
+
+                  <Popover open={openMorePopover}>
+                    <Tooltip open={openMoreTooltip}>
+                      <Tooltip.Content content="More" sideOffset={4} />
+                      <Popover.Trigger asChild>
+                        <Tooltip.Trigger asChild>
+                          <Button
+                            className="rounded-none p-[4px] hover:bg-white/10 hover:text-white active:bg-white/20"
+                            onMouseEnter={() => setOpenMoreTooltip(true)}
+                            onMouseLeave={() => setOpenMoreTooltip(false)}
+                            onClick={() => setOpenMorePopover(!openMorePopover)}
+                          >
+                            <BsThreeDots size="22" />
+                          </Button>
+                        </Tooltip.Trigger>
+                      </Popover.Trigger>
+                      <Popover.Content
+                        side="left"
+                        sideOffset={8}
+                        align="start"
+                        alignOffset={0}
+                        clickOutside={() => setOpenMorePopover(false)}
                       >
-                        Delete Message
-                        <BsTrash className="inline" />
-                      </PopoverButton>
-                    </MenuPopoverContainer>
-                  </Popover.Content>
-                </Tooltip>
+                        <MenuPopoverContainer>
+                          <PopoverButton
+                            className="text-xm flex items-center justify-between bg-transparent font-medium text-red-500 hover:bg-red-500 hover:text-white"
+                            onClick={() => {
+                              setOpenMorePopover(false);
+                              onDelete?.(message.id);
+                            }}
+                          >
+                            Delete Message
+                            <BsTrash className="inline" />
+                          </PopoverButton>
+                        </MenuPopoverContainer>
+                      </Popover.Content>
+                    </Tooltip>
+                  </Popover>
+                </Popover.Content>
               </Popover>
-            </Popover.Content>
-          </Popover>
+            )}
+          </>
         )}
       </div>
     </li>

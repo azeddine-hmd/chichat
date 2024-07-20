@@ -80,7 +80,7 @@ export default function ChatBoxList({
         message={message}
         content={message.content}
         shape={shape}
-        profile={user}
+        user={user}
         haveDateSeparator={haveDateSeparator}
         onDelete={onDelete}
         onEditComplete={(newContent) => {

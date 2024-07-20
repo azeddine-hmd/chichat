@@ -112,28 +112,24 @@ export default function DirectChatRoomPage({ id }: { id: string }) {
         ref={containerRef}
         className="flex h-full flex-col justify-end overflow-y-scroll bg-gray-600 pb-4"
       >
-        {chatRoom && (
-          <>
-            <ChatBoxList
-              className="block h-full overflow-y-scroll"
-              messages={messages}
-              chatRoom={chatRoom}
-              onDelete={(messageId) => {
-                window.clientSocket.emitWithAck(
-                  "chatroom:deleteMessage",
-                  chatRoom?.id,
-                  messageId
-                );
-              }}
-            />
-            <ChatInputField
-              placeholder={`Message @${chatRoom.users[1].displayName}`}
-              onMessageSent={onMessageSent}
-              containerRef={containerRef}
-              enableUploadButton
-            />
-          </>
-        )}
+        <ChatBoxList
+          className="block h-full overflow-y-scroll"
+          messages={messages}
+          chatRoom={chatRoom!}
+          onDelete={(messageId) => {
+            window.clientSocket.emitWithAck(
+              "chatroom:deleteMessage",
+              chatRoom?.id,
+              messageId
+            );
+          }}
+        />
+        <ChatInputField
+          placeholder={`Message @${chatRoom?.users[1].displayName}`}
+          onMessageSent={onMessageSent}
+          containerRef={containerRef}
+          enableUploadButton
+        />
       </main>
     </div>
   );
