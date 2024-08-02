@@ -11,6 +11,7 @@ import { GetMessagesChatRoomValidator } from '../validators/get-messages-chat-ro
 import { DeleteMessageChatRoomValidator } from '../validators/delete-message-chat-room-validator';
 import { mapToPublicChatRoom } from '../../chat-room/chat-room-mapper';
 import { UpdateMessagechatRoomValidator } from '../validators/update-message-chat-room-validator';
+import { GetHistoryChatRoomValidator } from '../validators/get-history-chat-room-validator';
 
 module.exports = (io: Server, socket: Socket) => {
   const enterDirectChatRoom = async (...args: any[]) => {
@@ -134,6 +135,24 @@ module.exports = (io: Server, socket: Socket) => {
     );
   };
 
+  const getHistoryChatRoom = async (...args: any[]) => {
+    console.info(
+      'event triggered: chatroom:getHistory from',
+      socket.user.username
+    );
+    const { chatRoomTypes } = await validateEventArgument(
+      new GetHistoryChatRoomValidator(args)
+    );
+    const chatRoomHistory = await chatRoomService.getChatRoomHistory(
+      socket.user,
+      chatRoomTypes
+    );
+    const history = chatRoomHistory.map((chatRoom) =>
+      mapToPublicChatRoom(socket.user.id, chatRoom)
+    );
+    socket.emit('chatroom:getHistory', { history: history });
+  };
+
   socket.on(
     'chatroom:direct:enter',
     listenerWrapper(socket, enterDirectChatRoom)
@@ -151,5 +170,9 @@ module.exports = (io: Server, socket: Socket) => {
     'chatroom:deleteMessage',
     listenerWrapper(socket, deleteMessageChatRoom)
   );
-  socket.on('chatroom:updateMessage', updateMessageChatRoom);
+  socket.on(
+    'chatroom:updateMessage',
+    listenerWrapper(socket, updateMessageChatRoom)
+  );
+  socket.on('chatroom:getHistory', listenerWrapper(socket, getHistoryChatRoom));
 };

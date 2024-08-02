@@ -4,6 +4,7 @@ import {
   ChatRoomWithUsers,
   UnsavedChatRoomWithUsers,
 } from '../types/chat-room';
+import { updateChatRoomHistory } from './chat-room-service';
 
 export async function saveMessage(
   me: Express.User,
@@ -28,6 +29,9 @@ export async function saveMessage(
       content: message,
     },
   });
+
+  updateChatRoomHistory(me, chatRoom);
+
   return messageRecord;
 }
 

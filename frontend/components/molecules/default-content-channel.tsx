@@ -8,24 +8,39 @@ import Popover from "./popover";
 import CreateGroupChatRoomPopoverContent from "./popover-content/create-group-chat-room-popover-content";
 import { useActiveChannelItemContext } from "@/context/active-channel-item-contex";
 import Avatar from "../atoms/avatar";
-import { useUserStore } from "@/stores/user-store";
-import { User } from "@/models/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ChatRoom } from "@/types/chat-room";
+import { useEvent } from "@/hooks/use-event";
 
-function ChannelDmItem({ user }: { user: User }) {
+function ChannelDmItem({ chatRoom }: { chatRoom: ChatRoom }) {
   const [onHover, setOnHover] = useState(false);
+  const router = useRouter();
+  const { item, setItem } = useActiveChannelItemContext();
+
+  const onDmItemClicked = () => {
+    if (item !== chatRoom) {
+      setItem(chatRoom);
+      router.push("/channels/me/" + chatRoom.id);
+    }
+  };
+
+  useEffect(() => { console.log("item:", item) }, [item]);
 
   return (
     <IconButton 
       className="group relative mb-2 flex w-full justify-between  p-2 active:bg-[#4E5058]/70"
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
+      onClick={onDmItemClicked}
+      active={typeof item === "object" && item.id === chatRoom.id}
     >
       <div className="flex w-full items-center justify-start">
-        {user && <Avatar status={user.status} imageSrc={user.avatar} />}
+        {chatRoom.type === "DIRECT" && (
+          <Avatar status={chatRoom.users[1].status} imageSrc={chatRoom.users[1].avatar} />
+        )}
         <div className="ml-1 flex flex-col items-center justify-start">
           <h3 className="text-muted group-hover:text-white/80 group-active:text-white">
-            {user?.displayName}
+            {chatRoom.type === "DIRECT" && chatRoom.users[1].displayName}
           </h3>
         </div>
       </div>
@@ -39,17 +54,29 @@ function ChannelDmItem({ user }: { user: User }) {
 export default function DefaultContentChannel() {
   const router = useRouter();
   const { item, setItem } = useActiveChannelItemContext();
+  const [dmHistory, setDmHistory] = useState<ChatRoom[]>([]);
 
   const onClickFriends = () => {
     router.push("/channels/me");
     setItem("friends");
   };
 
+  useEffect(() => {
+    window.clientSocket.emit("chatroom:getHistory", ["DIRECT", "GROUP"]);
+  }, []);
 
-  const { profile } = useUserStore();
+  useEvent("chatroom:getHistory", ({ history }: { history: ChatRoom[] }) => {
+    if (!history) {
+      console.log("chatroom:getHistory is empty");
+      setDmHistory([]);
+      return;
+    }
+    console.log("chatroom:getHistory: history:", history);
+    setDmHistory(history);
+  });
 
   return (
-    <>
+    <div>
       <IconButton
         className="mb-6 h-[42px] w-full px-2 active:bg-[#4E5058]/70"
         onClick={() => onClickFriends()}
@@ -78,9 +105,13 @@ export default function DefaultContentChannel() {
           </Tooltip>
         </Popover>
       </div>
-      {profile &&
-        <ChannelDmItem user={profile} />
-      }
-    </>
+      {dmHistory.map((chatRoom: ChatRoom) => (
+        <>
+          {chatRoom.type === "DIRECT" && (
+            <ChannelDmItem key={chatRoom.id} chatRoom={chatRoom} />
+          )}
+        </>
+      ))}
+    </div>
   );
 }

@@ -11,11 +11,11 @@ process.on('unhandledRejection', (reason, promise) => {
 
 export const app = express();
 
-// app.use('trust proxy');
-
 import './api/route';
 
 export const server = http.createServer(app);
+
+// app.use('trust proxy');
 
 import './api/sockets/socket';
 

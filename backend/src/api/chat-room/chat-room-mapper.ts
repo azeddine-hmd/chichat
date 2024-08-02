@@ -2,7 +2,7 @@ import { UserWithAvatar } from '../users/types/user';
 import { mapToPublicProfile } from '../users/users-mapper';
 import { ChatRoomWithUsers, UnsavedChatRoomWithUsers } from './types/chat-room';
 
-function moveUserToFirstIndex(
+export function moveUserToFirstIndex(
   myId: number,
   users: UserWithAvatar[]
 ): UserWithAvatar[] {

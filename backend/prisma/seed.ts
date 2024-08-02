@@ -95,6 +95,18 @@ async function fakeUsers() {
       uploadedBy: { connect: { username: 'test4' } },
     },
   });
+  await prisma.friendship.create({
+    data: {
+      user1: { connect: { id: 1 } },
+      user2: { connect: { id: 2 } },
+    },
+  })
+  await prisma.friendship.create({
+    data: {
+      user1: { connect: { id: 1 } },
+      user2: { connect: { id: 3 } },
+    },
+  })
 }
 
 async function main() {

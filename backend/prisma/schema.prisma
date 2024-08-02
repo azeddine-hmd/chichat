@@ -42,6 +42,7 @@ model User {
     blocked         Block[]             @relation("blocked")
     blockedBy       Block[]             @relation("blockedBy")
     Message         Message[]
+    ChatRoomHistory ChatRoomHistory[]
 }
 
 model UserSockets {
@@ -119,12 +120,13 @@ model File {
 }
 
 model ChatRoom {
-    id             String         @id
-    createdAt      DateTime       @default(now())
-    entersAt       DateTime
-    type           ChatRoomType
-    Message        Message[]
-    usersChatRooms UserChatRoom[]
+    id              String            @id
+    createdAt       DateTime          @default(now())
+    entersAt        DateTime
+    type            ChatRoomType
+    Message         Message[]
+    usersChatRooms  UserChatRoom[]
+    ChatRoomHistory ChatRoomHistory[]
 }
 
 model UserChatRoom {
@@ -135,6 +137,19 @@ model UserChatRoom {
     user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     chatRoom ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
 
+    @@unique([userId, chatRoomId])
+}
+
+model ChatRoomHistory {
+    id         Int    @id @default(autoincrement())
+    userId     Int
+    chatRoomId String
+    visitedAt  DateTime
+
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    chatRoom ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+
+    @@index([visitedAt])
     @@unique([userId, chatRoomId])
 }
 

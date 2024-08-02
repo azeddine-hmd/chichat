@@ -1,7 +1,12 @@
 import * as uuid from 'uuid';
 import { prisma, redisClient } from '../../../config';
 import { ChatRoomType } from '@prisma/client';
-import { UnsavedChatRoomWithUsers } from '../types/chat-room';
+import {
+  ChatRoomWithUsers,
+  UnsavedChatRoomWithUsers,
+} from '../types/chat-room';
+import { mapToPublicChatRoom, moveUserToFirstIndex } from '../chat-room-mapper';
+import { forEachSocket } from '../../../utils/for-each-socket';
 
 async function makeDirectChatRoom(
   me: Express.User,
@@ -32,6 +37,11 @@ async function makeDirectChatRoom(
         include: { user: { include: { avatar: true } } },
       }),
     ]);
+
+  (async () => {
+    const updatedChatRoom = await getChatRoom(me, chatRoom.id);
+    updateUnsavedChatRoomHistory(me, updatedChatRoom);
+  })();
 
   await redisClient.lPush(`chatroom:unsaved:${me.id}`, chatRoom.id);
 
@@ -89,4 +99,109 @@ export async function removeUnsavedChatRoom(me: Express.User) {
     },
   });
   await redisClient.del(`chatroom:unsaved:${me.id}`);
+}
+
+export async function getChatRoomHistory(
+  me: Express.User,
+  chatRoomTypes: ChatRoomType[]
+) {
+  const chatRoomHistoryRecords = await prisma.chatRoomHistory.findMany({
+    where: {
+      user: { id: me.id },
+      chatRoom: { type: { in: chatRoomTypes } },
+    },
+    include: {
+      chatRoom: {
+        include: {
+          usersChatRooms: { include: { user: { include: { avatar: true } } } },
+        },
+      },
+    },
+    orderBy: {
+      visitedAt: 'desc',
+    },
+  });
+
+  console.log('chatRoomHistoryRecords are:', chatRoomHistoryRecords);
+
+  const chatRoomHistory: ChatRoomWithUsers[] = chatRoomHistoryRecords.map(
+    (historyRec) => historyRec.chatRoom
+  );
+  return chatRoomHistory;
+}
+
+export async function updateChatRoomHistory(
+  me: Express.User,
+  chatRoom: ChatRoomWithUsers | UnsavedChatRoomWithUsers
+) {
+  const users = chatRoom.usersChatRooms.map(
+    (userChatRoom) => userChatRoom.user
+  );
+  moveUserToFirstIndex(me.id, users);
+  // users.shift();
+  users.forEach((user) => {
+    prisma.chatRoomHistory
+      .upsert({
+        where: {
+          userId_chatRoomId: { userId: user.id, chatRoomId: chatRoom.id },
+        },
+        update: { visitedAt: new Date() },
+        create: {
+          chatRoom: { connect: { id: chatRoom.id } },
+          visitedAt: new Date(),
+          user: { connect: { id: user.id } },
+        },
+      })
+      .catch((error) => console.error('updateChatRoomHistory: erorr:', error))
+      .then(() => {
+        forEachSocket(user.id, (socket) => {
+          getChatRoomHistory(user, ['GROUP', 'DIRECT']).then((history) => {
+            console.log(
+              `updating history of other people, user(username=${socket.user.username}) and socket(id=${socket.id})`
+            );
+            socket.emit('chatroom:getHistory', {
+              history: history.map((chatRoom) =>
+                mapToPublicChatRoom(socket.user.id, chatRoom)
+              ),
+            });
+          });
+        });
+      });
+  });
+}
+
+export async function updateUnsavedChatRoomHistory(
+  me: Express.User,
+  chatRoom: ChatRoomWithUsers | UnsavedChatRoomWithUsers
+) {
+  try {
+    const result = await prisma.chatRoomHistory.upsert({
+      where: {
+        userId_chatRoomId: { userId: me.id, chatRoomId: chatRoom.id },
+      },
+      update: { visitedAt: new Date() },
+      create: {
+        chatRoom: { connect: { id: chatRoom.id } },
+        visitedAt: new Date(),
+        user: { connect: { id: me.id } },
+      },
+    });
+    forEachSocket(me.id, (socket) => {
+      getChatRoomHistory(me, ['GROUP', 'DIRECT']).then((history) => {
+        console.log('result upsert is:', result);
+        console.log('chatRoom:', chatRoom);
+        console.log('history is:', JSON.stringify(history.map((h) => h.id)));
+        console.log(
+          `updating history of other people, user(username=${socket.user.username}) and socket(id=${socket.id})`
+        );
+        socket.emit('chatroom:getHistory', {
+          history: history.map((chatRoom) =>
+            mapToPublicChatRoom(socket.user.id, chatRoom)
+          ),
+        });
+      });
+    });
+  } catch (error) {
+    console.error('updateChatRoomHistory: erorr:', error);
+  }
 }
