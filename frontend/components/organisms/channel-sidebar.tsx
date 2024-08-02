@@ -38,8 +38,10 @@ export default function ChannelSidebar({
     >
       <DisabledSearchField />
       <Hr className="w-full border-separator-dark"></Hr>
-      <div className="ml-2 mr-2 mt-2 h-full">{children}</div>
-      {profile && <UserSection user={profile} />}
+      <div className="w-full h-full overflow-auto delay-75">
+      <div className="flex-grow ml-2 mr-2 mt-2 h-full">{children}</div>
+      </div>
+      {profile && <UserSection className="flex-shrink" user={profile} />}
     </nav>
   );
 }

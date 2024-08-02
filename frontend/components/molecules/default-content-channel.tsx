@@ -11,11 +11,13 @@ import Avatar from "../atoms/avatar";
 import { useEffect, useState } from "react";
 import { ChatRoom } from "@/types/chat-room";
 import { useEvent } from "@/hooks/use-event";
+import { cn } from "@/lib/cn";
 
 function ChannelDmItem({ chatRoom }: { chatRoom: ChatRoom }) {
   const [onHover, setOnHover] = useState(false);
   const router = useRouter();
   const { item, setItem } = useActiveChannelItemContext();
+  const isItemActive = typeof item === "object" && item.id === chatRoom.id;
 
   const onDmItemClicked = () => {
     if (item !== chatRoom) {
@@ -24,22 +26,27 @@ function ChannelDmItem({ chatRoom }: { chatRoom: ChatRoom }) {
     }
   };
 
+
   useEffect(() => { console.log("item:", item) }, [item]);
 
   return (
-    <IconButton 
+    <IconButton
       className="group relative mb-2 flex w-full justify-between  p-2 active:bg-[#4E5058]/70"
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
       onClick={onDmItemClicked}
-      active={typeof item === "object" && item.id === chatRoom.id}
+      active={isItemActive}
     >
       <div className="flex w-full items-center justify-start">
         {chatRoom.type === "DIRECT" && (
           <Avatar status={chatRoom.users[1].status} imageSrc={chatRoom.users[1].avatar} />
         )}
         <div className="ml-1 flex flex-col items-center justify-start">
-          <h3 className="text-muted group-hover:text-white/80 group-active:text-white">
+          <h3
+            className={cn("text-muted group-hover:text-white/80 group-active:text-white", { 
+              "text-white": isItemActive,
+            })}
+          >
             {chatRoom.type === "DIRECT" && chatRoom.users[1].displayName}
           </h3>
         </div>
@@ -72,7 +79,7 @@ export default function DefaultContentChannel() {
       return;
     }
     console.log("chatroom:getHistory: history:", history);
-    setDmHistory(history);
+    setDmHistory([...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history]);
   });
 
   return (
@@ -105,6 +112,7 @@ export default function DefaultContentChannel() {
           </Tooltip>
         </Popover>
       </div>
+      <div className="h-full overflow-y-scroll">
       {dmHistory.map((chatRoom: ChatRoom) => (
         <>
           {chatRoom.type === "DIRECT" && (
@@ -112,6 +120,7 @@ export default function DefaultContentChannel() {
           )}
         </>
       ))}
+      </div>
     </div>
   );
 }

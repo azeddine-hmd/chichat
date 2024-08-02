@@ -4,6 +4,7 @@ import { cn } from "@/lib/cn";
 
 export type IconButtonProps = {
   active?: boolean;
+  activeClassName?: string;
   hover?: boolean;
 } & React.ComponentPropsWithRef<"button">;
 
@@ -13,6 +14,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       children,
       className,
       active = false,
+      activeClassName,
       hover = false,
       ...restProps
     }: IconButtonProps,
@@ -24,6 +26,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           "flex h-fit w-fit items-center justify-start rounded px-2 hover:bg-[#4E5058]/60 hover:text-foreground active:bg-[#4E5058]/60 active:text-white",
           {
             "bg-[#4E5058]/60 text-white": active,
+            activeClassName: active,
             "bg-[#4E5058]/60 text-foreground": hover,
           },
           className
