@@ -122,8 +122,6 @@ export async function getChatRoomHistory(
     },
   });
 
-  console.log('chatRoomHistoryRecords are:', chatRoomHistoryRecords);
-
   const chatRoomHistory: ChatRoomWithUsers[] = chatRoomHistoryRecords.map(
     (historyRec) => historyRec.chatRoom
   );

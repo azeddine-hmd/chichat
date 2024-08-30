@@ -9,7 +9,7 @@ export type TooltipProps = {
 export default function Tooltip({ children, ...restProps}: TooltipProps) {
   return (
     <RadixTooltip.Provider>
-      <RadixTooltip.Root {...restProps}>
+      <RadixTooltip.Root delayDuration={40} {...restProps}>
         {children}
       </RadixTooltip.Root>
     </RadixTooltip.Provider>

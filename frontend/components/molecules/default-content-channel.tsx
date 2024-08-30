@@ -26,35 +26,44 @@ function ChannelDmItem({ chatRoom }: { chatRoom: ChatRoom }) {
     }
   };
 
-
-  useEffect(() => { console.log("item:", item) }, [item]);
+  useEffect(() => {
+    console.log("item:", item);
+  }, [item]);
 
   return (
-    <IconButton
-      className="group relative mb-2 flex w-full justify-between  p-2 active:bg-[#4E5058]/70"
-      onMouseEnter={() => setOnHover(true)}
-      onMouseLeave={() => setOnHover(false)}
-      onClick={onDmItemClicked}
-      active={isItemActive}
-    >
-      <div className="flex w-full items-center justify-start">
-        {chatRoom.type === "DIRECT" && (
-          <Avatar status={chatRoom.users[1].status} imageSrc={chatRoom.users[1].avatar} />
-        )}
-        <div className="ml-1 flex flex-col items-center justify-start">
-          <h3
-            className={cn("text-muted group-hover:text-white/80 group-active:text-white", { 
-              "text-white": isItemActive,
-            })}
-          >
-            {chatRoom.type === "DIRECT" && chatRoom.users[1].displayName}
-          </h3>
+    <li>
+      <IconButton
+        className="group relative mb-[1px] flex w-full justify-between p-2  hover:bg-[#4E5058]/30 active:bg-[#4E5058]/70"
+        onMouseEnter={() => setOnHover(true)}
+        onMouseLeave={() => setOnHover(false)}
+        onClick={onDmItemClicked}
+        active={isItemActive}
+      >
+        <div className="flex w-full items-center justify-start">
+          {chatRoom.type === "DIRECT" && (
+            <Avatar
+              status={chatRoom.users[1].status}
+              imageSrc={chatRoom.users[1].avatar}
+            />
+          )}
+          <div className="ml-1 flex flex-col items-center justify-start">
+            <h3
+              className={cn(
+                "text-muted group-hover:text-white/80 group-active:text-white",
+                {
+                  "text-white": isItemActive,
+                }
+              )}
+            >
+              {chatRoom.type === "DIRECT" && chatRoom.users[1].displayName}
+            </h3>
+          </div>
         </div>
-      </div>
-      {onHover &&
-        <BsX className="text-white/40 hover:text-foreground" size="22" />
-      }
-    </IconButton>
+        {onHover && (
+          <BsX className="text-white/40 hover:text-foreground" size="22" />
+        )}
+      </IconButton>
+    </li>
   );
 }
 
@@ -79,11 +88,12 @@ export default function DefaultContentChannel() {
       return;
     }
     console.log("chatroom:getHistory: history:", history);
-    setDmHistory([...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history, ...history]);
+    setDmHistory(history);
+    // setDmHistory([...history, ...history, ...history, ...history, ...history]);
   });
 
   return (
-    <div>
+    <>
       <IconButton
         className="mb-6 h-[42px] w-full px-2 active:bg-[#4E5058]/70"
         onClick={() => onClickFriends()}
@@ -112,15 +122,15 @@ export default function DefaultContentChannel() {
           </Tooltip>
         </Popover>
       </div>
-      <div className="h-full overflow-y-scroll">
-      {dmHistory.map((chatRoom: ChatRoom) => (
-        <>
-          {chatRoom.type === "DIRECT" && (
-            <ChannelDmItem key={chatRoom.id} chatRoom={chatRoom} />
-          )}
-        </>
-      ))}
-      </div>
-    </div>
+      <ul className="h-fit">
+        {dmHistory.map((chatRoom: ChatRoom) => (
+          <>
+            {chatRoom.type === "DIRECT" && (
+              <ChannelDmItem key={chatRoom.id} chatRoom={chatRoom} />
+            )}
+          </>
+        ))}
+      </ul>
+    </>
   );
 }

@@ -44,7 +44,45 @@
 
 }
 
-.borderBlack {
-  border-width: 1px;
-  border-color: rgba(0, 0, 0, 0.20);
+.scroll-area {
+  /* Initial scrollbar style */
+  scrollbar-width: thin; /* Firefox */
+}
+
+.scroll-area:hover::-webkit-scrollbar {
+  /* Scrollbar style on hover */
+  width: 12px;
+  background-color: transparent;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Thumb color */
+  border-radius: 10px;
+}
+
+.scroll-area:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.scroll-area::-webkit-scrollbar {
+  width: 8px;
+  transition: width 0.3s ease; /* Smooth transition */
+}
+
+.scroll-area:hover::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Optional: Add shrinking after some time of hover */
+.scroll-area:hover {
+  animation: shrinkScrollbar 2s forwards 5s;
+}
+
+@keyframes shrinkScrollbar {
+  0% {
+    scrollbar-width: thin;
+  }
+  100% {
+    scrollbar-width: none;
+  }
 }

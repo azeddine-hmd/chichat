@@ -8,6 +8,7 @@ import { User } from "@/models/user";
 import { useUserStore } from "@/stores/user-store";
 import { useEvent } from "@/hooks/use-event";
 import { cn } from "@/lib/cn";
+import ScrollArea from "../molecules/scrollbar";
 
 export default function ChannelSidebar({
   children,
@@ -38,10 +39,16 @@ export default function ChannelSidebar({
     >
       <DisabledSearchField />
       <Hr className="w-full border-separator-dark"></Hr>
-      <div className="w-full h-full overflow-auto delay-75">
-      <div className="flex-grow ml-2 mr-2 mt-2 h-full">{children}</div>
-      </div>
-      {profile && <UserSection className="flex-shrink" user={profile} />}
+      <ScrollArea
+        className="h-full w-full overflow-hidden"
+        scrollHideDelay={40}
+      >
+        <ScrollArea.Viewport className="h-full w-full">
+          <div className="ml-2 mr-2 mt-2 h-full flex-grow">{children}</div>
+        </ScrollArea.Viewport>
+        <ScrollArea.ScrollBar orientation="vertical" />
+      </ScrollArea>
+      {profile && <UserSection user={profile} />}
     </nav>
   );
 }

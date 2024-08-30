@@ -1,3 +1,5 @@
+const { blackA, mauve, violet } = require('@radix-ui/colors');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // safelist: ['border', 'border-black', 'border-opacity-10'],
@@ -57,6 +59,9 @@ module.exports = {
         red: {
           500: '#f23f42',
         },
+        ...blackA,
+        ...mauve,
+        ...violet,
       },
       animation: {
         'bounce-slow': 'bounce 3s infinite',

@@ -40,6 +40,9 @@ export async function getMessages(_: Express.User, chatRoomId: string) {
     where: {
       chatRoomId: chatRoomId,
     },
+    orderBy: {
+      createAt: 'asc',
+    },
   });
   return messagesRecords;
 }
