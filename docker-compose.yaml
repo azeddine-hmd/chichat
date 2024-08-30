@@ -21,6 +21,8 @@ services:
     depends_on:
       - db
       - adminer
+      - cache
+      - rediscommander
     ports:
       - ${EXPRESS_PORT}:${EXPRESS_PORT}
       - ${PRISMA_STUDIO_PORT}:${PRISMA_STUDIO_PORT}
