@@ -4,10 +4,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: process.env.BACKEND_DOMAIN,
-        protocol: process.env.BACKEND_PROTOCOL,
-      },
-      {
         hostname: "cdn.discordapp.com",
         protocol: "https",
       },
@@ -23,6 +19,10 @@ const nextConfig = {
         hostname: "media.discordapp.net",
         protocol: "https",
       },
+      (process.env.NODE_ENV === "production") ? {
+        hostname: process.env.BACKEND_HOST,
+        protocol: process.env.BACKEND_PROTOCOL,
+      } : undefined,
     ],
   },
   productionBrowserSourceMaps: process.env.NODE_ENV === "development",
