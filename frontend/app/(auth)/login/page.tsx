@@ -6,7 +6,6 @@ import { strongEmail } from "@/lib/yup-extra";
 import { useFormik } from "formik";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useMutation } from "@tanstack/react-query";
@@ -26,7 +25,6 @@ const loginSchema = Yup.object().shape({
 });
 
 export default function Login() {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [onLoading, setOnLoading] = useState(false);
@@ -70,9 +68,9 @@ export default function Login() {
           <h1 className="w-fit text-2xl font-medium text-white">
             Welcome back!
           </h1>
-          <h6 className="text-md mt-2 text-muted">
+          <h2 className="text-md mt-2 text-muted">
             We&apos;re excited to see you again!
-          </h6>
+          </h2>
           {error && (
             <h3 className="mt-2 text-lg font-semibold text-red-400">{error}</h3>
           )}
@@ -83,6 +81,7 @@ export default function Login() {
                   layoutClassName="mb-4"
                   name="email"
                   type="email"
+                  aria-label="email"
                   error={emailError ? emailError : formik.errors.email}
                   onChange={formik.handleChange}
                   value={formik.values.email}
@@ -94,6 +93,7 @@ export default function Login() {
                 <FormField
                   name="password"
                   type="password"
+                  aria-label="password"
                   error={formik.errors.password}
                   onChange={formik.handleChange}
                   value={formik.values.password}

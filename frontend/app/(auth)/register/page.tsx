@@ -96,6 +96,7 @@ export default function Register() {
                   >
                     <FormField
                       name="displayName"
+                      aria-label="display name"
                       error={formik.errors.displayName}
                       onChange={formik.handleChange}
                       value={formik.values.displayName}
@@ -104,6 +105,7 @@ export default function Register() {
                     </FormField>
                     <FormField
                       name="username"
+                      aria-label="username"
                       error={formik.errors.username}
                       onChange={formik.handleChange}
                       value={formik.values.username}
@@ -113,6 +115,7 @@ export default function Register() {
                     <FormField
                       type="password"
                       name="password"
+                      aria-label="password"
                       error={formik.errors.password}
                       onChange={formik.handleChange}
                       value={formik.values.password}
@@ -121,6 +124,7 @@ export default function Register() {
                     </FormField>
                     <FormField
                       name="email"
+                      aria-label="email"
                       error={formik.errors.email}
                       onChange={formik.handleChange}
                       value={formik.values.email}

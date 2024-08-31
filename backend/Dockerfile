@@ -5,11 +5,7 @@ WORKDIR /usr/src/app
 
 COPY ./package*.json ./
 
-RUN if [ "$NODE_ENV" = "production" ]; then \
-	npm ci --omit=dev; \
-else \
-	npm ci; \
-fi
+RUN npm ci
 
 COPY . ./
 RUN npm install -g prisma
