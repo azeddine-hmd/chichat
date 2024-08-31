@@ -34,8 +34,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/static', express.static('uploads'));
 app.use(
   helmet({
-    crossOriginResourcePolicy: true,
-    crossOriginOpenerPolicy: true,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
 app.use(prefix, authRouter);
