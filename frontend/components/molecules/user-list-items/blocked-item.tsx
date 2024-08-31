@@ -26,7 +26,8 @@ export default function BlockedItem({ user }: { user: User }) {
 
   return (
     <>
-      <Tooltip content="Unblock" sideOffset={2} arrow>
+      <Tooltip>
+        <Tooltip.Content content="Unblock" sideOffset={2} />
         <Button
           className="bg-grey-800 group/unblock group relative rounded-full bg-gray-700 p-2 group-hover/item:bg-gray-900 group-active:bg-gray-400/5"
           onClick={onUnblockClicked}
