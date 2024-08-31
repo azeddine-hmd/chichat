@@ -4,16 +4,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+        hostname: process.env.BACKEND_DOMAIN,
+        protocol: process.env.BACKEND_PROTOCOL,
+      },
+      {
         hostname: "cdn.discordapp.com",
         protocol: "https",
       },
       {
         hostname: "i.pravatar.cc",
         protocol: "https",
-      },
-      {
-        hostname: "localhost",
-        protocol: "http",
       },
       {
         hostname: "backend",
