@@ -13,13 +13,13 @@ type UserStore = {
   setPendingFR: (pendingFR: User[]) => void;
 };
 
-export const useUserStore = create<UserStore>(zukeeper((set) => ({
+export const useUserStore = create<UserStore>(zukeeper((set: any) => ({
   profile: null,
   friends: [],
   blocked: [],
   pendingFR: [],
-  setProfile: (profile) => set({ profile: profile }),
-  setFriends: (friends) => set({ friends: friends }),
-  setBlocked: (blocked) => set({ blocked: blocked }),
-  setPendingFR: (pendingFR) => set({ pendingFR: pendingFR }),
+  setProfile: (profile: User) => set({ profile: profile }),
+  setFriends: (friends: User[]) => set({ friends: friends }),
+  setBlocked: (blocked: User[]) => set({ blocked: blocked }),
+  setPendingFR: (pendingFR: User[]) => set({ pendingFR: pendingFR }),
 })));
