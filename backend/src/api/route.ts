@@ -16,6 +16,7 @@ import swaggerUI from 'swagger-ui-express';
 const prefix = '/api';
 
 // bind middlewares before routes mount
+app.set('trust proxy', true);
 app.use(cookieParserMiddleware);
 app.use(bodyParser.json());
 app.use(sessionMiddleware);
