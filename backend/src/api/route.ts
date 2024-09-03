@@ -32,11 +32,11 @@ if (process.env.NODE_ENV === 'development') {
 
 // module routes
 app.use('/static', express.static('uploads'));
-app.use(
-  helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-  })
-);
+// app.use(
+//   helmet({
+//     crossOriginResourcePolicy: { policy: 'cross-origin' },
+//   })
+// );
 app.use(prefix, authRouter);
 app.use(prefix, usersRouter);
 
