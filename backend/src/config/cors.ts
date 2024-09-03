@@ -5,3 +5,5 @@ export const corsOptions: CorsOptions = {
   methods: ['GET', 'POST', 'OPTIONS', 'DELETE', 'PATCH'],
   credentials: true,
 };
+
+console.log('CORS Options:', corsOptions);
