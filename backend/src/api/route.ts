@@ -16,11 +16,17 @@ import swaggerUI from 'swagger-ui-express';
 const prefix = '/api';
 
 // bind middlewares before routes mount
+app.set('trust proxy', true);
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+app.use(cors(corsOptions));
 app.use(cookieParserMiddleware);
 app.use(bodyParser.json());
 app.use(sessionMiddleware);
 app.use(requestTimeMiddleware);
-app.use(cors(corsOptions));
 app.use(passport.initialize());
 if (process.env.NODE_ENV === 'development') {
   app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs));
@@ -32,11 +38,6 @@ if (process.env.NODE_ENV === 'development') {
 
 // module routes
 app.use('/static', express.static('uploads'));
-app.use(
-  helmet({
-    crossOriginResourcePolicy: { policy: 'cross-origin' },
-  })
-);
 app.use(prefix, authRouter);
 app.use(prefix, usersRouter);
 
