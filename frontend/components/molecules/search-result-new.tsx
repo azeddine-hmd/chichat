@@ -40,7 +40,7 @@ export default function SearchResults<T>({
   );
 
   return (
-    <ul className={cn("h-full w-full overflow-y-scroll", className)}>
+    <ul className={cn("h-full w-full overflow-y-hidden", className)}>
       {title && (
         <h2 className="text-grey-500 mb-4 text-[12px] uppercase leading-4 text-muted">
           {title} - {filteredResults.length}

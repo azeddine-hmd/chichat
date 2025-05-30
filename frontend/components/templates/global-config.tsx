@@ -18,7 +18,9 @@ export default function GlobalTemplateConfig({
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <GlobalTemplate>{children}</GlobalTemplate>
+        <GlobalTemplate>
+          {children}
+        </GlobalTemplate>
         {/* <ReactQueryDevtools /> */}
       </QueryClientProvider>
     </>
