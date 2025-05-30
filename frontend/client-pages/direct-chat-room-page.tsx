@@ -110,10 +110,10 @@ export default function DirectChatRoomPage({ id }: { id: string }) {
       </TopBar>
       <main
         ref={containerRef}
-        className="flex h-full flex-col justify-end overflow-y-scroll bg-gray-600 pb-4"
+        className="flex h-full flex-col justify-end overflow-y-hidden bg-gray-600 pb-4"
       >
         <ChatBoxList
-          className="block h-full overflow-y-scroll"
+          className="block h-full"
           messages={messages}
           chatRoom={chatRoom!}
           onDelete={(messageId) => {
