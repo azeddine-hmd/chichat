@@ -92,7 +92,7 @@ export default function UsersList({ filterBy, users }: UsersListProps) {
             </UserItem>
             {(filterBy === "All" || filterBy === "Online") && (
               <Popover.Content
-                className="flex flex-col items-center justify-between space-y-1 overflow-scroll bg-black p-2 text-xs font-semibold text-[#dbdfe2] shadow-md"
+                className="flex flex-col items-center justify-between space-y-1 overflow-auto bg-black p-2 text-xs font-semibold text-[#dbdfe2] shadow-md"
                 position={ctxPopoverPos}
                 clickOutside={() => setOpenCtxPopover(false)}
                 side="left"

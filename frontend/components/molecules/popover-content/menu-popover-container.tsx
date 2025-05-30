@@ -8,7 +8,7 @@ export type MenuPopoverContainerProps = {
 
 export default function MenuPopoverContainer({ children, className }: MenuPopoverContainerProps) {
   return (
-    <div className={cn("flex flex-col items-center justify-between space-y-1 overflow-scroll bg-black p-2 text-xs font-semibold text-[#dbdfe2] shadow-md", className)}>
+    <div className={cn("flex flex-col items-center justify-between space-y-1 overflow-auto bg-black p-2 text-xs font-semibold text-[#dbdfe2] shadow-md", className)}>
       {children}
     </div>
   );
